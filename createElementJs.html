@@ -1,0 +1,50 @@
+<html>
+<header>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script>
+	function creaSelects(){
+		var i;
+		for (i = 0; i < 5; i++){
+			var btn = document.createElement("BUTTON"); 
+			btn.id = "bottone"+i;
+			var br = document.createElement("br"); 
+			var hr = document.createElement("hr");
+			var t = document.createTextNode("CLICK ME "+i);       // Create a text node
+			btn.appendChild(t);                                // Append the text to <button>
+			document.body.appendChild(btn); 
+			document.body.appendChild(br); 
+			document.body.appendChild(hr); 
+		}
+		document.getElementById("bottone1").style.color = "#ff0000";
+	}
+</script>
+
+</header>
+<body>
+<div>
+<h2>Calcola il tuo prenventivo online!</h2>
+
+
+<form action="/action_page.php">
+Nome dell'azienda:<br>
+<input type="text" name="companyName">
+<br>
+Numero di lampade standard:<br>
+<input type="text" name="N_analogic_bulb">
+<br>
+Numero di lampade LED:<br>
+<input type="text" name="N_LED_bulb">
+
+<br><br>
+<input type="submit" value="Calcola!">
+</form>
+
+<button onclick="creaSelects()"> ciao</button>
+
+<p>Per un prevendivo più accurato contattaci a questa mail: <a href="mailto:direzione@professional-led.it?subject=Richiesta%20preventivo%20maggiori%20informazioni">direzione@professional-led.it </a></p>
+</div>
+</body>
+</html>
