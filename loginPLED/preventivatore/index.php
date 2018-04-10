@@ -124,6 +124,71 @@
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 			<style>
+			.control {
+					font-family: arial;
+					display: block;
+					position: relative;
+					padding-left: 30px;
+					margin-bottom: 5px;
+					padding-top: 3px;
+					cursor: pointer;
+					font-size: 16px;
+			}
+					.control input {
+							position: absolute;
+							z-index: -1;
+							opacity: 0;
+					}
+			.control_indicator {
+					position: absolute;
+					top: 2px;
+					left: 45%;
+					height: 20px;
+					width: 20px;
+					background: #e6e6e6;
+					border: 0px dashed #000000;
+			}
+			.control-radio .control_indicator {
+					border-radius: 50%;
+			}
+
+			.control:hover input ~ .control_indicator,
+			.control input:focus ~ .control_indicator {
+					background: #cccccc;
+			}
+
+			.control input:checked ~ .control_indicator {
+					background: #2aa1c0;
+			}
+			.control:hover input:not([disabled]):checked ~ .control_indicator,
+			.control input:checked:focus ~ .control_indicator {
+					background: #0e6647d;
+			}
+			.control input:disabled ~ .control_indicator {
+					background: #e6e6e6;
+					opacity: 0.6;
+					pointer-events: none;
+			}
+			.control_indicator:after {
+					box-sizing: unset;
+					content: '';
+					position: absolute;
+					display: none;
+			}
+			.control input:checked ~ .control_indicator:after {
+					display: block;
+			}
+			.control-radio .control_indicator:after {
+					left: 7px;
+					top: 7px;
+					height: 6px;
+					width: 6px;
+					border-radius: 50%;
+					background: #ffffff;
+			}
+			.control-radio input:disabled ~ .control_indicator:after {
+					background: #7b7b7b;
+			}
 
 				.body{
 					background-color: #88d0f7;
@@ -231,6 +296,8 @@
 			var N_analogic_bulb = 1;
 			var nome_azienda = "";
 			var costoKWH = 0 ;
+			var noleggio ;
+			var coeffAcquisto ;
 			var controlButton = true;
 			var controlButtonRemove = false;
 			var StatoAttualeArray;
@@ -609,13 +676,13 @@
 								html += "</div>";
 							html += "<hr>";
 						}
-						html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
+						html += "<br><button class='buttonStep' onclick='toInfoRent()'>Prosegui</button>";
 						step3.innerHTML += html;
 						document.getElementById("container").appendChild(step3);
 					}
 				}
 
-				function toCheckValues(){
+				function toInfoRent(){
 					SolPLEDArray = new Array(N_analogic_bulb);
 					var control = 0;
 					for (var i = 0 ; i < N_analogic_bulb ; i++){
@@ -640,57 +707,138 @@
 
 					var html = "";
 
-					html += "<h2>Controlla i valori inseriti</h2>";
-					html += "<br>"
-
 					html += "<hr>";
-					html += "<h3>Dati azienda</h3>";
-					html += "<ul>";
-					html += "<li>Nome dell'azienda: "+nome_azienda+"</li>";
-					html += "<li>Numero Telefonico dell'azienda: "+tel_azienda+"</li>";
-					html += "<li>Nome del referente dell'azienda: "+nome_referente+"</li>";
-					html += "<li>Mail del referente dell'azienda: "+mail_referente+"</li>";
-					html += "<li>Costo della corrente in Kw/h: "+costoKWH+"</li>";
-					html += "</ul>";
-
-					html += "<hr>";
-					html += "<hr>";
-					html += "<h3>Dati prodotti</h3>";
-					html += "<ul>";
-					for (var i = 0; i < N_analogic_bulb; i++){
-						html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
-						html += " - consumo: "+StatoAttualeArray[i][1];
-						html += " - durata: "+StatoAttualeArray[i][2];
-						html += " - punti luce: "+StatoAttualeArray[i][3];
-						html += " - GG funzionamento: "+StatoAttualeArray[i][4];
-						html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
-						html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
-						html += " - punti luce: "+SolPLEDArray[i][1]+"]";
+					html += "<h2>Informazioni Noleggio</h2>";
+					html += "<div id='control-group'>";
 						html += "<br>";
-						html += " </li>"
-					}
-					html += "</ul>";
-
-					html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
-					html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
-
-					html += "<div class='flex-containerPLED'>";
-					html += "<hr>";
-					html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-					html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
-					html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+						html += "<h3>E' previsto il noleggio?</h3>";
+						html += "<label class='control control-radio'>Si";
+							html += "<input type='radio' id='choice1_yes' name='radio1'>";
+							html += "<div class='control_indicator'></div>";
+						html += "</label>";
+						html += "<label class='control control-radio'>No";
+							html += "<input type='radio' id='choice1_no' name='radio1'>";
+							html += "<div class='control_indicator'></div>";
+						html += "</label>";
 					html += "</div>";
-					html += "<hr>";
 
+					html += "<div id='control-group'>";
+						html += "<br>";
+						html += "<h3>Sono previsti costi aggiuntivi per l'installazione?</h3>";
+						html += "<label class='control control-radio'>Si";
+							html += "<input type='radio' id='choice2_yes' name='radio2'>";
+							html += "<div class='control_indicator'></div>";
+						html += "</label>";
+						html += "<label class='control control-radio'>No";
+							html += "<input type='radio' id='choice2_no' name='radio2'>";
+							html += "<div class='control_indicator'></div>";
+						html += "</label>";
+					html += "</div>";
+
+					html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
 					step4.innerHTML += html;
-
-
-					alert(StatoAttualeArray);
-					alert(SolPLEDArray);
-
 					document.getElementById("container").appendChild(step4);
 				}
 			}
+
+				function toCheckValues(){
+
+					var control = 0;
+
+					if (document.getElementById("choice1_yes").checked) {
+					  noleggio = true;
+						control ++;
+					}else if (document.getElementById("choice1_no").checked){
+						noleggio = false;
+						control++;
+					}else {
+						alert("E' previsto il noleggio?");
+					}
+
+					if (document.getElementById("choice2_yes").checked) {
+					  coeffAcquisto = 15;
+						control++;
+					}else if (document.getElementById("choice2_no").checked){
+						coeffAcquisto = 10;
+						control++;
+					}else{
+						alert("Sono previsti costi aggiuntivi per l'installazione?");
+					}
+
+					if(control == 2){
+						var step4 = document.getElementById("step4");
+						step4.parentNode.removeChild(step4);
+
+						var step5 = document.createElement("div");
+						step5.id="step5";
+
+						var html = "";
+
+						html += "<h2>Controlla i valori inseriti</h2>";
+						html += "<br>"
+
+						html += "<hr>";
+						html += "<div id='flex-containerPLED'>";
+							html += "<h3>Dati azienda</h3>";
+							html += "<ul style='margin-left: 30%,padding:0'>";
+							html += "<li>Nome dell'azienda: "+nome_azienda+"</li>";
+							html += "<li>Numero Telefonico dell'azienda: "+tel_azienda+"</li>";
+							html += "<li>Nome del referente dell'azienda: "+nome_referente+"</li>";
+							html += "<li>Mail del referente dell'azienda: "+mail_referente+"</li>";
+							html += "<li>Costo della corrente in Kw/h: "+costoKWH+"</li>";
+							html += "</ul>";
+						html += "</div>";
+
+						html += "<hr>";
+						html += "<hr>";
+						html += "<h3>Dati prodotti</h3>";
+						html += "<ul>";
+						for (var i = 0; i < N_analogic_bulb; i++){
+							html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
+							html += " - consumo: "+StatoAttualeArray[i][1];
+							html += " - durata: "+StatoAttualeArray[i][2];
+							html += " - punti luce: "+StatoAttualeArray[i][3];
+							html += " - GG funzionamento: "+StatoAttualeArray[i][4];
+							html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
+							html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
+							html += " - punti luce: "+SolPLEDArray[i][1]+"]";
+							html += "<br>";
+							html += " </li>"
+						}
+						html += "</ul>";
+
+
+						html += "<hr>";
+						html += "<h3>Dati noleggio</h3>";
+
+						if (noleggio){
+							html += "<p>E' previsto il noleggio. Verrà applicato un "+coeffAcquisto+"% al prezzo totale</p>";
+						}else{
+							html += "<p>Non è previsto il noleggio. Verrà applicato un "+coeffAcquisto+"% al prezzo totale</p>";
+						}
+
+						html += "<hr>";
+						html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
+						html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
+
+						html += "<div class='flex-containerPLED'>";
+							html += "<hr>";
+							html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+							html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
+							html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+						html += "</div>";
+						html += "<hr>";
+
+						step5.innerHTML += html;
+
+
+						alert(StatoAttualeArray);
+						alert(SolPLEDArray);
+
+						document.getElementById("container").appendChild(step5);
+					}
+
+				}
 
 			</script>
 
