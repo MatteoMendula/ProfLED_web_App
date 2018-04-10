@@ -231,6 +231,8 @@
 			var N_analogic_bulb = 1;
 			var nome_azienda = "";
 			var costoKWH = 0 ;
+			var controlButton = true;
+			var controlButtonRemove = false;
 			var StatoAttualeArray;
 			var SolPLEDArray;
 
@@ -250,44 +252,70 @@
 					}
 				}
 
-				function updateNameStandard(){
-					for (var i = 0 ; i < N_analogic_bulb ; i++){
-						var modello = document.getElementById("modelloStandard"+i).value;
-						var titolo = document.getElementById("titoloLampadaStandard"+i);
-						var consumo = document.getElementById("standardSpanConsumo"+i);
-						var durata = document.getElementById("standardSpanDurata"+i);
-						var PL = document.getElementById("standardSpanPL"+i);
-						var GG = document.getElementById("standardSpanGG"+i);
-						var HH = document.getElementById("standardSpanHH"+i);
+				function updateNameStandard(id){
+					//var id = id.substring(15);
+					var id = id.replace( /^\D+/g, '');
+					//alert(id);
+					var modello_input = document.getElementById("modelloStandard"+id).value;
+					var consumo_input = document.getElementById("consumoStandard"+id).value;
+					var durata_input = document.getElementById("durataStandard"+id).value;
+					var puntiL_input = document.getElementById("puntiluceStandard"+id).value;
+					var GG_input = document.getElementById("GGStandard"+id).value;
+					var HH_input = document.getElementById("HHStandard"+id).value;
 
-						if(modello != ""){
-							titolo.innerHTML = "Lampada modello: "+modello;
-							consumo.innerHTML = "Consumo reale del modello [" + modello+"] (in Watt)";
-							durata.innerHTML = "Durata del modello [" + modello+ "] (in ore)";
-							PL.innerHTML = "Punti luce del modello [" + modello + "]";
-							GG.innerHTML = "Giorni di funzionamento del modello [" + modello+ "] all'anno";
-							HH.innerHTML = "Ore di funzionamento del modello ["+modello +"] al giorno";
-						}
+					var titolo_span = document.getElementById("titoloLampadaStandard"+id);
+					var consumo_span = document.getElementById("standardSpanConsumo"+id);
+					var durata_span = document.getElementById("standardSpanDurata"+id);
+					var PL_span = document.getElementById("standardSpanPL"+id);
+					var GG_span = document.getElementById("standardSpanGG"+id);
+					var HH_span = document.getElementById("standardSpanHH"+id);
 
+					modello_input.value = modello_input;
+					consumo_input.value = consumo_input;
+					durata_input.value = durata_input;
+					puntiL_input.value = puntiL_input;
+					GG_input.value = GG_input;
+					HH_input.value = HH_input;
+
+
+
+					if(modello_input != ""){
+						titolo_span.innerHTML = "Lampada modello: "+modello_input;
+						consumo_span.innerHTML = "Consumo reale del modello [" + modello_input+"] (in Watt)";
+						durata_span.innerHTML = "Durata del modello [" + modello_input+ "] (in ore)";
+						PL_span.innerHTML = "Punti luce del modello [" + modello_input + "]";
+						GG_span.innerHTML = "Giorni di funzionamento del modello [" + modello_input+ "] all'anno";
+						HH_span.innerHTML = "Ore di funzionamento del modello ["+modello_input +"] al giorno";
 					}
 				}
 
 				function removeOneToStatoAttuale(){
-					var indice_id = N_analogic_bulb - 1;
-					var elemento = document.getElementById("elemento"+indice_id);
-					elemento.parentNode.removeChild(elemento);
-					N_analogic_bulb--;
+					if (N_analogic_bulb > 1){
+						var indice_id = N_analogic_bulb - 1;
+						var elemento = document.getElementById("elemento"+indice_id);
+						elemento.parentNode.removeChild(elemento);
+						N_analogic_bulb--;
+						controlButton = false;
+						var html = "";
 
-					var html = "";
+						if (controlButton == false){
+							controlButtonRemove = true;
+							html += "<div id='bottoniRemove'>";
+							html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+							html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Salva ultimo ed aggiungi una lampada</button></div>";
+							html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
+							html += "</div>";
+							html += "<hr>";
+							html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
+							html += "</div>";
+						}
 
-					html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-					html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Aggiungi una lampada</button></div>";
-					html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
-					html += "</div>";
-					html += "<hr>";
-					html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
+						step2.innerHTML += html;
+					}
+					else{
+						alert("Impossibile eliminare l'unico elemento!");
+					}
 
-					step2.innerHTML += html;
 
 				}
 
@@ -317,6 +345,13 @@
 					//----------------------------ELIMINO I VALORI INSERIRI PRECEDENTEMENTE-------------------
 					var elemento = document.getElementById("elemento"+indice_id);
 					elemento.parentNode.removeChild(elemento);
+					controlButton = false;
+
+					if (controlButtonRemove == true){
+						var bottoniRemove = document.getElementById("bottoniRemove");
+						bottoniRemove.parentNode.removeChild(bottoniRemove);
+						controlButtonRemove = false;
+					}
 
 					var html = "";
 
@@ -325,43 +360,49 @@
 					html += "<hr>";
 					html += "<h3 id='titoloLampadaStandard"+indice_id+"'>"+titolo_span+ "</h3>";
 					html += "<div><span>Modello: "+modello_span+"</span></div>";
-					html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard()' value='"+modello+"'> </input></div>";
+					html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)' value='"+modello+"'> </input></div>";
 					html += "<div><span id='standardSpanConsumo"+indice_id+"'>"+consumo_span+ " (in Watt)</span></div>";
-					html += "<div><input id='consumoStandard"+indice_id+"' value='"+consumo+"'></input></div>";
+					html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+consumo+"'></input></div>";
 					html += "<div><span id='standardSpanDurata"+indice_id+"'>"+durata_span+"</span></div>";
-					html += "<div><input id='durataStandard"+indice_id+"' value='"+durata+"'> </input></div>";
+					html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+durata+"'> </input></div>";
 					html += "<div><span id='standardSpanPL"+indice_id+"'>"+PL_span+"</span></div>";
-					html += "<div><input id='puntiluceStandard"+indice_id+"' value='"+PL+"'> </input></div>";
+					html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+PL+"'> </input></div>";
 					html += "<div><span id='standardSpanGG"+indice_id+"'>"+GG_span+"</span></div>";
-					html += "<div><input id='GGStandard"+indice_id+"' value='"+GG+"'> </input></div>";
+					html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+GG+"'> </input></div>";
 					html += "<div><span id='standardSpanHH"+indice_id+"'>"+HH_span+"</span></div>";
-					html += "<div><input id='HHStandard"+indice_id+"' value='"+HH+"'> </input></div>";
+					html += "<div><input id='HHStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+HH+"'> </input></div>";
 					html += "<hr>";
+					html += "</div>";
 
 					//------------------------------SCRITTURA DEI NUOVI CAMPI--------------------------------------------
 					html += "<div id='elemento"+N_analogic_bulb+"'>";
 					html += "<hr>";
 					html += "<h3 id='titoloLampadaStandard"+N_analogic_bulb+"'>Lampada Standard "+(N_analogic_bulb+1)+ "</h3>";
 					html += "<div><span>Inserire modello"+(N_analogic_bulb+1)+ "</span></div>";
-					html += "<div><input id='modelloStandard"+N_analogic_bulb+ "' onkeyup='updateNameStandard()'> </input></div>";
-					html += "<div><span id='standardSpanConsumo"+N_analogic_bulb+"'>Consumo reale del modello "+(N_analogic_bulb+1)+ " (in Watt)</span></div>";
-					html += "<div><input id='consumoStandard"+N_analogic_bulb+"'></input></div>";
+					html += "<div><input id='modelloStandard"+N_analogic_bulb+ "' onkeyup='updateNameStandard(this.id)'> </input></div>";
+					html += "<div><span id='standardSpanConsumo"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'>Consumo reale del modello "+(N_analogic_bulb+1)+ " (in Watt)</span></div>";
+					html += "<div><input id='consumoStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'></input></div>";
 					html += "<div><span id='standardSpanDurata"+N_analogic_bulb+"'>Durata del modello "+(N_analogic_bulb+1)+ " (in ore)</span></div>";
-					html += "<div><input id='durataStandard"+N_analogic_bulb+"'> </input></div>";
+					html += "<div><input id='durataStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 					html += "<div><span id='standardSpanPL"+N_analogic_bulb+"'>Punti luce del modello "+(N_analogic_bulb+1)+ "</span></div>";
-					html += "<div><input id='puntiluceStandard"+N_analogic_bulb+"'> </input></div>";
+					html += "<div><input id='puntiluceStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 					html += "<div><span id='standardSpanGG"+N_analogic_bulb+"'>Giorni di funzionamento del modello "+(N_analogic_bulb+1)+ " all'anno</span></div>";
-					html += "<div><input id='GGStandard"+N_analogic_bulb+"'> </input></div>";
+					html += "<div><input id='GGStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 					html += "<div><span id='standardSpanHH"+N_analogic_bulb+"'>Ore di funzionamento del modello "+(N_analogic_bulb+1)+ " al giorno</span></div>";
-					html += "<div><input id='HHStandard"+N_analogic_bulb+"'> </input></div>";
+					html += "<div><input id='HHStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 					html += "<hr>";
 
-					html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-					html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Aggiungi una lampada</button></div>";
-					html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
-					html += "</div>";
-					html += "<hr>";
-					html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
+					alert(controlButton);
+
+					if (controlButton == false){
+						html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+						html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Salva ultimo ed aggiungi una lampada</button></div>";
+						html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
+						html += "</div>";
+						html += "<hr>";
+						html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
+					}
+					html += "</div>"
 
 					html += "</div>"
 
@@ -453,27 +494,28 @@
 							html += "<hr>";
 							html += "<h3 id='titoloLampadaStandard"+indice_id+"'>Lampada Standard "+(indice_id+1)+ "</h3>";
 							html += "<div><span>Inserire modello"+(indice_id+1)+ "</span></div>";
-							html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard()'> </input></div>";
+							html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<div><span id='standardSpanConsumo"+indice_id+"'>Consumo reale del modello "+(indice_id+1)+ " (in Watt)</span></div>";
-							html += "<div><input id='consumoStandard"+indice_id+"'></input></div>";
+							html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'></input></div>";
 							html += "<div><span id='standardSpanDurata"+indice_id+"'>Durata del modello "+(indice_id+1)+ " (in ore)</span></div>";
-							html += "<div><input id='durataStandard"+indice_id+"'> </input></div>";
+							html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<div><span id='standardSpanPL"+indice_id+"'>Punti luce del modello "+(indice_id+1)+ "</span></div>";
-							html += "<div><input id='puntiluceStandard"+indice_id+"'> </input></div>";
+							html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<div><span id='standardSpanGG"+indice_id+"'>Giorni di funzionamento del modello "+(indice_id+1)+ " all'anno</span></div>";
-							html += "<div><input id='GGStandard"+indice_id+"'> </input></div>";
+							html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<div><span id='standardSpanHH"+indice_id+"'>Ore di funzionamento del modello "+(indice_id+1)+ " al giorno</span></div>";
-							html += "<div><input id='HHStandard"+indice_id+"'> </input></div>";
+							html += "<div><input id='HHStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<hr>";
 
 							html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-							html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Aggiungi una lampada</button></div>";
+							html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Salva ultimo ed aggiungi una lampada</button></div>";
 							html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
 							html += "</div>";
 							html += "<hr>";
 							html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
 
-							html += "</div>"
+							html += "</div>" //chiusura div elementoN
+							html += "</div>" //chiusura div step2
 							step2.innerHTML += html;
 
 							//document.body.appendChild(step2);
@@ -567,13 +609,13 @@
 								html += "</div>";
 							html += "<hr>";
 						}
-						html += "<br><button class='buttonStep' onclick='toStampaPDF()'>Prosegui</button>";
+						html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
 						step3.innerHTML += html;
 						document.getElementById("container").appendChild(step3);
 					}
 				}
 
-				function toStampaPDF(){
+				function toCheckValues(){
 					SolPLEDArray = new Array(N_analogic_bulb);
 					var control = 0;
 					for (var i = 0 ; i < N_analogic_bulb ; i++){
@@ -595,7 +637,53 @@
 
 					var step4 = document.createElement("div");
 					step4.id="step4";
-					step4.innerHTML += "<h2>PDF da stampare</h2>";
+
+					var html = "";
+
+					html += "<h2>Controlla i valori inseriti</h2>";
+					html += "<br>"
+
+					html += "<hr>";
+					html += "<h3>Dati azienda</h3>";
+					html += "<ul>";
+					html += "<li>Nome dell'azienda: "+nome_azienda+"</li>";
+					html += "<li>Numero Telefonico dell'azienda: "+tel_azienda+"</li>";
+					html += "<li>Nome del referente dell'azienda: "+nome_referente+"</li>";
+					html += "<li>Mail del referente dell'azienda: "+mail_referente+"</li>";
+					html += "<li>Costo della corrente in Kw/h: "+costoKWH+"</li>";
+					html += "</ul>";
+
+					html += "<hr>";
+					html += "<hr>";
+					html += "<h3>Dati prodotti</h3>";
+					html += "<ul>";
+					for (var i = 0; i < N_analogic_bulb; i++){
+						html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
+						html += " - consumo: "+StatoAttualeArray[i][1];
+						html += " - durata: "+StatoAttualeArray[i][2];
+						html += " - punti luce: "+StatoAttualeArray[i][3];
+						html += " - GG funzionamento: "+StatoAttualeArray[i][4];
+						html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
+						html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
+						html += " - punti luce: "+SolPLEDArray[i][1]+"]";
+						html += "<br>";
+						html += " </li>"
+					}
+					html += "</ul>";
+
+					html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
+					html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
+
+					html += "<div class='flex-containerPLED'>";
+					html += "<hr>";
+					html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+					html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
+					html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+					html += "</div>";
+					html += "<hr>";
+
+					step4.innerHTML += html;
+
 
 					alert(StatoAttualeArray);
 					alert(SolPLEDArray);
@@ -613,7 +701,7 @@
 			<center>
 				<div class="container" id="container">
 					<h2><big><strong>Preventivatore online</strong></big></h2>
-
+					<hr>
 					<div id="step1" >
 						<p>Inserisci i dati per iniziare</p>
 						<p>Tutti i valori inseriti andranno in stampa così come sono scritti. Fai attenzione!</p>
