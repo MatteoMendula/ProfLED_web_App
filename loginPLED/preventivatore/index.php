@@ -302,7 +302,7 @@
 			var controlButtonRemove = false;
 			var StatoAttualeArray;
 			var SolPLEDArray;
-
+			var imgLogo = "data:image/png;base64,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";
 
 
 				function inc_PuntiLuce_SOL_PLED(indice){
@@ -485,7 +485,6 @@
 						modelliLed.options.length = 0;
 						if (selezionato > 0){
 							for (var i = 0; i < array_gruppo_modello.length ; i++){
-								alert(array_gruppo_modello[i] + " sel: "+selezionato);
 								if (array_gruppo_modello[i] == "Case" && selezionato == "1"){
 									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
 								}
@@ -502,6 +501,8 @@
 					function toStatoAttuale(){
 						nome_azienda = document.getElementById("nomeAzienda").value;
 						tel_azienda = document.getElementById("telAzienda").value;
+						indirizzo_azienda = document.getElementById("addrAzienda").value;
+						cap_azienda = document.getElementById("CAPAzienda").value;
 						nome_referente = document.getElementById("nomeReferente").value;
 						mail_referente = document.getElementById("mailReferente").value;
 						costoKWH = document.getElementById("costoKWH").value;
@@ -510,7 +511,7 @@
 						var control = false;
 
 
-						if (nome_azienda != "" && tel_azienda != "" && nome_referente != "" && mail_referente != "" && mail_referente.includes("@",".") && costoKWH != "" && !isNaN(costoKWH)){
+						if (nome_azienda != "" && tel_azienda != "" && indirizzo_azienda != "" && indirizzo_azienda != "" && cap_azienda != "" && mail_referente != "" && mail_referente.includes("@",".") && costoKWH != "" && !isNaN(costoKWH)){
 							control = true;
 						}else{
 
@@ -524,6 +525,14 @@
 
 							if (tel_azienda == ""){
 								alert("Devi inserire il numero telefonico dell'azienda!");
+							}
+
+							if (indirizzo_azienda == ""){
+								alert("Devi inserire il l'indirizzo dell'azienda!");
+							}
+
+							if (cap_azienda == ""){
+								alert("Devi inserire il cap e la città!");
 							}
 
 							if (mail_referente == ""){
@@ -658,7 +667,6 @@
 						var html = "";
 
 						for (var i = 0; i < N_analogic_bulb; i++){
-							alert(StatoAttualeArray[i][0]);
 							html += "<hr>";
 							html += "<div><span>La lampada "+(i+1)+" dello stato attuale MODELLO["+StatoAttualeArray[i][0]+"] con "+StatoAttualeArray[i][3]+" punti luce</span></div>";
 							html += "<div><h3>E' DA SOSTITUIRE CON</h3></div>";
@@ -707,22 +715,30 @@
 
 					var html = "";
 
-					html += "<hr>";
-					html += "<h2>Informazioni Noleggio</h2>";
-					html += "<div id='control-group'>";
-						html += "<br>";
-						html += "<h3>E' previsto il noleggio?</h3>";
-						html += "<label class='control control-radio'>Si";
-							html += "<input type='radio' id='choice1_yes' name='radio1'>";
-							html += "<div class='control_indicator'></div>";
-						html += "</label>";
-						html += "<label class='control control-radio'>No";
-							html += "<input type='radio' id='choice1_no' name='radio1'>";
-							html += "<div class='control_indicator'></div>";
-						html += "</label>";
-					html += "</div>";
+					html += "<h2>Controlla i valori inseriti</h2>";
+					html += "<br>"
 
-					html += "<div id='control-group'>";
+					html += "<h3>Dati azienda</h3>";
+					html += "<div><span>Nome dell'azienda: "+nome_azienda+"<span></div>";
+					html += "<div><span>Numero Telefonico dell'azienda: "+tel_azienda+"</span></div>";
+					html += "<div><span>Indirizzo dell'azienda: "+indirizzo_azienda+"</span></div>";
+					html += "<div><span>CAP e città dell'azienda: "+cap_azienda+"</span></div>";
+					html += "<div><div><span>Nome del referente dell'azienda: "+nome_referente+"</span></div>";
+					html += "<div><span>Mail del referente dell'azienda: "+mail_referente+"</span></div>";
+					html += "<div><span>Costo della corrente in Kw/h: "+costoKWH+"</span></div>";
+
+					html += "<hr>";
+					html += "<h3>Dati prodotti</h3>";
+					html += "<ul>";
+					for (var i = 0; i < N_analogic_bulb; i++){
+						html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
+						html += " - consumo: "+StatoAttualeArray[i][1];
+						html += " - durata: "+StatoAttualeArray[i][2];
+						html += " - punti luce: "+StatoAttualeArray[i][3];
+						html += " - GG funzionamento: "+StatoAttualeArray[i][4];
+						html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
+						html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
+						html += " - punti luce: "+SolPLEDArray[i][1]+"]";
 						html += "<br>";
 						html += "<h3>Sono previsti costi aggiuntivi per l'installazione?</h3>";
 						html += "<label class='control control-radio'>Si";
@@ -774,71 +790,121 @@
 
 						var html = "";
 
-						html += "<h2>Controlla i valori inseriti</h2>";
-						html += "<br>"
+					document.getElementById("container").appendChild(step4);
+				}
 
-						html += "<hr>";
-						html += "<div id='flex-containerPLED'>";
-							html += "<h3>Dati azienda</h3>";
-							html += "<ul style='margin-left: 30%,padding:0'>";
-							html += "<li>Nome dell'azienda: "+nome_azienda+"</li>";
-							html += "<li>Numero Telefonico dell'azienda: "+tel_azienda+"</li>";
-							html += "<li>Nome del referente dell'azienda: "+nome_referente+"</li>";
-							html += "<li>Mail del referente dell'azienda: "+mail_referente+"</li>";
-							html += "<li>Costo della corrente in Kw/h: "+costoKWH+"</li>";
-							html += "</ul>";
-						html += "</div>";
+			function toStampaPDF(){
+				var step4 = document.getElementById("step4");
+				step4.parentNode.removeChild(step4);
 
-						html += "<hr>";
-						html += "<hr>";
-						html += "<h3>Dati prodotti</h3>";
-						html += "<ul>";
-						for (var i = 0; i < N_analogic_bulb; i++){
-							html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
-							html += " - consumo: "+StatoAttualeArray[i][1];
-							html += " - durata: "+StatoAttualeArray[i][2];
-							html += " - punti luce: "+StatoAttualeArray[i][3];
-							html += " - GG funzionamento: "+StatoAttualeArray[i][4];
-							html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
-							html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
-							html += " - punti luce: "+SolPLEDArray[i][1]+"]";
-							html += "<br>";
-							html += " </li>"
-						}
-						html += "</ul>";
+				var step5 = document.createElement("div");
+				step5.id="step5";
 
+				var html = "";
 
-						html += "<hr>";
-						html += "<h3>Dati noleggio</h3>";
+				html += "<h2>Clicca sul bottone corrispondente per visualizzare il file generato</h2>";
+				html += "<br>"
 
-						if (noleggio){
-							html += "<p>E' previsto il noleggio. Verrà applicato un "+coeffAcquisto+"% al prezzo totale</p>";
-						}else{
-							html += "<p>Non è previsto il noleggio. Verrà applicato un "+coeffAcquisto+"% al prezzo totale</p>";
-						}
+				html +="<center>";
+					html +="<div class='wrapper'>";
+						html +="<hr>";
+						html +="<button class='btn btn-primary' type='button' onclick='create_acquisto()'>Soluzione ACQUISTO</button>";
+						html +="<hr>";
+						html +="<button class='btn btn-warining' type='button' onclick='create_noleggio()'>Soluzione NOLEGGIO</button>";
+						html +="<hr>";
+						html +="<button class='btn btn-info' type='button' onclick='create_payback()'>PAYBACK</button>";
+						html +="<hr>";
+						html +="<hr>";
+						html +="<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+					html +="</div>";
+				html +="</center>";
 
-						html += "<hr>";
-						html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
-						html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
+				step5.innerHTML += html;
 
-						html += "<div class='flex-containerPLED'>";
-							html += "<hr>";
-							html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-							html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
-							html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
-						html += "</div>";
-						html += "<hr>";
+				document.getElementById("container").appendChild(step5);
+			}
 
-						step5.innerHTML += html;
+			function create_payback(){
+				var pdf_as_url;
+				var doc = new jsPDF();
+				var totalPagesExp = "{total_pages_count_string}";
+				var array_as_table;
 
+				var matte = "ciao";
+				var columns = ["ID", "Name", "Country"];
+				var rows = [
+				    [1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+					[1, "Shaw", "Tanzania"],
+				    [2, "Nelson", "Kazakhstan \n"],
+				    [3, matte, "Madagascar"],
+					[, , ],
+				];
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+			 // Purple
 
-						alert(StatoAttualeArray);
-						alert(SolPLEDArray);
-
-						document.getElementById("container").appendChild(step5);
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width, 15, 100, 15);
 					}
 
-				}
+					doc.text("PROFESSIONAL LED SRL\nSede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 15);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n\n"+nome_referente+"\n"+mail_referente);
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					if (typeof doc.putTotalPages === 'function') {
+							str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
+				};
+
+				doc.autoTable(columns, rows, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					margin: {top: 35},
+					headerStyles: {fillColor: [0, 77, 126]},
+					addPageContent: pageContent
+				});
+				pdf_as_url = doc.output('datauristring');
+				alert(pdf_as_url);
+				alert("cia4");
+				window.open("./toPrint.html?pdf="+pdf_as_url);
+
+			}
 
 			</script>
 
@@ -856,9 +922,16 @@
 
 						<div class="flex-container">
 							<div><span>Inserisci il nome dell'azienda</span></div>
-							<div><input placeholder="Questo sarà il nome che andrà in stampa" id="nomeAzienda"> </input></div>
+							<div><input placeholder="Lampade tristi SRL" id="nomeAzienda"> </input></div>
 							<div><span>Inserire N. telefonico dell'azienda</span></div>
 							<div><input placeholder="051/123456" id="telAzienda"> </input></div>
+						</div>
+
+						<div class="flex-container">
+							<div><span>Inserire indirizzo dell'azienda</span></div>
+							<div><input placeholder="Via dei matti 0" id="addrAzienda"> </input></div>
+							<div><span>Inserire CAP e citta'</span></div>
+							<div><input placeholder="40129 Bologna" id="CAPAzienda"> </input></div>
 						</div>
 
 						<div class="flex-container">
