@@ -124,71 +124,6 @@
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 			<style>
-			.control {
-					font-family: arial;
-					display: block;
-					position: relative;
-					padding-left: 30px;
-					margin-bottom: 5px;
-					padding-top: 3px;
-					cursor: pointer;
-					font-size: 16px;
-			}
-					.control input {
-							position: absolute;
-							z-index: -1;
-							opacity: 0;
-					}
-			.control_indicator {
-					position: absolute;
-					top: 2px;
-					left: 45%;
-					height: 20px;
-					width: 20px;
-					background: #e6e6e6;
-					border: 0px dashed #000000;
-			}
-			.control-radio .control_indicator {
-					border-radius: 50%;
-			}
-
-			.control:hover input ~ .control_indicator,
-			.control input:focus ~ .control_indicator {
-					background: #cccccc;
-			}
-
-			.control input:checked ~ .control_indicator {
-					background: #2aa1c0;
-			}
-			.control:hover input:not([disabled]):checked ~ .control_indicator,
-			.control input:checked:focus ~ .control_indicator {
-					background: #0e6647d;
-			}
-			.control input:disabled ~ .control_indicator {
-					background: #e6e6e6;
-					opacity: 0.6;
-					pointer-events: none;
-			}
-			.control_indicator:after {
-					box-sizing: unset;
-					content: '';
-					position: absolute;
-					display: none;
-			}
-			.control input:checked ~ .control_indicator:after {
-					display: block;
-			}
-			.control-radio .control_indicator:after {
-					left: 7px;
-					top: 7px;
-					height: 6px;
-					width: 6px;
-					border-radius: 50%;
-					background: #ffffff;
-			}
-			.control-radio input:disabled ~ .control_indicator:after {
-					background: #7b7b7b;
-			}
 
 				.body{
 					background-color: #88d0f7;
@@ -296,8 +231,6 @@
 			var N_analogic_bulb = 1;
 			var nome_azienda = "";
 			var costoKWH = 0 ;
-			var noleggio ;
-			var coeffAcquisto ;
 			var controlButton = true;
 			var controlButtonRemove = false;
 			var StatoAttualeArray;
@@ -684,13 +617,13 @@
 								html += "</div>";
 							html += "<hr>";
 						}
-						html += "<br><button class='buttonStep' onclick='toInfoRent()'>Prosegui</button>";
+						html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
 						step3.innerHTML += html;
 						document.getElementById("container").appendChild(step3);
 					}
 				}
 
-				function toInfoRent(){
+				function toCheckValues(){
 					SolPLEDArray = new Array(N_analogic_bulb);
 					var control = 0;
 					for (var i = 0 ; i < N_analogic_bulb ; i++){
@@ -740,58 +673,26 @@
 						html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
 						html += " - punti luce: "+SolPLEDArray[i][1]+"]";
 						html += "<br>";
-						html += "<h3>Sono previsti costi aggiuntivi per l'installazione?</h3>";
-						html += "<label class='control control-radio'>Si";
-							html += "<input type='radio' id='choice2_yes' name='radio2'>";
-							html += "<div class='control_indicator'></div>";
-						html += "</label>";
-						html += "<label class='control control-radio'>No";
-							html += "<input type='radio' id='choice2_no' name='radio2'>";
-							html += "<div class='control_indicator'></div>";
-						html += "</label>";
-					html += "</div>";
+						html += " </li>"
+					}
+					html += "</ul>";
 
-					html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
+					html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
+					html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
+
+					html += "<div class='flex-containerPLED'>";
+					html += "<hr>";
+					html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+					html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
+					html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+					html += "</div>";
+					html += "<hr>";
+
 					step4.innerHTML += html;
+
 					document.getElementById("container").appendChild(step4);
 				}
 			}
-
-				function toCheckValues(){
-
-					var control = 0;
-
-					if (document.getElementById("choice1_yes").checked) {
-					  noleggio = true;
-						control ++;
-					}else if (document.getElementById("choice1_no").checked){
-						noleggio = false;
-						control++;
-					}else {
-						alert("E' previsto il noleggio?");
-					}
-
-					if (document.getElementById("choice2_yes").checked) {
-					  coeffAcquisto = 15;
-						control++;
-					}else if (document.getElementById("choice2_no").checked){
-						coeffAcquisto = 10;
-						control++;
-					}else{
-						alert("Sono previsti costi aggiuntivi per l'installazione?");
-					}
-
-					if(control == 2){
-						var step4 = document.getElementById("step4");
-						step4.parentNode.removeChild(step4);
-
-						var step5 = document.createElement("div");
-						step5.id="step5";
-
-						var html = "";
-
-					document.getElementById("container").appendChild(step4);
-				}
 
 			function toStampaPDF(){
 				var step4 = document.getElementById("step4");
@@ -828,7 +729,6 @@
 				var pdf_as_url;
 				var doc = new jsPDF();
 				var totalPagesExp = "{total_pages_count_string}";
-				var array_as_table;
 
 				var matte = "ciao";
 				var columns = ["ID", "Name", "Country"];
@@ -874,11 +774,13 @@
 			 // Purple
 
 					if (imgLogo) {
-							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width, 15, 100, 15);
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
 					}
-
-					doc.text("PROFESSIONAL LED SRL\nSede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 15);
-					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n\n"+nome_referente+"\n"+mail_referente);
+					doc.setFontType('bold');
+					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
+					doc.setFontType('normal');
+					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
 					// FOOTER
 					var str = "Page " + data.pageCount;
 					// Total page number plugin only available in jspdf v1.0+
@@ -895,14 +797,22 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					margin: {top: 35},
+					margin: {top: 60},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
-				pdf_as_url = doc.output('datauristring');
-				alert(pdf_as_url);
-				alert("cia4");
-				window.open("./toPrint.html?pdf="+pdf_as_url);
+
+				if (typeof doc.putTotalPages === 'function') {
+        	doc.putTotalPages(totalPagesExp);
+    		}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
 
 			}
 
