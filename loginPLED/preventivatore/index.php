@@ -791,13 +791,22 @@
 					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
 				};
 
+				doc.setDrawColor(0);
+				doc.setFillColor(0, 77, 126);
+				doc.rect(10, 55, doc.internal.pageSize.width-20, 10, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(16);
+				doc.text(70, 62, "PAYBACK IN XXXX ANNI");
+
 				doc.autoTable(columns, rows, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					margin: {top: 60},
+					margin: {top: 70,bottom: 20},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
