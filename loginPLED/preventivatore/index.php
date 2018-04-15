@@ -125,6 +125,74 @@
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 			<style>
 
+			/*   radio button style */
+					.control {
+		    font-family: arial;
+		    display: block;
+		    position: relative;
+		    padding-left: 30px;
+		    margin-bottom: 5px;
+		    padding-top: 3px;
+		    cursor: pointer;
+		    font-size: 16px;
+		}
+		    .control input {
+		        position: absolute;
+		        z-index: -1;
+		        opacity: 0;
+		    }
+				.control_indicator {
+				    position: absolute;
+				    top: 2px;
+				    left: 0;
+				    height: 20px;
+				    width: 20px;
+				    background: #e6e6e6;
+				    border: 0px solid #000000;
+				}
+				.control-radio .control_indicator {
+				    border-radius: 50%;
+				}
+
+				.control:hover input ~ .control_indicator,
+				.control input:focus ~ .control_indicator {
+				    background: #cccccc;
+				}
+
+				.control input:checked ~ .control_indicator {
+				    background: #2aa1c0;
+				}
+				.control:hover input:not([disabled]):checked ~ .control_indicator,
+				.control input:checked:focus ~ .control_indicator {
+				    background: #0e6647d;
+				}
+				.control input:disabled ~ .control_indicator {
+				    background: #e6e6e6;
+				    opacity: 0.6;
+				    pointer-events: none;
+				}
+				.control_indicator:after {
+				    box-sizing: unset;
+				    content: '';
+				    position: absolute;
+				    display: none;
+				}
+				.control input:checked ~ .control_indicator:after {
+				    display: block;
+				}
+				.control-radio .control_indicator:after {
+				    left: 7px;
+				    top: 7px;
+				    height: 6px;
+				    width: 6px;
+				    border-radius: 50%;
+				    background: #ffffff;
+				}
+				.control-radio input:disabled ~ .control_indicator:after {
+				    background: #7b7b7b;
+				}
+				/* other styles*/
+
 				.body{
 					background-color: #88d0f7;
 				}
@@ -232,6 +300,8 @@
 			var nome_azienda = "";
 			var costoKWH = 0 ;
 			var controlButton = true;
+			var attrezzature;
+			var risparmio_manutenzione;
 			var controlButtonRemove = false;
 			var StatoAttualeArray;
 			var SolPLEDArray;
@@ -241,14 +311,14 @@
 				function inc_PuntiLuce_SOL_PLED(indice){
 					var i = indice.substring(10);
 					var PuntiLuceLED = document.getElementById("PuntiLuceLED"+i);
-					PuntiLuceLED.innerHTML++;
+					PuntiLuceLED.stepUp(1);
 				}
 
 				function dec_PuntiLuce_SOL_PLED(indice){
 					var i = indice.substring(10);
 					var PuntiLuceLED = document.getElementById("PuntiLuceLED"+i);
-					if (PuntiLuceLED.innerHTML > 0 ){
-						PuntiLuceLED.innerHTML--;
+					if (PuntiLuceLED.value > 0 ){
+						PuntiLuceLED.stepDown(1);
 					}
 				}
 
@@ -360,17 +430,17 @@
 					html += "<hr>";
 					html += "<h3 id='titoloLampadaStandard"+indice_id+"'>"+titolo_span+ "</h3>";
 					html += "<div><span>Modello: "+modello_span+"</span></div>";
-					html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)' value='"+modello+"'> </input></div>";
+					html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)' value='"+modello+"' readonly> </input></div>";
 					html += "<div><span id='standardSpanConsumo"+indice_id+"'>"+consumo_span+ " (in Watt)</span></div>";
-					html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+consumo+"'></input></div>";
+					html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+consumo+"' readonly></input></div>";
 					html += "<div><span id='standardSpanDurata"+indice_id+"'>"+durata_span+"</span></div>";
-					html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+durata+"'> </input></div>";
+					html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+durata+"' readonly> </input></div>";
 					html += "<div><span id='standardSpanPL"+indice_id+"'>"+PL_span+"</span></div>";
-					html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+PL+"'> </input></div>";
+					html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+PL+"' readonly> </input></div>";
 					html += "<div><span id='standardSpanGG"+indice_id+"'>"+GG_span+"</span></div>";
-					html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+GG+"'> </input></div>";
+					html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+GG+"' readonly> </input></div>";
 					html += "<div><span id='standardSpanHH"+indice_id+"'>"+HH_span+"</span></div>";
-					html += "<div><input id='HHStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+HH+"'> </input></div>";
+					html += "<div><input id='HHStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+HH+"' readonly> </input></div>";
 					html += "<hr>";
 					html += "</div>";
 
@@ -392,7 +462,7 @@
 					html += "<div><input id='HHStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 					html += "<hr>";
 
-					alert(controlButton);
+					//alert(controlButton);
 
 					if (controlButton == false){
 						html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
@@ -612,23 +682,23 @@
 								html += "<div class='flex-containerPLED'>";
 								html += "<div><span>Inserire punti luce: </span></div>";
 								html += "<div><button id='dec_button"+i+"' onclick='dec_PuntiLuce_SOL_PLED(this.id)' class='buttonLess'> - </button></div>";
-								html += "<div><label id='PuntiLuceLED"+i+"'>0</label></div>";
+								html += "<div><input type='number' value='0' id='PuntiLuceLED"+i+"'></div>";
 								html += "<div><button id='inc_button"+i+"' onclick='inc_PuntiLuce_SOL_PLED(this.id)' class='buttonPlus'> + </button></div>";
 								html += "</div>";
 							html += "<hr>";
 						}
-						html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
+						html += "<br><button class='buttonStep' onclick='toOtherInfo()'>Prosegui</button>";
 						step3.innerHTML += html;
 						document.getElementById("container").appendChild(step3);
 					}
 				}
 
-				function toCheckValues(){
+				function toOtherInfo(){
 					SolPLEDArray = new Array(N_analogic_bulb);
 					var control = 0;
 					for (var i = 0 ; i < N_analogic_bulb ; i++){
 						var modello = document.getElementById("modelliLED"+i).value;
-						var PL = document.getElementById("PuntiLuceLED"+i).innerHTML;
+						var PL = document.getElementById("PuntiLuceLED"+i).value;
 
 						if(modello != "" && PL != "0" ){
 							control++;
@@ -648,45 +718,29 @@
 
 					var html = "";
 
-					html += "<h2>Controlla i valori inseriti</h2>";
+					html += "<h2>Informazioni aggiuntive</h2>";
 					html += "<br>"
 
-					html += "<h3>Dati azienda</h3>";
-					html += "<div><span>Nome dell'azienda: "+nome_azienda+"<span></div>";
-					html += "<div><span>Numero Telefonico dell'azienda: "+tel_azienda+"</span></div>";
-					html += "<div><span>Indirizzo dell'azienda: "+indirizzo_azienda+"</span></div>";
-					html += "<div><span>CAP e città dell'azienda: "+cap_azienda+"</span></div>";
-					html += "<div><div><span>Nome del referente dell'azienda: "+nome_referente+"</span></div>";
-					html += "<div><span>Mail del referente dell'azienda: "+mail_referente+"</span></div>";
-					html += "<div><span>Costo della corrente in Kw/h: "+costoKWH+"</span></div>";
-
-					html += "<hr>";
-					html += "<h3>Dati prodotti</h3>";
-					html += "<ul>";
-					for (var i = 0; i < N_analogic_bulb; i++){
-						html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
-						html += " - consumo: "+StatoAttualeArray[i][1];
-						html += " - durata: "+StatoAttualeArray[i][2];
-						html += " - punti luce: "+StatoAttualeArray[i][3];
-						html += " - GG funzionamento: "+StatoAttualeArray[i][4];
-						html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
-						html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
-						html += " - punti luce: "+SolPLEDArray[i][1]+"]";
-						html += "<br>";
-						html += " </li>"
-					}
-					html += "</ul>";
-
-					html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
-					html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
-
+					html += "<h3>Sono necessarie attrezzature speciali per l'installazione?</h3>";
 					html += "<div class='flex-containerPLED'>";
-					html += "<hr>";
-					html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-					html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
-					html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+						html += "<div style='width:50%'><label class='control control-radio'>Si";
+						html += "<input type='radio' name='radio' id='radioInstallation1' checked='checked'/>";
+						html += "<div class='control_indicator'></div>";
+						html += "</label></div>";
+
+						html += "<div style='width:50%'><label class='control control-radio'>No";
+						html += "<input type='radio' id='radioInstallation2' name='radio'/>";
+						html += "<div class='control_indicator'></div>";
+						html += "</label></div>";
 					html += "</div>";
+
 					html += "<hr>";
+					html += "<div class='flex-containerPLED'>";
+						html += "<h3>Inserire il risparmio manutenzione ottenuto grazie alla soluzione Professional LED (in euro)</h3>";
+						html += "<div><input type='number' value='0' id='risparmioManutenzione'></div>";
+					html += "</div>";
+
+					html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
 
 					step4.innerHTML += html;
 
@@ -694,12 +748,102 @@
 				}
 			}
 
-			function toStampaPDF(){
+			function toCheckValues(){
+				var radio1 = document.getElementById("radioInstallation1");
+				var radio2 = document.getElementById("radioInstallation2");
+				var risparmio_manutenzione_temp = document.getElementById("risparmioManutenzione").value;
+				var control = 0;
+				if (radio1.checked){
+					attrezzature = true;
+					control++;
+				}else if (radio2.checked){
+					attrezzature = false;
+					control++;
+				}else{
+					alert("Errore in selezione opzioni installazione");
+				}
+
+				if (risparmio_manutenzione_temp != "" && risparmio_manutenzione_temp != "0"){
+					risparmio_manutenzione = risparmio_manutenzione_temp;
+					risparmio_manutenzione = risparmio_manutenzione.replace(',','.');
+					risparmio_manutenzione = parseFloat(risparmio_manutenzione).toFixed(2);
+					control++;
+				}else{
+					alert("Non hai inserito il risparmio manutenzione!");
+				}
+
+			if (control == 2){
 				var step4 = document.getElementById("step4");
 				step4.parentNode.removeChild(step4);
 
 				var step5 = document.createElement("div");
 				step5.id="step5";
+
+				var html = "";
+
+				html += "<h2>Controlla i valori inseriti</h2>";
+				html += "<br>"
+
+				html += "<h3>Dati azienda</h3>";
+				html += "<div><span>Nome dell'azienda: "+nome_azienda+"<span></div>";
+				html += "<div><span>Numero Telefonico dell'azienda: "+tel_azienda+"</span></div>";
+				html += "<div><span>Indirizzo dell'azienda: "+indirizzo_azienda+"</span></div>";
+				html += "<div><span>CAP e città dell'azienda: "+cap_azienda+"</span></div>";
+				html += "<div><div><span>Nome del referente dell'azienda: "+nome_referente+"</span></div>";
+				html += "<div><span>Mail del referente dell'azienda: "+mail_referente+"</span></div>";
+				html += "<div><span>Costo della corrente in Kw/h: "+costoKWH+"</span></div>";
+
+				html += "<hr>";
+				html += "<h3>Dati prodotti</h3>";
+				html += "<ul>";
+				for (var i = 0; i < N_analogic_bulb; i++){
+					html += "<li>Lampada [model:"+StatoAttualeArray[i][0];
+					html += " - consumo: "+StatoAttualeArray[i][1];
+					html += " - durata: "+StatoAttualeArray[i][2];
+					html += " - punti luce: "+StatoAttualeArray[i][3];
+					html += " - GG funzionamento: "+StatoAttualeArray[i][4];
+					html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
+					html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
+					html += " - punti luce: "+SolPLEDArray[i][1]+"]";
+					html += "<br>";
+					html += " </li>"
+				}
+				html += "</ul>";
+
+				html += "<hr>";
+				html += "<h3>Dati aggiuntivi</h3>";
+				if (attrezzature){
+					html += "<p>Sono previsti costi aggiuntivi per l'installazione</p>";
+				}else{
+					html += "<p>Non sono previsti costi aggiuntivi per l'installazione</p>";
+				}
+				html += "<p>Hai inserito "+risparmio_manutenzione+"euro come risparmio manutenzione</p>";
+				html += "<hr>";
+
+				html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
+				html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
+
+				html += "<div class='flex-containerPLED'>";
+				html += "<hr>";
+				html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+				html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
+				html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+				html += "</div>";
+				html += "<hr>";
+
+				step5.innerHTML += html;
+
+				document.getElementById("container").appendChild(step5);
+			}
+			}
+
+
+			function toStampaPDF(){
+				var step5 = document.getElementById("step5");
+				step5.parentNode.removeChild(step5);
+
+				var step6 = document.createElement("div");
+				step6.id="step6";
 
 				var html = "";
 
@@ -720,9 +864,9 @@
 					html +="</div>";
 				html +="</center>";
 
-				step5.innerHTML += html;
+				step6.innerHTML += html;
 
-				document.getElementById("container").appendChild(step5);
+				document.getElementById("container").appendChild(step6);
 			}
 
 			function create_payback(){
@@ -731,7 +875,7 @@
 				var totalPagesExp = "{total_pages_count_string}";
 
 				var matte = "ciao";
-				var columns = ["ID", "Name", "Country"];
+				var columns = ["Anno", "Risparmio", "Risparmio \nmanutenzione","Quota \nammortizzata","Quota \nresidua","Risparmio \ntot annuo","Investimento"];
 				var rows = [
 				    [1, "Shaw", "Tanzania"],
 				    [2, "Nelson", "Kazakhstan \n"],
@@ -806,6 +950,7 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
+					styles: {overflow: 'linebreak', columnWidth: 'wrap'},
 					margin: {top: 70,bottom: 20},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
