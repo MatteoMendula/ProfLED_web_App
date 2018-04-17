@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Apr 08, 2018 alle 23:23
--- Versione del server: 10.1.29-MariaDB
--- Versione PHP: 7.2.0
+-- Creato il: Apr 18, 2018 alle 00:37
+-- Versione del server: 10.1.31-MariaDB
+-- Versione PHP: 7.2.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -51,21 +51,26 @@ INSERT INTO `img` (`id`, `content`) VALUES
 CREATE TABLE `leds` (
   `id` int(11) NOT NULL,
   `modello` varchar(50) NOT NULL,
-  `descrizione` varchar(255) NOT NULL,
-  `id_foto` int(11) NOT NULL,
+  `id_foto` int(11) NOT NULL DEFAULT '0',
   `prezzo` float(10,2) NOT NULL,
-  `group_modello` varchar(50) DEFAULT NULL
+  `group_modello` varchar(50) DEFAULT NULL,
+  `consumo` int(11) NOT NULL,
+  `durata` varchar(20) NOT NULL,
+  `nome_lungo` varchar(50) DEFAULT NULL,
+  `marca` varchar(50) DEFAULT NULL,
+  `lumen` varchar(50) DEFAULT NULL,
+  `note` varchar(50) DEFAULT NULL,
+  `kelvin` varchar(50) DEFAULT NULL,
+  `garanzia` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dump dei dati per la tabella `leds`
 --
 
-INSERT INTO `leds` (`id`, `modello`, `descrizione`, `id_foto`, `prezzo`, `group_modello`) VALUES
-(1, 'MODELLO_DI_MATTE', 'questa lampada fa luce', 1, 36.14, 'Case'),
-(2, 'MODELLO_DI_MATTE_ALTRO', 'anche questa fa luce', 2, 300.50, 'Panel Led'),
-(3, 'MODELLO_DI_MATTE_ANCORA', 'dfasdsaasgsdgsadgasdgasdfgad\r\nsdfasdgasg\r\nsadgsdagsdgsdgsgs', 2, 9000.00, 'Plafo4k'),
-(4, 'altro modello', 'dsfasdfsdfsdfs', 2, 34.12, 'Case');
+INSERT INTO `leds` (`id`, `modello`, `id_foto`, `prezzo`, `group_modello`, `consumo`, `durata`, `nome_lungo`, `marca`, `lumen`, `note`, `kelvin`, `garanzia`) VALUES
+(5, 'PL-36W6060-4KW', 2, 95.00, 'Panel Led', 36, '70.000', 'Panel LED INDUSTRIALE 36 Watt. cm. 60 x 60 URG <19', 'Philips Lumiled - non dimmerabile', 'Potenza 120 Lumen/Watt -4.300 Lumen', 'Telaio bianco', 'Luce Bianco Naturale 4.000K', '5'),
+(6, 'CS-150W-5K', 1, 350.00, 'Case', 150, '70.000', 'Case LED INDUSTRIALE 150 Watt IP65', 'Philips Lumiled', 'Potenza 150 Lumen/Watt - 22.500 Lumen', NULL, 'Luce bianca 5.000K', '5');
 
 -- --------------------------------------------------------
 
@@ -126,7 +131,7 @@ ALTER TABLE `img`
 -- AUTO_INCREMENT per la tabella `leds`
 --
 ALTER TABLE `leds`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT per la tabella `users`
