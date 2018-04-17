@@ -32,7 +32,7 @@ if($_SESSION['username'] != "manrico"){
     <div class="wrapper">
       <h3>Cosa vuoi fare?</h3>
       <hr>
-      <button class="btn btn-primary" type="button" >Compilare un preventivo</button>
+      <button class="btn btn-primary" type="button" onclick="preventivo()">Compilare un preventivo</button>
       <hr>
       <button class="btn btn-danger" type="button" onclick="register()">Registrare un nuovo utente</button>
       <hr>
@@ -45,6 +45,10 @@ if($_SESSION['username'] != "manrico"){
 </html>
 
 <script>
+function preventivo(){
+  location.href = "./preventivatore/index.php";
+}
+
 function logout(){
   location.href = "./logout.php";
 }

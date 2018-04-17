@@ -9,10 +9,7 @@
 		  exit;
 		}else{
 		  $utente = $_SESSION['username'];
-		  echo "<h2>Benvenuto ".$utente."!</h1>";
-		  if ($_SESSION['username'] == "manrico"){
-		    header("location: manrico.php");
-		  }
+		  echo "<h2 style='color:green'>Benvenuto ".$utente."!</h1>";
 		}
 		/*
 		$servername = "localhost";
@@ -38,7 +35,7 @@
 			$createdAt=array();
 	    // output data of each row
 	    while($row = $result->fetch_assoc()) {
-	        echo "id: " . $row["id"]. " - username: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
+	        //echo "id: " . $row["id"]. " - username: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
 					$id[] = $row['id'];
 					$username[] = $row["username"];
 					$password[] = $row["password"];
@@ -65,23 +62,46 @@
 			$id_foto=array();
 			$prezzo=array();
 			$gruppo_modello=array();
+			$consumo=array();
+			$durata=array();
+			$nome_lungo=array();
+			$marca=array();
+			$lumen=array();
+			$note=array();
+			$kelvin=array();
+			$garanzia=array();
 	    // output data of each row
 	    while($row = $result->fetch_assoc()) {
 	        //echo "id: " . $row["id"]. " - modello: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
 					$id[] = $row['id'];
 					$modello[] = $row["modello"];
-					$descrizione[] = $row["descrizione"];
 					$id_foto[] = $row["id_foto"];
 					$prezzo[] = $row["prezzo"];
 					$gruppo_modello[] = $row["group_modello"];
+					$consumo[] = $row["consumo"];
+					$durata[] = $row["durata"];
+					$nome_lungo[] = $row["nome_lungo"];
+					$marca[] = $row["marca"];
+					$lumen[] = $row["marca"];
+					$note[] = $row["note"];
+					$kelvin[] = $row["kelvin"];
+					$garanzia[] = $row["garanzia"];
 			}
 			echo "<script>";
 			echo "var array_id_leds = " . json_encode($id) . ";";
 			echo "var array_modello = " . json_encode($modello) . ";";
-			echo "var array_descrizione = " . json_encode($descrizione) . ";";
 			echo "var array_id_foto = " . json_encode($id_foto) . ";";
 			echo "var array_prezzo = " . json_encode($prezzo) . ";";
 			echo "var array_gruppo_modello = " . json_encode($gruppo_modello) . ";";
+			echo "var array_consumo = " . json_encode($consumo) . ";";
+			echo "var array_durata = " . json_encode($durata) . ";";
+			echo "var array_nome_lungo = " . json_encode($nome_lungo) . ";";
+			echo "var array_marca = " . json_encode($marca) . ";";
+			echo "var array_lumen = " . json_encode($lumen) . ";";
+			echo "var array_note = " . json_encode($note) . ";";
+			echo "var array_kelvin = " . json_encode($kelvin) . ";";
+			echo "var array_garanzia = " . json_encode($garanzia) . ";";
+
 			echo "</script>";
 		} else {
 		    echo "0 results leds";
@@ -95,7 +115,7 @@
 			$foto=array();
 	    // output data of each row
 	    while($row = $result->fetch_assoc()) {
-	        echo "_foto: " . $row["id"]. " - foto: " . $row["content"]."<br>";
+	        //echo "_foto: " . $row["id"]. " - foto: " . $row["content"]."<br>";
 					$id[] = $row['id'];
 					$foto[] = $row["content"];
 			}
@@ -211,6 +231,8 @@
 				  flex-direction: column ;
 				  margin: 1rem;
 					background-color: #88d0f7;
+					border: 2px solid green;
+			    border-radius: 25px;
 				}
 
 				.flex-container > div {
@@ -293,6 +315,10 @@
 
 				    cursor: pointer;
 				}
+
+				.input{
+					text-align: center;
+				}
 			</style>
 
 			<script>
@@ -305,6 +331,32 @@
 			var controlButtonRemove = false;
 			var StatoAttualeArray;
 			var SolPLEDArray;
+
+			var spesa_annua_attuale;
+			var spesa_annua_attuale_totale;
+			var spesa_annua_led;
+			var risparmio_annuo_con_led;
+			var risparmio_percentuale;
+
+
+			var selezionati_nome_lungo;
+			var selezionati_consumo;
+			var selezionati_durata;
+			var selezionati_marca;
+			var selezionati_lumen;
+			var selezionati_note;
+			var selezionati_kelvin;
+			var selezionati_garanzia;
+			var selezionati_prezzo;
+			var consumi_led_selezionati;
+			var prezzo_led_selezionati;
+			var selezionati_foto;
+
+			var acquisto_totale;
+			var spesa_annua_led_totale;
+			var risparmio_annuo_con_led_totale;
+			var risparmio_percentuale_totale;
+
 			var imgLogo = "data:image/png;base64,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";
 
 
@@ -682,7 +734,7 @@
 								html += "<div class='flex-containerPLED'>";
 								html += "<div><span>Inserire punti luce: </span></div>";
 								html += "<div><button id='dec_button"+i+"' onclick='dec_PuntiLuce_SOL_PLED(this.id)' class='buttonLess'> - </button></div>";
-								html += "<div><input type='number' value='0' id='PuntiLuceLED"+i+"'></div>";
+								html += "<div><input type='number' value='0' id='PuntiLuceLED"+i+"' style='text-align:center'></div>";
 								html += "<div><button id='inc_button"+i+"' onclick='inc_PuntiLuce_SOL_PLED(this.id)' class='buttonPlus'> + </button></div>";
 								html += "</div>";
 							html += "<hr>";
@@ -737,7 +789,7 @@
 					html += "<hr>";
 					html += "<div class='flex-containerPLED'>";
 						html += "<h3>Inserire il risparmio manutenzione ottenuto grazie alla soluzione Professional LED (in euro)</h3>";
-						html += "<div><input type='number' value='0' id='risparmioManutenzione'></div>";
+						html += "<div><input type='number' value='0' id='risparmioManutenzione' style='text-align:center'></div>";
 					html += "</div>";
 
 					html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
@@ -773,6 +825,7 @@
 				}
 
 			if (control == 2){
+
 				var step4 = document.getElementById("step4");
 				step4.parentNode.removeChild(step4);
 
@@ -820,13 +873,13 @@
 				html += "<p>Hai inserito "+risparmio_manutenzione+"euro come risparmio manutenzione</p>";
 				html += "<hr>";
 
-				html += "<h3>Se i dati inseriti risultano corretti clicca su Fine per aprire i file generati</h3>";
+				html += "<h3>Se i dati inseriti risultano corretti clicca su Calcola per calcolare il preventivo</h3>";
 				html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
 
 				html += "<div class='flex-containerPLED'>";
 				html += "<hr>";
 				html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-				html += "<div><button class='buttonAddItem' onclick='toStampaPDF()'>Fine</button></div>";
+				html += "<div><button class='buttonAddItem' onclick='toCheckCalcolo()'>Calcola</button></div>";
 				html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
 				html += "</div>";
 				html += "<hr>";
@@ -837,8 +890,9 @@
 			}
 			}
 
+			function toCheckCalcolo(){
+				calcoli();
 
-			function toStampaPDF(){
 				var step5 = document.getElementById("step5");
 				step5.parentNode.removeChild(step5);
 
@@ -846,70 +900,242 @@
 				step6.id="step6";
 
 				var html = "";
+				html += "<h2>Eventuali modifiche e sconti</h2>";
+				html += "<br>";
+				html += "<hr>";
+				html += "<h3>Produtti PLED</h3>";
+				for (var i = 0; i < N_analogic_bulb;i++){
+					html += "<p>Modello "+SolPLEDArray[i][0]+" con "+SolPLEDArray[i][1]+" punti luce: costo unitario = "+selezionati_prezzo[i]+"</p>";
+				}
+				html += "<hr>";
+				html += "<h3>Totali</h3>";
+				html += "<p>Il totale degli acquisti risulta: "+acquisto_totale+"</p>";
+				html += "<p>La spesa attuale totale risulta: "+spesa_annua_attuale_totale+"</p>";
+				html += "<p>La spesa con LED totale risulta: "+spesa_annua_led_totale+"</p>";
+				html += "<p>Il risparmio con LED in euro risulta: "+risparmio_annuo_con_led+"</p>";
+				html += "<p>Il risparmio con LED in percentuale risulta: "+risparmio_percentuale_totale+"</p>";
+				html += "<hr>";
+				html += "<h3>Se vuoi modificare qualche valore riempi i campi sottostanti altrimenti vai ai PDF generati</h3>";
+				for (var i = 0; i < N_analogic_bulb;i++){
+					html += "<div class='flex-container'>";
+						html += "<div><span>Prezzo unitario del modello"+SolPLEDArray[i][0]+":</span></div>";
+						html += "<div><input placeholder='350.00' id='costo_unitario_changed"+i+"'> </input></div>";
+					html += "</div>";
 
-				html += "<h2>Clicca sul bottone corrispondente per visualizzare il file generato</h2>";
-				html += "<br>"
+					html += "<div class='flex-container'>";
+						html += "<div><span>Prezzo di acquisto totale:</span></div>";
+						html += "<div><input id='acquisto_totale_changed'> </input></div>";
+						html += "<div><span>Spesa attuale annua totale:</span></div>";
+						html += "<div><input id='attuale_totale_changed'> </input></div>";
+					html += "</div>";
+
+					html += "<div class='flex-container'>";
+						html += "<div><span>Risparmio annuo totale:</span></div>";
+						html += "<div><input id='risparmio_totale_changed'> </input></div>";
+						html += "<div><span>Risparmio annuo percentuale totale:</span></div>";
+						html += "<div><input id='risparmio_totale_percentuale_changed'> </input></div>";
+					html += "</div>";
+
+				}
 
 				html +="<center>";
 					html +="<div class='wrapper'>";
 						html +="<hr>";
-						html +="<button class='btn btn-primary' type='button' onclick='create_acquisto()'>Soluzione ACQUISTO</button>";
-						html +="<hr>";
-						html +="<button class='btn btn-warining' type='button' onclick='create_noleggio()'>Soluzione NOLEGGIO</button>";
-						html +="<hr>";
-						html +="<button class='btn btn-info' type='button' onclick='create_payback()'>PAYBACK</button>";
-						html +="<hr>";
-						html +="<hr>";
-						html +="<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+						html +="<div><button class='buttonStep' onclick='toStampaPDF()'>Ai PDF generati</button></div>";
 					html +="</div>";
 				html +="</center>";
 
 				step6.innerHTML += html;
 
 				document.getElementById("container").appendChild(step6);
+
+			}
+
+
+			function calcoli(){
+				//------------------------CALCOLI PER STAMPA----------------------------
+				spesa_annua_led = new Array(N_analogic_bulb);
+				spesa_annua_attuale = new Array(N_analogic_bulb);
+				risparmio_annuo_con_led = new Array(N_analogic_bulb);
+				risparmio_percentuale = new Array(N_analogic_bulb);
+
+				selezionati_nome_lungo = new Array(N_analogic_bulb);
+				selezionati_prezzo = new Array(N_analogic_bulb);
+				selezionati_foto = new Array(N_analogic_bulb);
+				selezionati_note = new Array(N_analogic_bulb);
+				selezionati_lumen = new Array (N_analogic_bulb);
+				selezionati_marca = new Array (N_analogic_bulb);
+				selezionati_lumen = new Array (N_analogic_bulb);
+				selezionati_kelvin = new Array (N_analogic_bulb);
+				selezionati_garanzia = new Array (N_analogic_bulb);
+				selezionati_durata = new Array (N_analogic_bulb);
+				selezionati_consumo = new Array (N_analogic_bulb);
+
+				acquisto_totale = 0;
+				spesa_annua_led_totale = 0;
+				spesa_annua_attuale_totale = 0;
+				risparmio_annuo_con_led_totale = 0;
+				risparmio_percentuale_totale = 0;
+				for (var i = 0; i < N_analogic_bulb; i++){
+					var temp = StatoAttualeArray[i][4] *StatoAttualeArray[i][5] * costoKWH / 1000;
+					spesa_annua_attuale[i] = temp * StatoAttualeArray[i][1] * StatoAttualeArray[i][3];
+					var modelloLED = SolPLEDArray[i][0];
+					for (var j = 0; j < array_modello.length; j++){
+						if (modelloLED == array_modello[j]){
+							selezionati_consumo[i] = parseFloat(array_consumo[j]);
+							selezionati_prezzo[i] = parseFloat(array_prezzo[j]);
+							selezionati_foto[i] = array_id_foto[j];
+							selezionati_note[i] = array_note[j];
+							selezionati_durata[i] = array_durata[j];
+							selezionati_kelvin[i] = array_kelvin[j];
+							selezionati_garanzia[i] = array_garanzia;
+							selezionati_nome_lungo[i] = array_nome_lungo[j];
+							selezionati_lumen[i] = array_lumen[j];
+							//alert("TRovato match "+consumi_led_selezionati[i]+" "+prezzo_led_selezionati[i]+" "+descrizioni_led_selezionati[i]+" "+foto_selezionati[i]+" "+durata_selezionati[i]);
+						}
+					}
+					spesa_annua_led[i] = temp * SolPLEDArray[i][1] * selezionati_consumo[i];
+					risparmio_annuo_con_led[i] = spesa_annua_attuale[i] - spesa_annua_led[i];
+					risparmio_percentuale[i] = Math.floor(1 - (spesa_annua_led[i]/spesa_annua_attuale[i]));
+
+					//totali
+					spesa_annua_attuale_totale += spesa_annua_attuale[i];
+					spesa_annua_led_totale += spesa_annua_led[i];
+					risparmio_annuo_con_led_totale += risparmio_annuo_con_led[i];
+					acquisto_totale += selezionati_prezzo[i];
+				}
+				risparmio_percentuale_totale = Math.floor(1 - (spesa_annua_led_totale/spesa_annua_attuale_totale));
+
+				//----------------------------------------------------------------------
+			}
+
+			function toStampaPDF(){
+
+				var control = 0;
+
+				for (var i = 0 ; i < N_analogic_bulb ; i++){
+					var costo_unitario = document.getElementById("costo_unitario_changed"+i);
+					if (costo_unitario.value == "" || !isNaN(costo_unitario.value))
+						control++;
+				}
+				var acquisto_totale_changed = document.getElementById("acquisto_totale_changed");
+				var spesa_totale_attuale_changed = document.getElementById("attuale_totale_changed");
+				var risparmio_totale_changed = document.getElementById("risparmio_totale_changed");
+				var risparmio_totale_percentuale_changed = document.getElementById("risparmio_totale_percentuale_changed");
+
+
+				if (spesa_totale_attuale_changed.value == ""){
+					control++;
+				}else if (!isNaN(spesa_totale_attuale_changed.value)) {
+					control++;
+					spesa_annua_attuale_totale=spesa_totale_attuale_changed.value;
+				}else{
+					alert("Error: la spesa annua totale non è un numero");
+				}
+
+				if (acquisto_totale_changed.value == ""){
+					control++;
+				}else if (!isNaN(acquisto_totale_changed.value)) {
+					control++;
+					acquisto_totale=acquisto_totale_changed.value;
+				}else{
+					alert("Error: l'acquisto totale non è un numero");
+				}
+
+				if (risparmio_totale_changed.value == ""){
+					control++;
+				}else if (!isNaN(risparmio_totale_changed.value)) {
+					control++;
+					risparmio_annuo_con_led_totale=risparmio_totale_changed.value;
+				}else{
+					alert("Error: il risparmio annuo totale non è un numero");
+				}
+
+				if (risparmio_totale_percentuale_changed.value == ""){
+					control++;
+				}else if (!isNaN(risparmio_totale_percentuale_changed.value)) {
+					control++;
+					risparmio_percentuale_totale=risparmio_totale_percentuale_changed.value;
+				}else{
+					alert("Error: il risparmio annuo totale percentuale non è un numero");
+				}
+
+
+				if (control == (N_analogic_bulb+4)){
+
+
+					calcoli();
+
+					var step6 = document.getElementById("step6");
+					step6.parentNode.removeChild(step6);
+
+					var step7 = document.createElement("step7");
+					step7.id="step7";
+
+
+
+					var html = "";
+
+					html += "<h2>Clicca sul bottone corrispondente per visualizzare il file generato</h2>";
+					html += "<br>"
+
+					html +="<center>";
+						html +="<div class='wrapper'>";
+							html +="<hr>";
+							html +="<button class='btn btn-primary' type='button' onclick='create_acquisto()'>Soluzione ACQUISTO</button>";
+							html +="<hr>";
+							html +="<button class='btn btn-warining' type='button' onclick='create_noleggio()'>Soluzione NOLEGGIO</button>";
+							html +="<hr>";
+							html +="<button class='btn btn-info' type='button' onclick='create_payback()'>PAYBACK</button>";
+							html +="<hr>";
+							html +="<hr>";
+							html +="<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+						html +="</div>";
+					html +="</center>";
+
+					step7.innerHTML += html;
+
+					document.getElementById("container").appendChild(step7);
+				}else{
+					alert("Qualcuno dei valori inseriti non è un numero!");
+				}
 			}
 
 			function create_payback(){
 				var pdf_as_url;
 				var doc = new jsPDF();
 				var totalPagesExp = "{total_pages_count_string}";
-
-				var matte = "ciao";
 				var columns = ["Anno", "Risparmio", "Risparmio \nmanutenzione","Quota \nammortizzata","Quota \nresidua","Risparmio \ntot annuo","Investimento"];
-				var rows = [
-				    [1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-					[1, "Shaw", "Tanzania"],
-				    [2, "Nelson", "Kazakhstan \n"],
-				    [3, matte, "Madagascar"],
-					[, , ],
-				];
+				var rows = new Array();
+				var precedente = 0;
+				for (var i = 0; i < 20 ; i++){
+					var anno = i+1;
+					var risparmio_colonna = risparmio_annuo_con_led_totale - risparmio_manutenzione;
+					var manutenzione_colonna = risparmio_manutenzione;
+					var quota_ammortizzata_colonna;
+					var temp = quota_ammortizzata_colonna - manutenzione_colonna - risparmio_colonna;
+					var quota_residua_colonna;
+					var investimento_colonna;
+					var risparmio_tot_annuo_colonna;
+					if (i == 0){
+						quota_ammortizzata_colonna = acquisto_totale;
+						investimento_colonna = acquisto_totale;
+					}else{
+						quota_ammortizzata_colonna = precedente;
+					}
+
+					if (temp > 0) quota_residua_colonna = temp;
+					else quota_residua_colonna = 0;
+
+					precedente = quota_residua_colonna;
+
+					if (quota_residua_colonna > 0) risparmio_tot_annuo_colonna = 0;
+					else risparmio_tot_annuo_colonna = risparmio_colonna + manutenzione_colonna - quota_ammortizzata_colonna;
+					alert(anno+" "+risparmio_colonna+" "+manutenzione_colonna+" "+quota_ammortizzata_colonna+" "+quota_residua_colonna+" "+risparmio_tot_annuo_colonna+" "+investimento_colonna);
+
+					rows.push(anno,risparmio_colonna,manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna,investimento_colonna);
+				}
+
 				var pageContent = function (data) {
 					// HEADER
 					doc.setFontSize(9);
@@ -950,7 +1176,7 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak', columnWidth: 'wrap'},
+					styles: {overflow: 'linebreak'},
 					margin: {top: 70,bottom: 20},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
@@ -1020,8 +1246,11 @@
 				</div>
 			</center>
 
-
-
-
+			<?php
+				echo "<div align='right' style='margin:1rem'>";
+				echo "<p>Web app realizzata da Matteo Mendula. Tutti i diritti riservati.</p>";
+				echo "<a href='../logout.php'>LOGOUT</a>";
+				echo "</div>"
+			?>
 		</body>
 	</html>
