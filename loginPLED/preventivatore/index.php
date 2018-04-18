@@ -903,40 +903,45 @@
 				html += "<h2>Eventuali modifiche e sconti</h2>";
 				html += "<br>";
 				html += "<hr>";
-				html += "<h3>Produtti PLED</h3>";
+				html += "<h3>Prodotti PLED</h3>";
 				for (var i = 0; i < N_analogic_bulb;i++){
-					html += "<p>Modello "+SolPLEDArray[i][0]+" con "+SolPLEDArray[i][1]+" punti luce: costo unitario = "+selezionati_prezzo[i]+"</p>";
+					html += "<p>Modello "+SolPLEDArray[i][0]+" con "+SolPLEDArray[i][1]+" punti luce: costo unitario di listino = "+selezionati_prezzo[i]+"</p>";
 				}
 				html += "<hr>";
 				html += "<h3>Totali</h3>";
-				html += "<p>Il totale degli acquisti risulta: "+acquisto_totale+"</p>";
-				html += "<p>La spesa attuale totale risulta: "+spesa_annua_attuale_totale+"</p>";
-				html += "<p>La spesa con LED totale risulta: "+spesa_annua_led_totale+"</p>";
-				html += "<p>Il risparmio con LED in euro risulta: "+risparmio_annuo_con_led+"</p>";
-				html += "<p>Il risparmio con LED in percentuale risulta: "+risparmio_percentuale_totale+"</p>";
+				html += "<div id='riassuntoCalcoli'>"
+					html += "<p>Il totale degli acquisti risulta: "+acquisto_totale+"</p>";
+					html += "<p>La spesa attuale totale risulta: "+spesa_annua_attuale_totale+"</p>";
+					html += "<p>La spesa con LED totale risulta: "+spesa_annua_led_totale+"</p>";
+					html += "<p>Il risparmio con LED in euro risulta: "+risparmio_annuo_con_led_totale+"</p>";
+					html += "<p>Il risparmio con LED in percentuale risulta: "+risparmio_percentuale_totale+"</p>";
+				html += "</div>";
 				html += "<hr>";
 				html += "<h3>Se vuoi modificare qualche valore riempi i campi sottostanti altrimenti vai ai PDF generati</h3>";
+				html += "<h3>Prodotti("+N_analogic_bulb+")</h3>"
 				for (var i = 0; i < N_analogic_bulb;i++){
+					var prezzo = selezionati_prezzo[i];
 					html += "<div class='flex-container'>";
-						html += "<div><span>Prezzo unitario del modello"+SolPLEDArray[i][0]+":</span></div>";
-						html += "<div><input placeholder='350.00' id='costo_unitario_changed"+i+"'> </input></div>";
+						html += "<div><span>Prezzo unitario del modello "+SolPLEDArray[i][0]+":</span></div>";
+						html += "<div><input placeholder='"+prezzo+"' id='costo_unitario_changed"+i+"' style='text-align:center' onkeyup='cambiaRiassuntoCalcoli(this.id)'> </input></div>";
 					html += "</div>";
-
-					html += "<div class='flex-container'>";
-						html += "<div><span>Prezzo di acquisto totale:</span></div>";
-						html += "<div><input id='acquisto_totale_changed'> </input></div>";
-						html += "<div><span>Spesa attuale annua totale:</span></div>";
-						html += "<div><input id='attuale_totale_changed'> </input></div>";
-					html += "</div>";
-
-					html += "<div class='flex-container'>";
-						html += "<div><span>Risparmio annuo totale:</span></div>";
-						html += "<div><input id='risparmio_totale_changed'> </input></div>";
-						html += "<div><span>Risparmio annuo percentuale totale:</span></div>";
-						html += "<div><input id='risparmio_totale_percentuale_changed'> </input></div>";
-					html += "</div>";
-
 				}
+				html += "<hr>";
+				html += "<h3>Totali</h3>"
+				html += "<div class='flex-container'>";
+					html += "<div><span>Prezzo di acquisto totale:</span></div>";
+					html += "<div><input id='acquisto_totale_changed' style='text-align:center' onkeyup='cambiaRiassuntoCalcoli(this.id)'> </input></div>";
+					html += "<div><span>Spesa attuale annua totale:</span></div>";
+					html += "<div><input id='attuale_totale_changed' style='text-align:center' onkeyup='cambiaRiassuntoCalcoli(this.id)'> </input></div>";
+				html += "</div>";
+
+				html += "<div class='flex-container'>";
+					html += "<div><span>Risparmio annuo totale:</span></div>";
+					html += "<div><input id='risparmio_totale_changed' style='text-align:center' onkeyup='cambiaRiassuntoCalcoli(this.id)'> </input></div>";
+					html += "<div><span>Risparmio annuo percentuale totale:</span></div>";
+					html += "<div><input id='risparmio_totale_percentuale_changed' style='text-align:center' onkeyup='cambiaRiassuntoCalcoli(this.id)'> </input></div>";
+				html += "</div>";
+
 
 				html +="<center>";
 					html +="<div class='wrapper'>";
@@ -951,6 +956,86 @@
 
 			}
 
+			function cambiaRiassuntoCalcoli(id){
+				var riassunto_calcoli = document.getElementById("riassuntoCalcoli");
+				var html = "";
+				var control = 0;
+
+				for (var i = 0 ; i < N_analogic_bulb ; i++){
+					var costo_unitario = document.getElementById("costo_unitario_changed"+i);
+					if (costo_unitario.value == ""){
+						control++;
+					}else if (!isNaN(costo_unitario.value)){
+						control++;
+						selezionati_prezzo[i] = parseFloat(costo_unitario.value);
+						//alert("debug: "+ selezionati_prezzo[i] + " - " + selezionati_prezzo);
+					}else{
+						alert("Error: Il prezzo inserito per il modello nr."+i+" ["+SolPLEDArray[i][0]+"] non è un numero!");
+					}
+				}
+				var acquisto_totale_changed = document.getElementById("acquisto_totale_changed");
+				var spesa_totale_attuale_changed = document.getElementById("attuale_totale_changed");
+				var risparmio_totale_changed = document.getElementById("risparmio_totale_changed");
+				var risparmio_totale_percentuale_changed = document.getElementById("risparmio_totale_percentuale_changed");
+
+
+				if (spesa_totale_attuale_changed.value == ""){
+					control++;
+				}else if (!isNaN(spesa_totale_attuale_changed.value)) {
+					control++;
+					spesa_annua_attuale_totale=spesa_totale_attuale_changed.value;
+				}else{
+					alert("Error: la spesa annua totale non è un numero");
+				}
+
+				if (acquisto_totale_changed.value == ""){
+					control++;
+				}else if (!isNaN(acquisto_totale_changed.value)) {
+					control++;
+					acquisto_totale=acquisto_totale_changed.value;
+				}else{
+					alert("Error: l'acquisto totale non è un numero");
+				}
+
+				if (risparmio_totale_changed.value == ""){
+					control++;
+				}else if (!isNaN(risparmio_totale_changed.value)) {
+					control++;
+					risparmio_annuo_con_led_totale=risparmio_totale_changed.value;
+				}else{
+					alert("Error: il risparmio annuo totale non è un numero");
+				}
+
+				if (risparmio_totale_percentuale_changed.value == ""){
+					control++;
+				}else if (!isNaN(risparmio_totale_percentuale_changed.value)) {
+					control++;
+					risparmio_percentuale_totale=risparmio_totale_percentuale_changed.value;
+				}else{
+					alert("Error: il risparmio annuo totale percentuale non è un numero");
+				}
+
+				if (control == (N_analogic_bulb+4)){
+					//alert("ok");
+					if (id.startsWith("costo_unitario")){
+						acquisto_totale = 0;
+						for (var i = 0 ; i < N_analogic_bulb ; i++){
+							acquisto_totale += SolPLEDArray[i][1] * selezionati_prezzo[i];
+						}
+					}
+					html += "<div id='riassuntoCalcoli'>"
+						html += "<p>Il totale degli acquisti risulta: "+acquisto_totale+"</p>";
+						html += "<p>La spesa attuale totale risulta: "+spesa_annua_attuale_totale+"</p>";
+						html += "<p>La spesa con LED totale risulta: "+spesa_annua_led_totale+"</p>";
+						html += "<p>Il risparmio con LED in euro risulta: "+risparmio_annuo_con_led_totale+"</p>";
+						html += "<p>Il risparmio con LED in percentuale risulta: "+risparmio_percentuale_totale+"</p>";
+						html += "<p>ciao</p>";
+					html += "</div>";
+					riassunto_calcoli.innerHTML = html;
+				}
+
+
+			}
 
 			function calcoli(){
 				//------------------------CALCOLI PER STAMPA----------------------------
@@ -976,6 +1061,7 @@
 				spesa_annua_attuale_totale = 0;
 				risparmio_annuo_con_led_totale = 0;
 				risparmio_percentuale_totale = 0;
+				risparmio_manutenzione = parseFloat(risparmio_manutenzione);
 				for (var i = 0; i < N_analogic_bulb; i++){
 					var temp = StatoAttualeArray[i][4] *StatoAttualeArray[i][5] * costoKWH / 1000;
 					spesa_annua_attuale[i] = temp * StatoAttualeArray[i][1] * StatoAttualeArray[i][3];
@@ -1002,9 +1088,10 @@
 					spesa_annua_attuale_totale += spesa_annua_attuale[i];
 					spesa_annua_led_totale += spesa_annua_led[i];
 					risparmio_annuo_con_led_totale += risparmio_annuo_con_led[i];
-					acquisto_totale += selezionati_prezzo[i];
+					acquisto_totale += selezionati_prezzo[i] * SolPLEDArray[i][1];
 				}
-				risparmio_percentuale_totale = Math.floor(1 - (spesa_annua_led_totale/spesa_annua_attuale_totale));
+				risparmio_annuo_con_led_totale += risparmio_manutenzione;
+				risparmio_percentuale_totale = Math.floor((spesa_annua_led_totale/spesa_annua_attuale_totale -1 )*100);
 
 				//----------------------------------------------------------------------
 			}
@@ -1108,7 +1195,8 @@
 				var columns = ["Anno", "Risparmio", "Risparmio \nmanutenzione","Quota \nammortizzata","Quota \nresidua","Risparmio \ntot annuo","Investimento"];
 				var rows = new Array();
 				var precedente = 0;
-				for (var i = 0; i < 20 ; i++){
+				rows[0]=["1",risparmio_annuo_con_led_totale-risparmio_manutenzione,risparmio_manutenzione,acquisto_totale,acquisto_totale-risparmio_annuo_con_led_totale,0,acquisto_totale];
+/*				for (var i = 0; i < 20 ; i++){
 					var anno = i+1;
 					var risparmio_colonna = risparmio_annuo_con_led_totale - risparmio_manutenzione;
 					var manutenzione_colonna = risparmio_manutenzione;
@@ -1135,6 +1223,7 @@
 
 					rows.push(anno,risparmio_colonna,manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna,investimento_colonna);
 				}
+				*/
 
 				var pageContent = function (data) {
 					// HEADER
