@@ -983,7 +983,7 @@
 					control++;
 				}else if (!isNaN(spesa_totale_attuale_changed.value)) {
 					control++;
-					spesa_annua_attuale_totale=spesa_totale_attuale_changed.value;
+					spesa_annua_attuale_totale=parseFloat(spesa_totale_attuale_changed.value);
 				}else{
 					alert("Error: la spesa annua totale non è un numero");
 				}
@@ -992,7 +992,7 @@
 					control++;
 				}else if (!isNaN(acquisto_totale_changed.value)) {
 					control++;
-					acquisto_totale=acquisto_totale_changed.value;
+					acquisto_totale=parseFloat(acquisto_totale_changed.value);
 				}else{
 					alert("Error: l'acquisto totale non è un numero");
 				}
@@ -1001,7 +1001,7 @@
 					control++;
 				}else if (!isNaN(risparmio_totale_changed.value)) {
 					control++;
-					risparmio_annuo_con_led_totale=risparmio_totale_changed.value;
+					risparmio_annuo_con_led_totale=parseFloat(risparmio_totale_changed.value);
 				}else{
 					alert("Error: il risparmio annuo totale non è un numero");
 				}
@@ -1010,7 +1010,7 @@
 					control++;
 				}else if (!isNaN(risparmio_totale_percentuale_changed.value)) {
 					control++;
-					risparmio_percentuale_totale=risparmio_totale_percentuale_changed.value;
+					risparmio_percentuale_totale=parseFloat(risparmio_totale_percentuale_changed.value);
 				}else{
 					alert("Error: il risparmio annuo totale percentuale non è un numero");
 				}
@@ -1024,11 +1024,11 @@
 						}
 					}
 					html += "<div id='riassuntoCalcoli'>"
-						html += "<p>Il totale degli acquisti risulta: "+acquisto_totale+"</p>";
-						html += "<p>La spesa attuale totale risulta: "+spesa_annua_attuale_totale+"</p>";
-						html += "<p>La spesa con LED totale risulta: "+spesa_annua_led_totale+"</p>";
-						html += "<p>Il risparmio con LED in euro risulta: "+risparmio_annuo_con_led_totale+"</p>";
-						html += "<p>Il risparmio con LED in percentuale risulta: "+risparmio_percentuale_totale+"</p>";
+						html += "<p>Il totale degli acquisti risulta: "+Number(acquisto_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>La spesa attuale totale risulta: "+Number(spesa_annua_attuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>La spesa con LED totale risulta: "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>Il risparmio con LED in euro risulta: "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>Il risparmio con LED in percentuale risulta: "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
 						html += "<p>ciao</p>";
 					html += "</div>";
 					riassunto_calcoli.innerHTML = html;
