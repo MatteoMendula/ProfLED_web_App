@@ -910,11 +910,11 @@
 				html += "<hr>";
 				html += "<h3>Totali</h3>";
 				html += "<div id='riassuntoCalcoli'>"
-					html += "<p>Il totale degli acquisti risulta: "+acquisto_totale+"</p>";
-					html += "<p>La spesa attuale totale risulta: "+spesa_annua_attuale_totale+"</p>";
-					html += "<p>La spesa con LED totale risulta: "+spesa_annua_led_totale+"</p>";
-					html += "<p>Il risparmio con LED in euro risulta: "+risparmio_annuo_con_led_totale+"</p>";
-					html += "<p>Il risparmio con LED in percentuale risulta: "+risparmio_percentuale_totale+"</p>";
+					html += "<p>Il totale degli acquisti risulta: "+Number(acquisto_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>La spesa attuale totale risulta: "+Number(spesa_annua_attuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>La spesa con LED totale risulta: "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>Il risparmio con LED in euro risulta: "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>Il risparmio con LED in percentuale risulta: "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
 				html += "</div>";
 				html += "<hr>";
 				html += "<h3>Se vuoi modificare qualche valore riempi i campi sottostanti altrimenti vai ai PDF generati</h3>";
@@ -1029,7 +1029,6 @@
 						html += "<p>La spesa con LED totale risulta: "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
 						html += "<p>Il risparmio con LED in euro risulta: "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
 						html += "<p>Il risparmio con LED in percentuale risulta: "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
-						html += "<p>ciao</p>";
 					html += "</div>";
 					riassunto_calcoli.innerHTML = html;
 				}
@@ -1151,8 +1150,6 @@
 				if (control == (N_analogic_bulb+4)){
 
 
-					calcoli();
-
 					var step6 = document.getElementById("step6");
 					step6.parentNode.removeChild(step6);
 
@@ -1196,34 +1193,37 @@
 				var rows = new Array();
 				var precedente = 0;
 				rows[0]=["1",risparmio_annuo_con_led_totale-risparmio_manutenzione,risparmio_manutenzione,acquisto_totale,acquisto_totale-risparmio_annuo_con_led_totale,0,acquisto_totale];
-/*				for (var i = 0; i < 20 ; i++){
-					var anno = i+1;
+				for (var i = 0; i < 19 ; i++){
+					var anno = i+2;
 					var risparmio_colonna = risparmio_annuo_con_led_totale - risparmio_manutenzione;
 					var manutenzione_colonna = risparmio_manutenzione;
 					var quota_ammortizzata_colonna;
+					quota_ammortizzata_colonna = precedente;
 					var temp = quota_ammortizzata_colonna - manutenzione_colonna - risparmio_colonna;
 					var quota_residua_colonna;
 					var investimento_colonna;
 					var risparmio_tot_annuo_colonna;
-					if (i == 0){
-						quota_ammortizzata_colonna = acquisto_totale;
-						investimento_colonna = acquisto_totale;
-					}else{
-						quota_ammortizzata_colonna = precedente;
-					}
+
+					temp = Number(temp.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+
+
+					quota_ammortizzata_colonna = Number(quota_ammortizzata_colonna.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
 
 					if (temp > 0) quota_residua_colonna = temp;
-					else quota_residua_colonna = 0;
+					else quota_residua_colonna = Number(0).toLocaleString("es-ES", {minimumFractionDigits: 2});
 
 					precedente = quota_residua_colonna;
 
+
 					if (quota_residua_colonna > 0) risparmio_tot_annuo_colonna = 0;
 					else risparmio_tot_annuo_colonna = risparmio_colonna + manutenzione_colonna - quota_ammortizzata_colonna;
-					alert(anno+" "+risparmio_colonna+" "+manutenzione_colonna+" "+quota_ammortizzata_colonna+" "+quota_residua_colonna+" "+risparmio_tot_annuo_colonna+" "+investimento_colonna);
+					//alert(anno+" "+risparmio_colonna+" "+manutenzione_colonna+" "+quota_ammortizzata_colonna+" "+quota_residua_colonna+" "+risparmio_tot_annuo_colonna+" "+investimento_colonna);
 
-					rows.push(anno,risparmio_colonna,manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna,investimento_colonna);
+					risparmio_tot_annuo_colonna = Number(risparmio_tot_annuo_colonna.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+
+					rows[i+1]=[anno,risparmio_colonna,manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna];
 				}
-				*/
+
 
 				var pageContent = function (data) {
 					// HEADER
