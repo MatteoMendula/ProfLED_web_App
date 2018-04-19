@@ -323,7 +323,17 @@
 
 			<script>
 			var N_analogic_bulb = 1;
-			var nome_azienda = "";
+
+			var nome_azienda;
+			var nome_referente;
+			var tel_azienda;
+			var mail_referente;
+			var cap_azienda;
+			var indirizzo_azienda;
+
+			var costo_smaltimento;
+			var numero_preventivo;
+
 			var costoKWH = 0 ;
 			var controlButton = true;
 			var attrezzature;
@@ -788,8 +798,16 @@
 
 					html += "<hr>";
 					html += "<div class='flex-containerPLED'>";
-						html += "<h3>Inserire il risparmio manutenzione ottenuto grazie alla soluzione Professional LED (in euro)</h3>";
+						html += "<p>Inserire il risparmio manutenzione (in euro)</p>";
 						html += "<div><input type='number' value='0' id='risparmioManutenzione' style='text-align:center'></div>";
+					html += "</div>";
+					html += "<div class='flex-containerPLED'>";
+						html += "<p>Smaltimento vecchi apparecchi illuminotecnici in Isola Ecologica (in euro)</p>";
+						html += "<div><input type='number' value='0' id='costoSmaltimento' style='text-align:center'></div>";
+					html += "</div>";
+					html += "<div class='flex-containerPLED'>";
+						html += "<p>Inserire il numero del preventivo</p>";
+						html += "<div><input type='number' value='0' id='NPreventivo' style='text-align:center'></div>";
 					html += "</div>";
 
 					html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
@@ -804,6 +822,8 @@
 				var radio1 = document.getElementById("radioInstallation1");
 				var radio2 = document.getElementById("radioInstallation2");
 				var risparmio_manutenzione_temp = document.getElementById("risparmioManutenzione").value;
+				var smaltimento = document.getElementById("costoSmaltimento").value;
+				var numPrev = document.getElementById("NPreventivo").value;
 				var control = 0;
 				if (radio1.checked){
 					attrezzature = true;
@@ -824,7 +844,23 @@
 					alert("Non hai inserito il risparmio manutenzione!");
 				}
 
-			if (control == 2){
+				if (smaltimento != "" && smaltimento != "0"){
+					smaltimento = smaltimento.replace(',','.');
+					costo_smaltimento = parseFloat(smaltimento).toFixed(2);
+					control++;
+				}else{
+					alert("Non hai inserito il costo di smaltimento!");
+				}
+
+				if (numPrev != "" && numPrev != "0"){
+					numPrev = numPrev.replace(',','.');
+					numero_preventivo = parseFloat(numPrev).toFixed(2);
+					control++;
+				}else{
+					alert("Non hai inserito il risparmio manutenzione!");
+				}
+
+			if (control == 4){
 
 				var step4 = document.getElementById("step4");
 				step4.parentNode.removeChild(step4);
@@ -887,8 +923,10 @@
 				step5.innerHTML += html;
 
 				document.getElementById("container").appendChild(step5);
+			}else{
+				alert("Error: Non hai inserito tutti i valori correttamente!");
 			}
-			}
+		}
 
 			function toCheckCalcolo(){
 				calcoli();
@@ -910,11 +948,11 @@
 				html += "<hr>";
 				html += "<h3>Totali</h3>";
 				html += "<div id='riassuntoCalcoli'>"
-					html += "<p>Il totale degli acquisti risulta: "+Number(acquisto_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-					html += "<p>La spesa attuale totale risulta: "+Number(spesa_annua_attuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-					html += "<p>La spesa con LED totale risulta: "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-					html += "<p>Il risparmio con LED in euro risulta: "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-					html += "<p>Il risparmio con LED in percentuale risulta: "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
+					html += "<p>Il totale degli acquisti risulta:  € "+Number(acquisto_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>La spesa attuale totale risulta:  € "+Number(spesa_annua_attuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>La spesa con LED totale risulta:  € "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>Il risparmio con LED in euro risulta:  € "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+					html += "<p>Il risparmio con LED in percentuale risulta:  € "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
 				html += "</div>";
 				html += "<hr>";
 				html += "<h3>Se vuoi modificare qualche valore riempi i campi sottostanti altrimenti vai ai PDF generati</h3>";
@@ -1018,17 +1056,17 @@
 				if (control == (N_analogic_bulb+4)){
 					//alert("ok");
 					if (id.startsWith("costo_unitario")){
-						acquisto_totale = 0;
+						acquisto_totale = parseFloat(costo_smaltimento);
 						for (var i = 0 ; i < N_analogic_bulb ; i++){
 							acquisto_totale += SolPLEDArray[i][1] * selezionati_prezzo[i];
 						}
 					}
 					html += "<div id='riassuntoCalcoli'>"
-						html += "<p>Il totale degli acquisti risulta: "+Number(acquisto_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-						html += "<p>La spesa attuale totale risulta: "+Number(spesa_annua_attuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-						html += "<p>La spesa con LED totale risulta: "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-						html += "<p>Il risparmio con LED in euro risulta: "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
-						html += "<p>Il risparmio con LED in percentuale risulta: "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
+						html += "<p>Il totale degli acquisti risulta:  € "+Number(acquisto_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>La spesa attuale totale risulta:  € "+Number(spesa_annua_attuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>La spesa con LED totale risulta:  € "+Number(spesa_annua_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>Il risparmio con LED in euro risulta:  € "+Number(risparmio_annuo_con_led_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"</p>";
+						html += "<p>Il risparmio con LED in percentuale risulta:  € "+Number(risparmio_percentuale_totale.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})+"%</p>";
 					html += "</div>";
 					riassunto_calcoli.innerHTML = html;
 				}
@@ -1055,7 +1093,7 @@
 				selezionati_durata = new Array (N_analogic_bulb);
 				selezionati_consumo = new Array (N_analogic_bulb);
 
-				acquisto_totale = 0;
+				acquisto_totale = parseFloat(costo_smaltimento);
 				spesa_annua_led_totale = 0;
 				spesa_annua_attuale_totale = 0;
 				risparmio_annuo_con_led_totale = 0;
@@ -1090,6 +1128,7 @@
 					acquisto_totale += selezionati_prezzo[i] * SolPLEDArray[i][1];
 				}
 				risparmio_annuo_con_led_totale += risparmio_manutenzione;
+				risparmio_annuo_con_led_totale = parseFloat(risparmio_annuo_con_led_totale);
 				risparmio_percentuale_totale = Math.floor((spesa_annua_led_totale/spesa_annua_attuale_totale -1 )*100);
 
 				//----------------------------------------------------------------------
@@ -1191,38 +1230,52 @@
 				var totalPagesExp = "{total_pages_count_string}";
 				var columns = ["Anno", "Risparmio", "Risparmio \nmanutenzione","Quota \nammortizzata","Quota \nresidua","Risparmio \ntot annuo","Investimento"];
 				var rows = new Array();
-				var precedente = 0;
-				rows[0]=["1",risparmio_annuo_con_led_totale-risparmio_manutenzione,risparmio_manutenzione,acquisto_totale,acquisto_totale-risparmio_annuo_con_led_totale,0,acquisto_totale];
-				for (var i = 0; i < 19 ; i++){
-					var anno = i+2;
-					var risparmio_colonna = risparmio_annuo_con_led_totale - risparmio_manutenzione;
-					var manutenzione_colonna = risparmio_manutenzione;
+
+
+				//valori totali
+				var risparmio_totale_vita = 0;
+				var ammoratamento_cespite = acquisto_totale * 140 / 100;
+				var payback = acquisto_totale / risparmio_annuo_con_led_totale;
+
+
+				//colonne sempre uguali
+				var risparmio_colonna = "€ "+Number((risparmio_annuo_con_led_totale-risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				var risparmio_manutenzione_colonna = "€ "+Number((risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				var precedente_colonna = 0;
+
+				for (var i = 0; i < 20 ; i++){
 					var quota_ammortizzata_colonna;
-					quota_ammortizzata_colonna = precedente;
-					var temp = quota_ammortizzata_colonna - manutenzione_colonna - risparmio_colonna;
+					var colonna_temp;
 					var quota_residua_colonna;
-					var investimento_colonna;
 					var risparmio_tot_annuo_colonna;
+					var investimento_colonna;
 
-					temp = Number(temp.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+					//numeri
+					quota_ammortizzata_colonna = ((i == 0) ? acquisto_totale : precedente_colonna);
+					colonna_temp = quota_ammortizzata_colonna-risparmio_annuo_con_led_totale;
+					precedente = colonna_temp;
+					quota_residua_colonna = ((colonna_temp > 0) ? colonna_temp : 0);
+					risparmio_tot_annuo_colonna = ((quota_residua_colonna > 0) ? 0 : (risparmio_annuo_con_led_totale-quota_ammortizzata_colonna));
+
+					risparmio_totale_vita += risparmio_tot_annuo_colonna;
+
+					if(i == 0) investimento_colonna = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					else investimento_colonna = "€ "+Number((0).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+					//stringhe formattate per stampa
+					quota_ammortizzata_colonna = "€ "+Number((quota_ammortizzata_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					quota_residua_colonna = "€ "+Number((quota_residua_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					risparmio_tot_annuo_colonna = "€ "+Number((risparmio_tot_annuo_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 
 
-					quota_ammortizzata_colonna = Number(quota_ammortizzata_colonna.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
-
-					if (temp > 0) quota_residua_colonna = temp;
-					else quota_residua_colonna = Number(0).toLocaleString("es-ES", {minimumFractionDigits: 2});
-
-					precedente = quota_residua_colonna;
-
-
-					if (quota_residua_colonna > 0) risparmio_tot_annuo_colonna = 0;
-					else risparmio_tot_annuo_colonna = risparmio_colonna + manutenzione_colonna - quota_ammortizzata_colonna;
-					//alert(anno+" "+risparmio_colonna+" "+manutenzione_colonna+" "+quota_ammortizzata_colonna+" "+quota_residua_colonna+" "+risparmio_tot_annuo_colonna+" "+investimento_colonna);
-
-					risparmio_tot_annuo_colonna = Number(risparmio_tot_annuo_colonna.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
-
-					rows[i+1]=[anno,risparmio_colonna,manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna];
+					rows[i] = [i+1,risparmio_colonna,risparmio_manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna,investimento_colonna];
 				}
+
+				//totali formattati in require_once
+				payback = ""+Number((payback).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				risparmio_totale_vita = "€ "+Number((risparmio_totale_vita).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				ammoratamento_cespite = "€ "+Number((ammoratamento_cespite).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
 
 
 				var pageContent = function (data) {
@@ -1243,6 +1296,7 @@
 					// FOOTER
 					var str = "Page " + data.pageCount;
 					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
 					if (typeof doc.putTotalPages === 'function') {
 							str = str + " of " + totalPagesExp;
 					}
@@ -1257,7 +1311,7 @@
 				doc.setFontType('bold');
 				doc.setTextColor(160, 197, 25);
 				doc.setFontSize(16);
-				doc.text(70, 62, "PAYBACK IN XXXX ANNI");
+				doc.text(70, 62, "PAYBACK IN "+payback+" ANNI");
 
 				doc.autoTable(columns, rows, {
 					//styles: {fillColor: [154, 216, 25]},
@@ -1266,10 +1320,38 @@
 					//},
 					theme: 'grid',
 					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20},
+					margin: {top: 70,bottom: 20, right: 15},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
+
+				var finalY = doc.autoTable.previous.finalY;
+				var finalX = doc.autoTable.previous.finalX;
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(54, finalY+3, 111, 11, 'FD');
+				doc.rect(139.2, finalY+3, 25.8, 11, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(9);
+				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
+				doc.setTextColor(0, 77, 126);
+				doc.setFontSize(12);
+				doc.text(143, finalY+10, risparmio_totale_vita);
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, finalY+20, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, finalY+21, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(20,finalY+27,"Legge finanziaria 2018: ammortamento cespite 130% annuo                         "+ammoratamento_cespite);
+
+				doc.setTextColor(0);
+				doc.setFontSize(9);
+				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
@@ -1289,7 +1371,7 @@
 
 		</header>
 
-		<body style="background-color:#110e33">
+		<body background="https://static.webshopapp.com/shops/001680/files/145451846/striscia-led-rigida-impermeabile-blanco-5050-smd-7.jpg">
 
 			<center>
 				<div class="container" id="container">
@@ -1337,7 +1419,7 @@
 
 			<?php
 				echo "<div align='right' style='margin:1rem'>";
-				echo "<p>Web app realizzata da Matteo Mendula. Tutti i diritti riservati.</p>";
+				echo "<p>Web app realizzata da Matteo Mendula © Tutti i diritti riservati.</p>";
 				echo "<a href='../logout.php'>LOGOUT</a>";
 				echo "</div>"
 			?>
