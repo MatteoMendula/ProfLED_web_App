@@ -30,7 +30,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
     <div class="wrapper">
       <h3>Cosa vuoi fare?</h3>
       <hr>
-      <button class="btn btn-danger" type="button" onclick="preventivatore()">Compilare un preventivo</button>
+      <button class="btn btn-primary" type="button" onclick="preventivatore()">Compilare un preventivo</button>
       <hr>
       <button class="btn btn-warining" type="button" onclick="logout()">Uscire</button>
     </div>

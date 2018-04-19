@@ -145,6 +145,56 @@
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 			<style>
 
+			/*---------------------------------------
+    Preloader section
+-----------------------------------------*/
+.loading_screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  background: none repeat scroll 0 0 #000000;
+}
+
+.sk-rotating-plane {
+  width: 70px;
+  height: 70px;
+  background-color: #222;
+	background-image: url("./logo.jpg");
+  -webkit-animation: sk-rotatePlane 1.2s infinite ease-in-out;
+          animation: sk-rotatePlane 1.2s infinite ease-in-out; }
+
+@-webkit-keyframes sk-rotatePlane {
+  0% {
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg); }
+  50% {
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); }
+  100% {
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+@keyframes sk-rotatePlane {
+  0% {
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg); }
+  50% {
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); }
+  100% {
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+
+
+
 			/*   radio button style */
 					.control {
 		    font-family: arial;
@@ -322,6 +372,24 @@
 			</style>
 
 			<script>
+
+			(function(){
+			  if (window.addEventListener)
+			  {
+			    window.addEventListener("load", nascondi_loading_screen, false);
+			  }else{
+			    window.attachEvent("onload", nascondi_loading_screen);
+			  }
+			})();
+			function mostra_loading_screen()
+			{
+			  document.getElementById("loading_screen").style.display = 'block';
+			}
+			function nascondi_loading_screen()
+			{
+			  document.getElementById("loading_screen").style.display = 'none';
+			}
+
 			var N_analogic_bulb = 1;
 
 			var nome_azienda;
@@ -1371,7 +1439,11 @@
 
 		</header>
 
-		<body background="https://static.webshopapp.com/shops/001680/files/145451846/striscia-led-rigida-impermeabile-blanco-5050-smd-7.jpg">
+		<body background="https://static.webshopapp.com/shops/001680/files/145451846/striscia-led-rigida-impermeabile-blanco-5050-smd-7.jpg" style="background-size:cover">
+
+			<div class="loading_screen" id="loading_screen">
+				<div class="sk-rotating-plane"></div>
+			</div>
 
 			<center>
 				<div class="container" id="container">
