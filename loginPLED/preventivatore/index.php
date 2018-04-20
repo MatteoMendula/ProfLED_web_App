@@ -809,12 +809,13 @@
 							html += "<option value='Panel Led'>Panel Led</option>";
 							html += "<option value='Plafo4k'>Plafo4k</option>";
 							html += "</select><select id='modelliLED"+i+"' size='1'></select></div>";
-								html += "<div class='flex-containerPLED'>";
+							html += "<div><label>Dimmerabile </label><input type='checkbox' value='0'></div>";
+							html += "<div class='flex-containerPLED'>";
 								html += "<div><span>Inserire punti luce: </span></div>";
 								html += "<div><button id='dec_button"+i+"' onclick='dec_PuntiLuce_SOL_PLED(this.id)' class='buttonLess'> - </button></div>";
 								html += "<div><input type='number' value='0' id='PuntiLuceLED"+i+"' style='text-align:center'></div>";
 								html += "<div><button id='inc_button"+i+"' onclick='inc_PuntiLuce_SOL_PLED(this.id)' class='buttonPlus'> + </button></div>";
-								html += "</div>";
+							html += "</div>";
 							html += "<hr>";
 						}
 						html += "<br><button class='buttonStep' onclick='toOtherInfo()'>Prosegui</button>";
@@ -1273,9 +1274,13 @@
 					html +="<center>";
 						html +="<div class='wrapper'>";
 							html +="<hr>";
-							html +="<button class='btn btn-primary' type='button' onclick='create_acquisto()'>Soluzione ACQUISTO</button>";
+							html +="<button class='btn btn-primary' type='button' onclick='create_acquisto_listino()'>ACQUISTO listino</button>";
 							html +="<hr>";
-							html +="<button class='btn btn-warining' type='button' onclick='create_noleggio()'>Soluzione NOLEGGIO</button>";
+							html +="<button class='btn btn-success' type='button' onclick='create_acquisto_conti()'>RISPARMIO</button>";
+							html +="<hr>";
+							html +="<button class='btn btn-default' type='button' onclick='create_noleggio_listino()'>NOLEGGIO listino</button>";
+							html +="<hr>";
+							html +="<button class='btn btn-warining' type='button' onclick='create_noleggio_conti()'>FOGLIO4 </button>";
 							html +="<hr>";
 							html +="<button class='btn btn-info' type='button' onclick='create_payback()'>PAYBACK</button>";
 							html +="<hr>";
@@ -1397,8 +1402,8 @@
 				var finalX = doc.autoTable.previous.finalX;
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
-				doc.rect(54, finalY+3, 111, 11, 'FD');
-				doc.rect(139.2, finalY+3, 25.8, 11, 'FD');
+				doc.rect(54, finalY+3, 113, 11, 'FD');
+				doc.rect(139.2, finalY+3, 27.8, 11, 'FD');
 
 				doc.setFontType('bold');
 				doc.setTextColor(160, 197, 25);
@@ -1406,7 +1411,7 @@
 				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
 				doc.setTextColor(0, 77, 126);
 				doc.setFontSize(12);
-				doc.text(143, finalY+10, risparmio_totale_vita);
+				doc.text(141, finalY+10, risparmio_totale_vita);
 
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
