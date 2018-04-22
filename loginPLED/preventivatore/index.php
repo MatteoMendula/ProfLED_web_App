@@ -974,7 +974,11 @@
 					html += " - GG funzionamento: "+StatoAttualeArray[i][4];
 					html += " - HH funzionamento: "+StatoAttualeArray[i][5]+"]";
 					html += " <strong>sostituita con</strong> [model: "+SolPLEDArray[i][0];
-					html += " - punti luce: "+SolPLEDArray[i][1]+"]";
+					html += " - punti luce: "+SolPLEDArray[i][1];
+
+					if (SolPLEDArray[i][2] == 1) html += " - richiesto dimmerabile (+30euro)]";
+					else html += "]";
+
 					html += "<br>";
 					html += " </li>"
 				}
@@ -1042,7 +1046,9 @@
 				for (var i = 0; i < N_analogic_bulb;i++){
 					var prezzo = selezionati_prezzo[i];
 					html += "<div class='flex-container'>";
-						html += "<div><span>Prezzo unitario del modello "+SolPLEDArray[i][0]+":</span></div>";
+						html += "<div><span>Prezzo unitario del modello "+SolPLEDArray[i][0];
+						if (SolPLEDArray[i][2] == 1) html += " (richiesto DIMMERABILE):</span></div>"
+						else html += ":</span></div>";
 						html += "<div><input placeholder='"+prezzo+"' id='costo_unitario_changed"+i+"' style='text-align:center' onkeyup='cambiaRiassuntoCalcoli(this.id)'> </input></div>";
 					html += "</div>";
 				}
