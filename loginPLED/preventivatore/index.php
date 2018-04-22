@@ -1209,6 +1209,156 @@
 				}
 			}
 
+			function create_acquisto_conti() {
+				var doc = new jsPDF("l");
+				var totalPagesExp = "{total_pages_count_string}";
+				var columns1 = [
+					"Illuminazione \nattuale",
+					"Consumo \nreale in Watt",
+					"Ore \ndurata \nmedia",
+					"Punti \nluce",
+					"Giorni di \nfunz.",
+					"Ore di \nfunz."
+				];
+				var columns2 = [
+					"Sostituzione LED",
+					"Consumo \nin Watt",
+					"Ore durata \nmedia",
+					"Punti \nluce",
+					"Spesa annua \nattuale",
+					"Spesa annua \ncon LED",
+					"Risparmio annuo \ncon LED",
+					"%"
+				];
+				var rows1 = new Array();
+				var rows2 = new Array();
+				var risparmio = 0;
+
+				for (var i = 0; i < N_analogic_bulb; i++){
+					var spesa_annua_attuale = StatoAttualeArray[i][1] * StatoAttualeArray[i][3] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					var spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					risparmio += spesa_annua_attuale - spesa_annua_led;
+					rows1[i] = [
+								StatoAttualeArray[i][0],
+								StatoAttualeArray[i][1], 
+								StatoAttualeArray[i][2], 
+								StatoAttualeArray[i][3],
+								StatoAttualeArray[i][4],
+								StatoAttualeArray[i][5]
+								];
+					rows2[i] = [
+								SolPLEDArray[i][0],
+								selezionati_consumo[i], 
+								selezionati_durata[i] + " h",
+								SolPLEDArray[i][1],
+								"€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								"€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								"€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								Number((spesa_annua_led / spesa_annua_attuale * 100 - 100).toFixed(0)).toLocaleString("it-IT", {minimumFractionDigits: 0}) + " %"
+								];
+				}
+
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+					// Purple
+
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+					}
+					doc.setFontType('bold');
+					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
+					doc.setFontType('normal');
+					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede Operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
+					if (typeof doc.putTotalPages === 'function') {
+						str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
+				};
+
+				doc.autoTable(columns1, rows1, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, right: 170},
+					headerStyles: {fillColor: [0, 77, 126]},
+					addPageContent: pageContent
+				});
+
+				doc.autoTable(columns2, rows2, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 130},
+					headerStyles: {fillColor: [0, 77, 126]},
+				});
+
+				var finalY = doc.autoTable.previous.finalY;
+				var finalX = doc.autoTable.previous.finalX;
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+3, 113, 11, 'FD');
+				doc.rect(doc.internal.pageSize.width / 2 + 50, finalY+3, 27.8, 11, 'FD');
+
+				doc.setFontType('normal');
+				doc.setTextColor(40);
+				doc.setFontSize(15);
+				doc.text(doc.internal.pageSize.width / 2 - 46, finalY+10, "Risparmio manutenzione annua");
+				doc.setTextColor(0, 77, 126);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 + 54, finalY+10, "€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}));
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+20, 113, 11, 'FD');
+				doc.rect(doc.internal.pageSize.width / 2 + 50, finalY+20, 27.8, 11, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(15);
+				doc.text(doc.internal.pageSize.width / 2 - 46, finalY+27, "TOTALE RISPARMIO");
+				doc.setTextColor(0, 77, 126);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 + 54, finalY+27, "€ " + Number((risparmio + risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}));
+
+				doc.setFontType('bold');
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, finalY+35, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, finalY+36, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 - 50,finalY+42,"Legge finanziaria 2018: ammortamento cespite 130% annuo")
+
+				if (typeof doc.putTotalPages === 'function') {
+        			doc.putTotalPages(totalPagesExp);
+    			}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+			}
+
 			function create_payback(){
 				var pdf_as_url;
 				var doc = new jsPDF();
