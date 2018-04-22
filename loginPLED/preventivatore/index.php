@@ -517,7 +517,28 @@
 								if (array_gruppo_modello[i] == "Panel Led" && selezionato == "2"){
 									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
 								}
-								if (array_gruppo_modello[i] == "Plafo4k" && selezionato == "3"){
+								if (array_gruppo_modello[i] == "Plafo 4k" && selezionato == "3"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "Plafo 5k" && selezionato == "4"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "Plafo 6k" && selezionato == "5"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "Proiettore" && selezionato == "6"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "Fari SPORT" && selezionato == "7"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "Campana" && selezionato == "8"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "alimentatori" && selezionato == "9"){
+									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
+								}
+								if (array_gruppo_modello[i] == "Varie" && selezionato == "10"){
 									modelliLed.options[modelliLed.options.length] = new Option(array_modello[i]);
 								}
 							}
@@ -700,7 +721,14 @@
 							html += "<option value='0'>Scegli un gruppo</option>";
 							html += "<option value='Case'>Case</option>";
 							html += "<option value='Panel Led'>Panel Led</option>";
-							html += "<option value='Plafo4k'>Plafo4k</option>";
+							html += "<option value='Plafo 4k'>Plafo 4k</option>";
+							html += "<option value='Plafo 5k'>Plafo 5k</option>";
+							html += "<option value='Plafo 6k'>Plafo 6k</option>";
+							html += "<option value='Proiettore'>Proiettore</option>";
+							html += "<option value='Fari SPORT'>Fari SPORT</option>";
+							html += "<option value='Camapana'>Campana</option>";
+							html += "<option value='alimentatori'>alimentatori</option>";
+							html += "<option value='Varie'>Varie</option>";
 							html += "</select><select id='modelliLED"+i+"' size='1'></select></div>";
 							html += "<div><label>Dimmerabile </label><input id='dimmerabile"+i+"' type='checkbox' value='0'></div>";
 							html += "<div class='flex-containerPLED'>";
@@ -1092,9 +1120,10 @@
 							selezionati_note[i] = array_note[j];
 							selezionati_durata[i] = array_durata[j];
 							selezionati_kelvin[i] = array_kelvin[j];
-							selezionati_garanzia[i] = array_garanzia;
+							selezionati_garanzia[i] = array_garanzia[j];
 							selezionati_nome_lungo[i] = array_nome_lungo[j];
 							selezionati_lumen[i] = array_lumen[j];
+							selezionati_marca[i] = array_marca[j];
 							//alert("TRovato match "+consumi_led_selezionati[i]+" "+prezzo_led_selezionati[i]+" "+descrizioni_led_selezionati[i]+" "+foto_selezionati[i]+" "+durata_selezionati[i]);
 						}
 					}
@@ -1208,6 +1237,7 @@
 					alert("Qualcuno dei valori inseriti non è un numero!");
 				}
 			}
+
 
 			function create_payback(){
 				var pdf_as_url;
@@ -1352,28 +1382,45 @@
 
 			}
 
+
 			function create_acquisto_listino(){
 				var pdf_as_url;
 				var doc = new jsPDF();
 				var totalPagesExp = "{total_pages_count_string}";
-				var columns = ["Codice","Descrizione","Q.tà","Prezzo unit.","Importo totale"];
+				var getColumns = function () {
+				    return [
+				        {title: "Codice", dataKey: "cod"},
+				        {title: "Descrizione", dataKey: "descrizione"},
+				        {title: "Q.tà", dataKey: "quantity"},
+				        {title: "Prezzo unit.", dataKey: "price"},
+				        {title: "Importo totale", dataKey: "total"}
+				    ];
+				};
+				//var columns = ["Codice","Descrizione","Q.tà","Prezzo unit.","Importo totale"];
+/*
 				var rows = new Array();
 
 				for (var i = 0; i < N_analogic_bulb ; i++){
 					var modello = SolPLEDArray[i][0];
-					var descrizione = ""+selezionati_nome_lungo[i]+"\n"+selezionati_marca[i]+"\n"+selezionati_lumen[i]+"\n"+selezionati_durata[i]+"\n"+selezionati_note[i]+"\nGARANZIA"+selezionati_garanzia[i];
-					var quantita = SolPLEDArray[i][1];
-					var prezzo_unitario = selezionati_prezzo;
+					var descrizione = ""+selezionati_nome_lungo[i]+"\n";
+							descrizione += selezionati_marca[i]+"\n";
+							descrizione += selezionati_lumen[i]+"\n";
+							descrizione += "Durata "+ selezionati_durata[i]+"ore\n";
+							descrizione += selezionati_kelvin[i]+"\n";
+							if (selezionati_note[i] != null) {descrizione += selezionati_note[i]+"\n";}
+							descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
+					var quantita = parseFloat(SolPLEDArray[i][1]);
+					var prezzo_unitario = parseFloat(selezionati_prezzo[i]);
 					var importo = prezzo_unitario * quantita;
 
 					//formattazione in require_once
 					prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 					importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 
-					rows[i] = [modello,descrizione,quantita,prezzo_unitario,importo];
+					rows[i] = [modello,descrizione,Math.floor(quantita),prezzo_unitario,importo];
 				}
 
-
+*/
 				var pageContent = function (data) {
 					// HEADER
 					doc.setFontSize(9);
@@ -1400,63 +1447,54 @@
 					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
 				};
 
-				doc.setDrawColor(0);
-				doc.setFillColor(0,77,126);
-				doc.rect(10, 55, 30, 10, 'FD');
-				doc.rect(40, 55, 100, 10, 'FD');
-				doc.rect(140, 55, 30, 10, 'FD');
+				var today  = new Date();
 
-				doc.setFillColor(255);
-				doc.rect(10, 65, 30, 10, 'FD');
-				doc.rect(40, 65, 100, 10, 'FD');
-				doc.rect(140, 65, 30, 10, 'FD');
-
-
-
+				doc.setFontSize(10);
 				doc.setFontType('bold');
-				doc.setTextColor(160, 197, 25);
-				doc.setFontSize(16);
-				doc.text(70, 62, "PAYBACK IN "+payback+" ANNI");
+				doc.text(14,60,"Soluzione ACQUISTO");
 
-				doc.autoTable(columns, rows, {
+				doc.setFontType('normal');
+				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
+
+				doc.setFillColor(160, 197, 25);
+				doc.setDrawColor(0);
+				doc.rect(174,55,28,8,'F');
+				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
+
+
+
+				var data = getDataAcquisto();
+
+				doc.autoTable(getColumns(), data, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
 					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, right: 15},
+					margin: {top: 70,bottom: 20, left: 7},
 					headerStyles: {fillColor: [0, 77, 126]},
+					columnStyles: {	0:{columnWidth: 20},
+													1:{columnWidth: 120},
+													2:{columnWidth: 10},
+													3:{columnWidth: 20},
+													4:{columnWidth: 25}},
+
+
+					drawCell: function (cell, data) {
+	            // Rowspan
+	            if (data.column.dataKey === "descrizione") {
+								var indice_foto = selezionati_foto[data.row.index];
+								var foto = array_foto[indice_foto];
+								doc.addImage(foto, 'JPEG', cell.x,cell.y, 30, 20);
+	            }
+					  	return false;
+					},
+
+
 					addPageContent: pageContent
 				});
 
-				var finalY = doc.autoTable.previous.finalY;
-				var finalX = doc.autoTable.previous.finalX;
-				doc.setDrawColor(201,201,201);
-				doc.setFillColor(255, 255, 255);
-				doc.rect(54, finalY+3, 113, 11, 'FD');
-				doc.rect(139.2, finalY+3, 27.8, 11, 'FD');
-
-				doc.setFontType('bold');
-				doc.setTextColor(160, 197, 25);
-				doc.setFontSize(9);
-				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
-				doc.setTextColor(0, 77, 126);
-				doc.setFontSize(12);
-				doc.text(141, finalY+10, risparmio_totale_vita);
-
-				doc.setDrawColor(201,201,201);
-				doc.setFillColor(255, 255, 255);
-				doc.rect(10, finalY+20, doc.internal.pageSize.width-20, 11, 'FD');
-				doc.rect(11, finalY+21, doc.internal.pageSize.width-22, 9, 'FD');
-
-				doc.setTextColor(0);
-				doc.setFontSize(12);
-				doc.text(20,finalY+27,"Legge finanziaria 2018: ammortamento cespite 130% annuo                         "+ammoratamento_cespite);
-
-				doc.setTextColor(0);
-				doc.setFontSize(9);
-				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
@@ -1470,6 +1508,36 @@
 					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
 				}
 
+			}
+
+			function getDataAcquisto() {
+   				var data = [];
+			    for (var i = 0; i < N_analogic_bulb; i++) {
+							var modello = SolPLEDArray[i][0];
+							var descrizione = ""+selezionati_nome_lungo[i]+"\n";
+									descrizione += selezionati_marca[i]+"\n";
+									descrizione += selezionati_lumen[i]+"\n";
+									descrizione += "Durata "+ selezionati_durata[i]+"ore\n";
+									descrizione += selezionati_kelvin[i]+"\n";
+									if (selezionati_note[i] != null) {descrizione += selezionati_note[i]+"\n";}
+									descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
+							var quantita = parseFloat(SolPLEDArray[i][1]);
+							var prezzo_unitario = parseFloat(selezionati_prezzo[i]);
+							var importo = prezzo_unitario * quantita;
+
+							//formattazione in require_once
+							prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+							importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+			        data.push({
+			            cod: modello,
+			            descrizione: descrizione,
+			            quantity: quantita,
+			            price: prezzo_unitario,
+			            totale: importo
+			        });
+			    }
+			    return data;
 			}
 
 			function create_payback(){
@@ -1643,10 +1711,7 @@
 							$createdAt[] = $row["created_at"];
 					}
 					echo "<script>";
-					echo "var array_id_utenti = " . json_encode($id) . ";";
-					echo "var array_username = " . json_encode($username) . ";";
-					echo "var array_password = " . json_encode($password) . ";";
-					echo "var array_createdAt = " . json_encode($createdAt) . ";";
+					echo "var utente = '" . $_SESSION['username'] . "';";
 					echo "</script>";
 				} else {
 						echo "0 results users";
@@ -1683,7 +1748,7 @@
 							$durata[] = $row["durata"];
 							$nome_lungo[] = $row["nome_lungo"];
 							$marca[] = $row["marca"];
-							$lumen[] = $row["marca"];
+							$lumen[] = $row["lumen"];
 							$note[] = $row["note"];
 							$kelvin[] = $row["kelvin"];
 							$garanzia[] = $row["garanzia"];
