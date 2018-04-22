@@ -7,9 +7,6 @@
 		if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 		  header("location: ../login.php");
 		  exit;
-		}else{
-		  $utente = $_SESSION['username'];
-		  echo "<h2 style='color:green'>Benvenuto ".$utente."!</h1>";
 		}
 		/*
 		$servername = "localhost";
@@ -24,111 +21,7 @@
 		    die("Connection failed: " . $conn->connect_error);
 		}
 	*/
-		require_once '../configUsers.php';
-		$table    = "users"; // MySql table name
-		$sql = "SELECT * FROM $table";
-		$result = $link->query($sql);
-		if ($result->num_rows > 0) {
-			$id=array();
-			$username=array();
-			$password=array();
-			$createdAt=array();
-	    // output data of each row
-	    while($row = $result->fetch_assoc()) {
-	        //echo "id: " . $row["id"]. " - username: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
-					$id[] = $row['id'];
-					$username[] = $row["username"];
-					$password[] = $row["password"];
-					$createdAt[] = $row["created_at"];
-			}
-			echo "<script>";
-			echo "var array_id_utenti = " . json_encode($id) . ";";
-			echo "var array_username = " . json_encode($username) . ";";
-			echo "var array_password = " . json_encode($password) . ";";
-			echo "var array_createdAt = " . json_encode($createdAt) . ";";
-			echo "</script>";
-		} else {
-		    echo "0 results users";
-		}
-		//mysql_close($link);
-
-		$table    = "leds"; // MySql table name
-		$sql = "SELECT * FROM $table";
-		$result = $link->query($sql);
-		if ($result->num_rows > 0) {
-			$id=array();
-			$modello=array();
-			$descrizione=array();
-			$id_foto=array();
-			$prezzo=array();
-			$gruppo_modello=array();
-			$consumo=array();
-			$durata=array();
-			$nome_lungo=array();
-			$marca=array();
-			$lumen=array();
-			$note=array();
-			$kelvin=array();
-			$garanzia=array();
-	    // output data of each row
-	    while($row = $result->fetch_assoc()) {
-	        //echo "id: " . $row["id"]. " - modello: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
-					$id[] = $row['id'];
-					$modello[] = $row["modello"];
-					$id_foto[] = $row["id_foto"];
-					$prezzo[] = $row["prezzo"];
-					$gruppo_modello[] = $row["group_modello"];
-					$consumo[] = $row["consumo"];
-					$durata[] = $row["durata"];
-					$nome_lungo[] = $row["nome_lungo"];
-					$marca[] = $row["marca"];
-					$lumen[] = $row["marca"];
-					$note[] = $row["note"];
-					$kelvin[] = $row["kelvin"];
-					$garanzia[] = $row["garanzia"];
-			}
-			echo "<script>";
-			echo "var array_id_leds = " . json_encode($id) . ";";
-			echo "var array_modello = " . json_encode($modello) . ";";
-			echo "var array_id_foto = " . json_encode($id_foto) . ";";
-			echo "var array_prezzo = " . json_encode($prezzo) . ";";
-			echo "var array_gruppo_modello = " . json_encode($gruppo_modello) . ";";
-			echo "var array_consumo = " . json_encode($consumo) . ";";
-			echo "var array_durata = " . json_encode($durata) . ";";
-			echo "var array_nome_lungo = " . json_encode($nome_lungo) . ";";
-			echo "var array_marca = " . json_encode($marca) . ";";
-			echo "var array_lumen = " . json_encode($lumen) . ";";
-			echo "var array_note = " . json_encode($note) . ";";
-			echo "var array_kelvin = " . json_encode($kelvin) . ";";
-			echo "var array_garanzia = " . json_encode($garanzia) . ";";
-
-			echo "</script>";
-		} else {
-		    echo "0 results leds";
-		}
-
-		$table = "img"; // MySql table name
-		$sql = "SELECT * FROM $table";
-		$result = $link->query($sql);
-		if ($result->num_rows > 0) {
-			$id=array();
-			$foto=array();
-	    // output data of each row
-	    while($row = $result->fetch_assoc()) {
-	        //echo "_foto: " . $row["id"]. " - foto: " . $row["content"]."<br>";
-					$id[] = $row['id'];
-					$foto[] = $row["content"];
-			}
-			echo "<script>";
-			echo "var array_id_foto = " . json_encode($id) . ";";
-			echo "var array_foto = " . json_encode($foto) . ";";
-			echo "</script>";
-		} else {
-		    echo "0 results leds";
-		}
-		//mysql_close($link);
-
-	?>
+?>
 	<!DOCTYPE html>
 	<html>
 		<header>
@@ -1727,6 +1620,115 @@
 		</header>
 
 		<body background="https://static.webshopapp.com/shops/001680/files/145451846/striscia-led-rigida-impermeabile-blanco-5050-smd-7.jpg" style="background-size:cover">
+
+			<?php
+				$utente = $_SESSION['username'];
+				echo "<h2 style='color:green'>Benvenuto ".$utente."!</h1>";
+
+				require_once '../configUsers.php';
+				$table    = "users"; // MySql table name
+				$sql = "SELECT * FROM $table";
+				$result = $link->query($sql);
+				if ($result->num_rows > 0) {
+					$id=array();
+					$username=array();
+					$password=array();
+					$createdAt=array();
+					// output data of each row
+					while($row = $result->fetch_assoc()) {
+							//echo "id: " . $row["id"]. " - username: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
+							$id[] = $row['id'];
+							$username[] = $row["username"];
+							$password[] = $row["password"];
+							$createdAt[] = $row["created_at"];
+					}
+					echo "<script>";
+					echo "var array_id_utenti = " . json_encode($id) . ";";
+					echo "var array_username = " . json_encode($username) . ";";
+					echo "var array_password = " . json_encode($password) . ";";
+					echo "var array_createdAt = " . json_encode($createdAt) . ";";
+					echo "</script>";
+				} else {
+						echo "0 results users";
+				}
+				//mysql_close($link);
+
+				$table    = "leds"; // MySql table name
+				$sql = "SELECT * FROM $table";
+				$result = $link->query($sql);
+				if ($result->num_rows > 0) {
+					$id=array();
+					$modello=array();
+					$descrizione=array();
+					$id_foto=array();
+					$prezzo=array();
+					$gruppo_modello=array();
+					$consumo=array();
+					$durata=array();
+					$nome_lungo=array();
+					$marca=array();
+					$lumen=array();
+					$note=array();
+					$kelvin=array();
+					$garanzia=array();
+					// output data of each row
+					while($row = $result->fetch_assoc()) {
+							//echo "id: " . $row["id"]. " - modello: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
+							$id[] = $row['id'];
+							$modello[] = $row["modello"];
+							$id_foto[] = $row["id_foto"];
+							$prezzo[] = $row["prezzo"];
+							$gruppo_modello[] = $row["group_modello"];
+							$consumo[] = $row["consumo"];
+							$durata[] = $row["durata"];
+							$nome_lungo[] = $row["nome_lungo"];
+							$marca[] = $row["marca"];
+							$lumen[] = $row["marca"];
+							$note[] = $row["note"];
+							$kelvin[] = $row["kelvin"];
+							$garanzia[] = $row["garanzia"];
+					}
+					echo "<script>";
+					echo "var array_id_leds = " . json_encode($id) . ";";
+					echo "var array_modello = " . json_encode($modello) . ";";
+					echo "var array_id_foto = " . json_encode($id_foto) . ";";
+					echo "var array_prezzo = " . json_encode($prezzo) . ";";
+					echo "var array_gruppo_modello = " . json_encode($gruppo_modello) . ";";
+					echo "var array_consumo = " . json_encode($consumo) . ";";
+					echo "var array_durata = " . json_encode($durata) . ";";
+					echo "var array_nome_lungo = " . json_encode($nome_lungo) . ";";
+					echo "var array_marca = " . json_encode($marca) . ";";
+					echo "var array_lumen = " . json_encode($lumen) . ";";
+					echo "var array_note = " . json_encode($note) . ";";
+					echo "var array_kelvin = " . json_encode($kelvin) . ";";
+					echo "var array_garanzia = " . json_encode($garanzia) . ";";
+
+					echo "</script>";
+				} else {
+						echo "0 results leds";
+				}
+
+				$table = "img"; // MySql table name
+				$sql = "SELECT * FROM $table";
+				$result = $link->query($sql);
+				if ($result->num_rows > 0) {
+					$id=array();
+					$foto=array();
+					// output data of each row
+					while($row = $result->fetch_assoc()) {
+							//echo "_foto: " . $row["id"]. " - foto: " . $row["content"]."<br>";
+							$id[] = $row['id'];
+							$foto[] = $row["content"];
+					}
+					echo "<script>";
+					echo "var array_id_foto = " . json_encode($id) . ";";
+					echo "var array_foto = " . json_encode($foto) . ";";
+					echo "</script>";
+				} else {
+						echo "0 results leds";
+				}
+				//mysql_close($link);
+			?>
 
 			<div class="loading_screen" id="loading_screen">
 				<div class="sk-rotating-plane"></div>
