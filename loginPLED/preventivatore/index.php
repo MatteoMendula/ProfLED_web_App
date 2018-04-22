@@ -401,6 +401,7 @@
 
 			var costo_smaltimento;
 			var numero_preventivo;
+			var dimmerabilita = "Tutti i prodotti sono stati richiesti non dimmerabili";
 
 			var costoKWH = 0 ;
 			var controlButton = true;
@@ -415,7 +416,6 @@
 			var spesa_annua_led;
 			var risparmio_annuo_con_led;
 			var risparmio_percentuale;
-
 
 			var selezionati_nome_lungo;
 			var selezionati_consumo;
@@ -809,7 +809,7 @@
 							html += "<option value='Panel Led'>Panel Led</option>";
 							html += "<option value='Plafo4k'>Plafo4k</option>";
 							html += "</select><select id='modelliLED"+i+"' size='1'></select></div>";
-							html += "<div><label>Dimmerabile </label><input type='checkbox' value='0'></div>";
+							html += "<div><label>Dimmerabile </label><input id='dimmerabile"+i+"' type='checkbox' value='0'></div>";
 							html += "<div class='flex-containerPLED'>";
 								html += "<div><span>Inserire punti luce: </span></div>";
 								html += "<div><button id='dec_button"+i+"' onclick='dec_PuntiLuce_SOL_PLED(this.id)' class='buttonLess'> - </button></div>";
@@ -827,13 +827,25 @@
 				function toOtherInfo(){
 					SolPLEDArray = new Array(N_analogic_bulb);
 					var control = 0;
+					var count_dimmerabili = 0;
 					for (var i = 0 ; i < N_analogic_bulb ; i++){
 						var modello = document.getElementById("modelliLED"+i).value;
 						var PL = document.getElementById("PuntiLuceLED"+i).value;
+						var dimmer = document.getElementById("dimmerabile"+i);
+						var control_dimmerabile = 0;
+
+						if (dimmer.checked){
+							control_dimmerabile = 1;
+							count_dimmerabili++;
+						}
+
+						if(count_dimmerabili > 0){
+							dimmerabilita = ""+count_dimmerabili+" prodotti sono stati richiesti dimmerabili";
+						}
 
 						if(modello != "" && PL != "0" ){
 							control++;
-							SolPLEDArray[i] = new Array(modello,PL);
+							SolPLEDArray[i] = new Array(modello,PL,control_dimmerabile);
 						}else if (modello == ""){
 							alert("Nome Modello "+(i+1)+" mancante!");
 						}else if (PL == "0"){
@@ -939,7 +951,7 @@
 
 				var html = "";
 
-				html += "<h2>Controlla i valori inseriti</h2>";
+				html += "<h2>Controlla i valori inseriti per il preventivo nr."+numero_preventivo+"</h2>";
 				html += "<br>"
 
 				html += "<h3>Dati azienda</h3>";
@@ -976,6 +988,7 @@
 					html += "<p>Non sono previsti costi aggiuntivi per l'installazione</p>";
 				}
 				html += "<p>Hai inserito "+risparmio_manutenzione+"euro come risparmio manutenzione</p>";
+				html += "<p>Hai inserito "+costo_smaltimento+" euro come costo di smaltimento</p>";
 				html += "<hr>";
 
 				html += "<h3>Se i dati inseriti risultano corretti clicca su Calcola per calcolare il preventivo</h3>";
@@ -1295,6 +1308,269 @@
 				}else{
 					alert("Qualcuno dei valori inseriti non è un numero!");
 				}
+			}
+
+			function create_payback(){
+				var pdf_as_url;
+				var doc = new jsPDF();
+				var totalPagesExp = "{total_pages_count_string}";
+				var columns = ["Anno", "Risparmio", "Risparmio \nmanutenzione","Quota \nammortizzata","Quota \nresidua","Risparmio \ntot annuo","Investimento"];
+				var rows = new Array();
+
+
+				//valori totali
+				var risparmio_totale_vita = 0;
+				var ammoratamento_cespite = acquisto_totale * 140 / 100;
+				var payback = acquisto_totale / risparmio_annuo_con_led_totale;
+
+
+				//colonne sempre uguali
+				var risparmio_colonna = "€ "+Number((risparmio_annuo_con_led_totale-risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				var risparmio_manutenzione_colonna = "€ "+Number((risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				var precedente_colonna = 0;
+
+				for (var i = 0; i < 20 ; i++){
+					var quota_ammortizzata_colonna;
+					var colonna_temp;
+					var quota_residua_colonna;
+					var risparmio_tot_annuo_colonna;
+					var investimento_colonna;
+
+					//numeri
+					quota_ammortizzata_colonna = ((i == 0) ? acquisto_totale : precedente_colonna);
+					colonna_temp = quota_ammortizzata_colonna-risparmio_annuo_con_led_totale;
+					precedente = colonna_temp;
+					quota_residua_colonna = ((colonna_temp > 0) ? colonna_temp : 0);
+					risparmio_tot_annuo_colonna = ((quota_residua_colonna > 0) ? 0 : (risparmio_annuo_con_led_totale-quota_ammortizzata_colonna));
+
+					risparmio_totale_vita += risparmio_tot_annuo_colonna;
+
+					if(i == 0) investimento_colonna = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					else investimento_colonna = "€ "+Number((0).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+					//stringhe formattate per stampa
+					quota_ammortizzata_colonna = "€ "+Number((quota_ammortizzata_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					quota_residua_colonna = "€ "+Number((quota_residua_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					risparmio_tot_annuo_colonna = "€ "+Number((risparmio_tot_annuo_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+
+					rows[i] = [i+1,risparmio_colonna,risparmio_manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna,investimento_colonna];
+				}
+
+				//totali formattati in require_once
+				payback = ""+Number((payback).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				risparmio_totale_vita = "€ "+Number((risparmio_totale_vita).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				ammoratamento_cespite = "€ "+Number((ammoratamento_cespite).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+
+
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+			 // Purple
+
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+					}
+					doc.setFontType('bold');
+					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
+					doc.setFontType('normal');
+					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
+					if (typeof doc.putTotalPages === 'function') {
+							str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
+				};
+
+				doc.setDrawColor(0);
+				doc.setFillColor(0, 77, 126);
+				doc.rect(10, 55, doc.internal.pageSize.width-20, 10, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(16);
+				doc.text(70, 62, "PAYBACK IN "+payback+" ANNI");
+
+				doc.autoTable(columns, rows, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, right: 15},
+					headerStyles: {fillColor: [0, 77, 126]},
+					addPageContent: pageContent
+				});
+
+				var finalY = doc.autoTable.previous.finalY;
+				var finalX = doc.autoTable.previous.finalX;
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(54, finalY+3, 113, 11, 'FD');
+				doc.rect(139.2, finalY+3, 27.8, 11, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(9);
+				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
+				doc.setTextColor(0, 77, 126);
+				doc.setFontSize(12);
+				doc.text(141, finalY+10, risparmio_totale_vita);
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, finalY+20, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, finalY+21, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(20,finalY+27,"Legge finanziaria 2018: ammortamento cespite 130% annuo                         "+ammoratamento_cespite);
+
+				doc.setTextColor(0);
+				doc.setFontSize(9);
+				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
+
+				if (typeof doc.putTotalPages === 'function') {
+        	doc.putTotalPages(totalPagesExp);
+    		}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+
+			}
+
+			function create_acquisto_listino(){
+				var pdf_as_url;
+				var doc = new jsPDF();
+				var totalPagesExp = "{total_pages_count_string}";
+				var columns = ["Codice","Descrizione","Q.tà","Prezzo unit.","Importo totale"];
+				var rows = new Array();
+
+				for (var i = 0; i < N_analogic_bulb ; i++){
+					var modello = SolPLEDArray[i][0];
+					var descrizione = ""+selezionati_nome_lungo[i]+"\n"+selezionati_marca[i]+"\n"+selezionati_lumen[i]+"\n"+selezionati_durata[i]+"\n"+selezionati_note[i]+"\nGARANZIA"+selezionati_garanzia[i];
+					var quantita = SolPLEDArray[i][1];
+					var prezzo_unitario = selezionati_prezzo;
+					var importo = prezzo_unitario * quantita;
+
+					//formattazione in require_once
+					prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+					rows[i] = [modello,descrizione,quantita,prezzo_unitario,importo];
+				}
+
+
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+			 // Purple
+
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+					}
+					doc.setFontType('bold');
+					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
+					doc.setFontType('normal');
+					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
+					if (typeof doc.putTotalPages === 'function') {
+							str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
+				};
+
+				doc.setDrawColor(0);
+				doc.setFillColor(0,77,126);
+				doc.rect(10, 55, 30, 10, 'FD');
+				doc.rect(40, 55, 100, 10, 'FD');
+				doc.rect(140, 55, 30, 10, 'FD');
+
+				doc.setFillColor(255);
+				doc.rect(10, 65, 30, 10, 'FD');
+				doc.rect(40, 65, 100, 10, 'FD');
+				doc.rect(140, 65, 30, 10, 'FD');
+
+
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(16);
+				doc.text(70, 62, "PAYBACK IN "+payback+" ANNI");
+
+				doc.autoTable(columns, rows, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, right: 15},
+					headerStyles: {fillColor: [0, 77, 126]},
+					addPageContent: pageContent
+				});
+
+				var finalY = doc.autoTable.previous.finalY;
+				var finalX = doc.autoTable.previous.finalX;
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(54, finalY+3, 113, 11, 'FD');
+				doc.rect(139.2, finalY+3, 27.8, 11, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(9);
+				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
+				doc.setTextColor(0, 77, 126);
+				doc.setFontSize(12);
+				doc.text(141, finalY+10, risparmio_totale_vita);
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, finalY+20, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, finalY+21, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(20,finalY+27,"Legge finanziaria 2018: ammortamento cespite 130% annuo                         "+ammoratamento_cespite);
+
+				doc.setTextColor(0);
+				doc.setFontSize(9);
+				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
+
+				if (typeof doc.putTotalPages === 'function') {
+        	doc.putTotalPages(totalPagesExp);
+    		}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+
 			}
 
 			function create_payback(){
