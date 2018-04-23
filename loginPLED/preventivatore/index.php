@@ -1214,17 +1214,17 @@
 				var totalPagesExp = "{total_pages_count_string}";
 				var columns1 = [
 					"Illuminazione \nattuale",
-					"Consumo \nreale in Watt",
-					"Ore \ndurata \nmedia",
-					"Punti \nluce",
-					"Giorni di \nfunz.",
-					"Ore di \nfunz."
+					"Consumo reale in Watt",
+					"Ore \ndurata media",
+					"Punti luce",
+					"Giorni di funz.",
+					"Ore di funz."
 				];
 				var columns2 = [
 					"Sostituzione LED",
-					"Consumo \nin Watt",
+					"Consumo in Watt",
 					"Ore durata \nmedia",
-					"Punti \nluce",
+					"Punti luce",
 					"Spesa annua \nattuale",
 					"Spesa annua \ncon LED",
 					"Risparmio annuo \ncon LED",
@@ -1254,7 +1254,7 @@
 								"€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
 								"€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
 								"€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
-								Number((spesa_annua_led / spesa_annua_attuale * 100 - 100).toFixed(0)).toLocaleString("it-IT", {minimumFractionDigits: 0}) + " %"
+								Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
 								];
 				}
 
@@ -1284,6 +1284,20 @@
 					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
 				};
 
+				var today  = new Date();
+
+				doc.setFontSize(10);
+				doc.setFontType('bold');
+				doc.text(14,60,"Soluzione ACQUISTO");
+
+				doc.setFontType('normal');
+				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
+
+				doc.setFillColor(160, 197, 25);
+				doc.setDrawColor(0);
+				doc.rect(174,55,38,8,'F');
+				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente + " rev. 1");
+
 				doc.autoTable(columns1, rows1, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
@@ -1291,7 +1305,7 @@
 					//},
 					theme: 'grid',
 					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, right: 170},
+					margin: {top: 70,bottom: 20, right: 169},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
@@ -1793,10 +1807,7 @@
 							$createdAt[] = $row["created_at"];
 					}
 					echo "<script>";
-					echo "var array_id_utenti = " . json_encode($id) . ";";
-					echo "var array_username = " . json_encode($username) . ";";
-					echo "var array_password = " . json_encode($password) . ";";
-					echo "var array_createdAt = " . json_encode($createdAt) . ";";
+					echo "var utente = '" . $_SESSION['username'] . "';";
 					echo "</script>";
 				} else {
 						echo "0 results users";
