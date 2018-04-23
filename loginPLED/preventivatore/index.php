@@ -1387,15 +1387,7 @@
 				var pdf_as_url;
 				var doc = new jsPDF();
 				var totalPagesExp = "{total_pages_count_string}";
-				var getColumns = function () {
-				    return [
-				        {title: "Codice", dataKey: "cod"},
-				        {title: "Descrizione", dataKey: "descrizione"},
-				        {title: "Q.tà", dataKey: "quantity"},
-				        {title: "Prezzo unit.", dataKey: "price"},
-				        {title: "Importo totale", dataKey: "total"}
-				    ];
-				};
+				var data = getDataAcquisto();
 				//var columns = ["Codice","Descrizione","Q.tà","Prezzo unit.","Importo totale"];
 /*
 				var rows = new Array();
@@ -1448,6 +1440,7 @@
 				};
 
 				var today  = new Date();
+				var images = [];
 
 				doc.setFontSize(10);
 				doc.setFontType('bold');
@@ -1461,40 +1454,54 @@
 				doc.rect(174,55,28,8,'F');
 				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
 
-
-
-				var data = getDataAcquisto();
-
 				doc.autoTable(getColumns(), data, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, left: 7},
-					headerStyles: {fillColor: [0, 77, 126]},
-					columnStyles: {	0:{columnWidth: 20},
-													1:{columnWidth: 120},
-													2:{columnWidth: 10},
-													3:{columnWidth: 20},
-													4:{columnWidth: 25}},
-
+					columnStyles: {	cod:{columnWidth: 20},
+													descrizione:{columnWidth: 70},
+													foto:{columnWidth: 50},
+													quantity:{columnWidth: 10},
+													price:{columnWidth: 20},
+													total:{columnWidth: 25}},
 
 					drawCell: function (cell, data) {
-	            // Rowspan
-	            if (data.column.dataKey === "descrizione") {
-								var indice_foto = selezionati_foto[data.row.index];
-								var foto = array_foto[indice_foto];
-								doc.addImage(foto, 'JPEG', cell.x,cell.y, 30, 20);
-	            }
-					  	return false;
+						if (data.column.dataKey === "foto") {
+							var img = array_foto[data.row.index];
+							images.push({
+								elem: img,
+								w: cell.width,
+								h: cell.height,
+								x: cell.textPos.x,
+								y: cell.textPos.y
+							});
+						}
 					},
+
+					styles: {overflow: 'linebreak'},
+					/*
+					afterPageContent: function() {
+				      for (var i = 0; i < images.length; i++) {
+				        doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y);
+				      }
+				   },
+					 */
+					margin: {top: 70,bottom: 20, left: 7},
+					//startY:70,
+					headerStyles: {fillColor: [0, 77, 126]},
+
+
+
 
 
 					addPageContent: pageContent
 				});
 
+				for (var i = 0; i < images.length; i++) {
+					doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y,images[i].w-2,images[i].h);
+				}
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
@@ -1509,6 +1516,17 @@
 				}
 
 			}
+
+			var getColumns = function () {
+					return [
+							{title: "Codice", dataKey: "cod"},
+							{title: "Descrizione", dataKey: "descrizione"},
+							{title: "foto",dataKey: "foto"},
+							{title: "Q.tà", dataKey: "quantity"},
+							{title: "Prezzo unit.", dataKey: "price"},
+							{title: "Importo totale", dataKey: "total"}
+					];
+			};
 
 			function getDataAcquisto() {
    				var data = [];
@@ -1532,9 +1550,10 @@
 			        data.push({
 			            cod: modello,
 			            descrizione: descrizione,
+									foto: "",
 			            quantity: quantita,
 			            price: prezzo_unitario,
-			            totale: importo
+			            total: importo
 			        });
 			    }
 			    return data;
