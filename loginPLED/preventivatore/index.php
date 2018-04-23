@@ -323,6 +323,9 @@
 			var prezzo_led_selezionati;
 			var selezionati_foto;
 
+			var indici_foto_filtrati = new Array();
+
+
 			var acquisto_totale;
 			var spesa_annua_led_totale;
 			var risparmio_annuo_con_led_totale;
@@ -1116,7 +1119,7 @@
 						if (modelloLED == array_modello[j]){
 							selezionati_consumo[i] = parseFloat(array_consumo[j]);
 							selezionati_prezzo[i] = parseFloat(array_prezzo[j]);
-							selezionati_foto[i] = array_id_foto[j];
+							selezionati_foto[i] = array_id_foto_modello[j];
 							selezionati_note[i] = array_note[j];
 							selezionati_durata[i] = array_durata[j];
 							selezionati_kelvin[i] = array_kelvin[j];
@@ -1388,31 +1391,7 @@
 				var doc = new jsPDF();
 				var totalPagesExp = "{total_pages_count_string}";
 				var data = getDataAcquisto();
-				//var columns = ["Codice","Descrizione","Q.tà","Prezzo unit.","Importo totale"];
-/*
-				var rows = new Array();
 
-				for (var i = 0; i < N_analogic_bulb ; i++){
-					var modello = SolPLEDArray[i][0];
-					var descrizione = ""+selezionati_nome_lungo[i]+"\n";
-							descrizione += selezionati_marca[i]+"\n";
-							descrizione += selezionati_lumen[i]+"\n";
-							descrizione += "Durata "+ selezionati_durata[i]+"ore\n";
-							descrizione += selezionati_kelvin[i]+"\n";
-							if (selezionati_note[i] != null) {descrizione += selezionati_note[i]+"\n";}
-							descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
-					var quantita = parseFloat(SolPLEDArray[i][1]);
-					var prezzo_unitario = parseFloat(selezionati_prezzo[i]);
-					var importo = prezzo_unitario * quantita;
-
-					//formattazione in require_once
-					prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-					importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-
-					rows[i] = [modello,descrizione,Math.floor(quantita),prezzo_unitario,importo];
-				}
-
-*/
 				var pageContent = function (data) {
 					// HEADER
 					doc.setFontSize(9);
@@ -1449,16 +1428,12 @@
 				doc.setFontType('normal');
 				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
 
-				doc.setFillColor(160, 197, 25);
-				doc.setDrawColor(0);
-				doc.rect(174,55,28,8,'F');
+				//doc.setFillColor(160, 197, 25);
+				//doc.setDrawColor(0);
+				//doc.rect(174,55,28,8,'F');
 				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
 
 				doc.autoTable(getColumns(), data, {
-					//styles: {fillColor: [154, 216, 25]},
-					//columnStyles: {
-					//	id: {fillColor: [0, 0, 0]}
-					//},
 					theme: 'grid',
 					columnStyles: {	cod:{columnWidth: 20},
 													descrizione:{columnWidth: 70},
@@ -1469,7 +1444,8 @@
 
 					drawCell: function (cell, data) {
 						if (data.column.dataKey === "foto") {
-							var img = array_foto[data.row.index];
+							var indice_foto = indici_foto_filtrati[data.row.index]-1;
+							var img = array_foto[indice_foto];
 							images.push({
 								elem: img,
 								w: cell.width,
@@ -1481,26 +1457,16 @@
 					},
 
 					styles: {overflow: 'linebreak'},
-					/*
-					afterPageContent: function() {
-				      for (var i = 0; i < images.length; i++) {
-				        doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y);
-				      }
-				   },
-					 */
 					margin: {top: 70,bottom: 20, left: 7},
-					//startY:70,
 					headerStyles: {fillColor: [0, 77, 126]},
-
-
-
-
-
 					addPageContent: pageContent
 				});
 
+				//adding photos
 				for (var i = 0; i < images.length; i++) {
-					doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y,images[i].w-2,images[i].h);
+					if (selezionati_foto[i] != 0){
+						doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y,images[i].w-5,images[i].h-5);
+					}
 				}
 
 				if (typeof doc.putTotalPages === 'function') {
@@ -1521,7 +1487,7 @@
 					return [
 							{title: "Codice", dataKey: "cod"},
 							{title: "Descrizione", dataKey: "descrizione"},
-							{title: "foto",dataKey: "foto"},
+							{title: "",dataKey: "foto"},
 							{title: "Q.tà", dataKey: "quantity"},
 							{title: "Prezzo unit.", dataKey: "price"},
 							{title: "Importo totale", dataKey: "total"}
@@ -1530,6 +1496,11 @@
 
 			function getDataAcquisto() {
    				var data = [];
+
+					var filtrato = new Array();
+					var modelli = new Array();
+
+
 			    for (var i = 0; i < N_analogic_bulb; i++) {
 							var modello = SolPLEDArray[i][0];
 							var descrizione = ""+selezionati_nome_lungo[i]+"\n";
@@ -1537,15 +1508,16 @@
 									descrizione += selezionati_lumen[i]+"\n";
 									descrizione += "Durata "+ selezionati_durata[i]+"ore\n";
 									descrizione += selezionati_kelvin[i]+"\n";
-									if (selezionati_note[i] != null) {descrizione += selezionati_note[i]+"\n";}
-									descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
+									if (selezionati_note[i] != null) {
+										descrizione += selezionati_note[i]+"\n";
+										descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
+									}else{
+										descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI\n";
+									}
 							var quantita = parseFloat(SolPLEDArray[i][1]);
 							var prezzo_unitario = parseFloat(selezionati_prezzo[i]);
 							var importo = prezzo_unitario * quantita;
 
-							//formattazione in require_once
-							prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-							importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 
 			        data.push({
 			            cod: modello,
@@ -1556,7 +1528,40 @@
 			            total: importo
 			        });
 			    }
-			    return data;
+
+					filtrato[0] = data[0];
+					modelli.push(data[0].cod);
+					indici_foto_filtrati[0] = selezionati_foto[0];
+
+
+					for (var i = 1; i < data.length; i++){
+						if (modelli.includes(data[i].cod)){
+							var indice = modelli.indexOf(data[i].cod);
+							filtrato[indice].quantity += data[i].quantity;
+							filtrato[indice].total += data[i].quantity * filtrato[indice].price;
+						}else{
+							modelli.push(data[i].cod);
+							indici_foto_filtrati.push(selezionati_foto[i]);
+							filtrato.push({
+								cod: data[i].cod,
+								descrizione: data[i].descrizione,
+								foto: "",
+								quantity: data[i].quantity,
+								price: data[i].price,
+								total: data[i].total
+							});
+						}
+					}
+
+					//formattazione in require_once
+					//prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					//importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					for (var j = 0; j < filtrato.length; j++){
+						filtrato[j].price = "€ "+Number((filtrato[j].price).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+						filtrato[j].total = "€ "+Number((filtrato[j].total).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					}
+
+			    return filtrato;
 			}
 
 			function create_payback(){
@@ -1757,7 +1762,7 @@
 					$garanzia=array();
 					// output data of each row
 					while($row = $result->fetch_assoc()) {
-							//echo "id: " . $row["id"]. " - modello: " . $row["username"]. "password" . $row["password"]."-crated at" . $row["created_at"] ."<br>";
+							//echo "id: " . $row["id"]. " - idfoto: " . $row["id_foto"]. "<br>";
 							$id[] = $row['id'];
 							$modello[] = $row["modello"];
 							$id_foto[] = $row["id_foto"];
@@ -1775,7 +1780,7 @@
 					echo "<script>";
 					echo "var array_id_leds = " . json_encode($id) . ";";
 					echo "var array_modello = " . json_encode($modello) . ";";
-					echo "var array_id_foto = " . json_encode($id_foto) . ";";
+					echo "var array_id_foto_modello = " . json_encode($id_foto) . ";";
 					echo "var array_prezzo = " . json_encode($prezzo) . ";";
 					echo "var array_gruppo_modello = " . json_encode($gruppo_modello) . ";";
 					echo "var array_consumo = " . json_encode($consumo) . ";";
