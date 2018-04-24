@@ -803,6 +803,7 @@
 						if (dimmer.checked){
 							control_dimmerabile = 1;
 							count_dimmerabili++;
+							modello += "_DIM";
 						}
 
 						if(count_dimmerabili > 0){
@@ -1157,8 +1158,10 @@
 					var temp = StatoAttualeArray[i][4] *StatoAttualeArray[i][5] * costoKWH / 1000;
 					spesa_annua_attuale[i] = temp * StatoAttualeArray[i][1] * StatoAttualeArray[i][3];
 					var modelloLED = SolPLEDArray[i][0];
+					var modelloLED_dim = "";
+					if (modelloLED.includes("_DIM")) modelloLED_dim = modelloLED.substring(0,modelloLED.length-4);
 					for (var j = 0; j < array_modello.length; j++){
-						if (modelloLED == array_modello[j]){
+						if (modelloLED == array_modello[j] || modelloLED_dim == array_modello[j]){
 							selezionati_consumo[i] = parseFloat(array_consumo[j]);
 							selezionati_prezzo[i] = parseFloat(array_prezzo[j]);
 							selezionati_foto[i] = array_id_foto_modello[j];
