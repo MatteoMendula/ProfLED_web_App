@@ -332,7 +332,7 @@
 			var risparmio_percentuale_totale;
 
 			var imgLogo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUwAAABGCAYAAACngq2NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAEohJREFUeNrsXb2S2zgShrccbbLacKPlBFd1VQ6siS+w9AAqj55AUrKZS6Nso5HkF5CmNtsLRD3BaMoPIE2wselgq67qguFEGx6dON0DhIbYggASIPVDzfRXRQ/dIgGyAXzoboDAK9a6+ZsdBzE6vvAjYp8+rhiBQCCcCV4dkTBNSPghSHPOyXNBxUEgEIgw3cnzlh9TTp4JFQ2BQKgavqvQs9T4MeTHIyfxayoaAoFAFqY7hKveJmuTQCCQhZmPBlibdSomAoFwDhbmuGT679B5HdxuXwgLs8ktzYiKi0AgVJcwP318tdfcWjc1sBzf8+PKg0AFaV7y54mpyAgEwqnw2uWi3/78XhBbF/4bfnjzLXGVaQQs/r+Ao8cJVFwrBnqCnEcQ6d6tSZNAIBBOBNcY5owfE3TYZPj/s9xUP30M+XHBzwZgRWahzgl2REVGIBCqTpiB4bxmkAWaVeiGTx+nTMQp80mzD249gUAgVJYwV+j8Af5GBtmDQeZKmpEDaQqypDmaBALhJHAe9Pntz+/X03s+vPkW+cq80Lpp8H+XGVfE4MYTCARCJS3M40EuyBFmhgdobiaBQKgqYXKrUQzifBYHPx9lyEa6rCDy5n9eUdERCISqWpgNdK4mo9cNsncGWRErM2bbMVIdb6noCARCVQkzNpwnBhm+ruw34PeZbjmBQCAcGa8dr+uxdNQ7zJCJ+ZRfNFlRZFmYFMMkEAjVJEz4YmdaRFYCtEoRgUA4P8L87c/vuyz9mqfHiXHBZWLgZZYnIxUTCITnAtcYZp/JSeM1OPeREQgEwosizCTHVSb3mUAgkEsOEIM5Qzgfe8qKIsj4LX7xJSe/qa/v6OXcl8CTX3phRF6r7suPGmoH18k56T/VSUQ7GJTDcdfD9CtkEQvtWn5d8WdrHjDvvG071G6X9+sVl4qlobDITMdMKKJTaliuELMLbnPTa90sM9KwYczTHZVMo7mzvbIknyGUd81Y3jLvVcb7iPj5xNLRChKbM9sGe+l7bL/fcfQfgU4Sh7IfQd7u9b91I/TxCP8Tq4P1POrZsgwPhH/8NEIG1Locu//6q1nifuc6xvNZeaYh2zO/hd+bGOrVus27fulT58cdHIFBVrfJSiDra54HdlrU4Plm64pfbgUlt3TEb7ITwSSliHuFwiL1PT3XMS1l8U7XoFf8Tgqy8bZu7ozv1LoRFfoOkaW6P0beimg0nw0WrPtzHkb/8vrDAZNFFwiUsIsGEOMjJ1m8wE8fylboLXB1ySdaj9qGgrhykBWpnDZLA/fix4DJGgqgkvdBJw2o8G3nNFKiEPd2QGcNaPS2HniJXECzxbVt/SiSybNe8q0qX8vTDxN4r2Qd0tEtM9nDY12bLKHrjQUl00i08uqydKHqoEB9rB1Q/7LTFNZj+XIwPbduePQhdEawG0MTTppvuaXZQ2QpOKf+nUci+rmrrEghDzPd4U8fTzddScSoRP7SJZqiCl/3TCeBdNosjfc2jOlIC6qOyMlMwkImn2t8JOtlH1Bhl4HRjU11PWDmXUQ7KEzT2/ldlpcgokvQXVjgGYdI/4M96z/Z5FHU+rVDWe3C0u4hK/Nc15SNkUWfdSQO4TR12IyvLifNCZRlBHkPXC3MW5bOw7yFv3NUiUyyeQmLI8iJ+VUDnz4OwAIKoCePCqYz4umoKVmNrXSkhXSNYlAjx/R+gPuu1g0xK/53One8ocWQst7J9kFE4BSmkeutRgWesY70P814Dl3/P0NnkKf/EMq8vvYwWjf73LuqjzrZEDpetabsiJ0f5tzqK/vckR5H5cSodKIbatfhr/++59dvvEfXL31Cpn3q6Cor4Ip3c92/6vV6+4gLRdBwapYYVOLpSo2BxANoOKsKNgBMDHVWbvbDoRZk6SP9+9S9AZRnnv6/QjjnM1N7V7m58a5hrQQZGbdQnzpnSpiHcXHkIM+IE2ds8Ai2ys510KfGj2v44sdFdg0bovkUsMs+QNNnvHNkXXPR0vhWal26NyJ57VxLo1qQZanKc1bQJX1AYZFDrMZfRv8LJ/1LPbRRPZjs4bmHG5JMn3u6scoloRK2iTM0eLBbZecaw9xsbMaJcOYgmzgXunA55RSLvMoeV866lO5yw2At+aYzQpblQktfye8LpLyyuL9VgipTObAiR5evPWLCU9TJTPh9j+vOV7xv2Vjd9pzOIvq/d9a/dNmVLrqlCE3mFSCXH5N4qBHqOWHIrcC/s459uP07MZM/fmp4ueRse4JuoP3Nk2WRzdDBBVdoV2rSrWyMd8gqXBRskHhmgW5BYx36v7tohK2bvKs6/BqXtUsHEAc0WzOtG5cGuDtYImNrqrNVMdwG6EcF6OfWgT5RJ0TcT3oniiiuNx1w6yaCRhAWqD81S/hgn/rH14vY51uWTjWLMnTuYl2GBo9sDG0uqGxs+7TI1Mdrj0TqmgsUIevKJIssBCF+f8/8Jjz3Clac8m7yboUXDfIdVOoaIhNbY1w6NppwPYh0fATMLQZ7uJFVSZoL0KmqG2pNgitwtyNrPZCk0ATLqoOIU3X2dSD1sdOgzWnRg2evQ925KPClU2Pjjpt01bpZwTVDVs3Y9ind8oRblAUJE/YB//Ar+/rPf8TrHv4//+Vl2WIjB9lXLsPTYRqFK1CxqSD7QF5YIQayLDpyr1ykuaVDSEoRlpsbHjK3GQ1Rpltddg5h6i6GWsPvINJbZo4iS2tppYVL3rH0C6LJ2jNwf9ZE61jiA+jfZDH3mJz3qbwYn6/a+hsjx25kjDeWvNDT+YwLxOzAn0Vj97uIhblxs9akKHHlKytBJr2TzrmUJJFYCu7BkcgHBrLpoEb8YK3YQi7d0hpYXr7WQF0jExOeKumWpdOAphDPm4EehiydU5h1f7whYGFZSuJRHxyMnJ8h9Q4OpX9bvoNNmEHEZF28j3SSPgOXe+novvfYeWAf04ryQ1S7VufK1yU/BVG1K9DzDfZAJpEhjRVYUHUUq7K96wIaQRdcSp84XB+lcb6QLruyFIMC98dAQNJq84vdqVDBcfUv31nEM2U8tnXzxSM/n1CLeq+YvXBw6/KK7Y6pLHwszGPD/Hnc88T23Dv5JYqxV91yKV2tARlOCayxrKrA3SV8stxfQy59FgH5DcCkuGVpvHrIXOfC7kP/8sMIFZqYZFq4Ug9dFGZ5ciRYdd+IvVDAxPUuM4fgbqtImDHEVRYvZvkpafX0Nq6ize2SDR1bOU8OK+p0UThlUdmRUEkGn8HCyWuw71CnikliCefZHsn2NJ3Io5yw/oWl9/XI+hcd6yNLB8BswIuXDBxXP1IueZ+fT4/Q9uqcnPLCBOJLHFun1OH3O83o4GlEHs/QsFw7xe74qQkzYumUkYi9RIj4rKioqdv1YInZ4pHTIbinY8vCIBPUsCJW7fjUcPO3ddNhpm+9JSnixV9wj6/CGgyI95aZptKkS3TJcIg/MZxO/3IQqAneSBY6G/24v18IZaAsrEPPIKix4oO/PmGG2h6eITQR96EJEw+aiPOvTH3wTguZYrerwbLimWmjuWPpPEUxGBCz7SXMcGVasePNXXWdh8kYHlEXC4/IL7yu4dlnsITaytL7h1skJa2/NtseEBrCFKTEoJeEFVlB69T6l4NAPWb7Ek5atAEiQR8vJwSy7FsJ031t1+YzmNe5/gSWk6VRF69zFLpeOBQ2N1M9dPvDm28RlzXY9oZnK5OMGNHZ7cqOZ8qG14TG0QeCNfW4bgvYVqvDUN84dy0uUgzvNLVY6Ssg3Q6yBE3W1KAwgW3rHy8Vdxz9bw986eijDiX2TPmWpRPZuy9k/MBm3M2ZvoCwBqcV1zkRfkaVcMWJsMlleCFVq4y48EBI1+WsowKPnuEWFYlXyEbqZZfE9m1pP1f9EzJRxCUnV7oalplyBxfP7L1We9IL6Z9wMsLsseNvgkYgEAiVQnU3QSMQCIRztDBh4zNlOQ4+vPmWaLIxl8UmGamYQCC8NJcczy0TI7ltDxmBQCA8C7guIIynaRx2EzQCgUA4c8IUAzgJHHjDMyWbZ8gIBALhWYAGfQgEAmHPFqYY+OniDc98ZAQCgfBiCBM2OVsf/HziKJuRegkEwku0MBvoXA0ABTmygNRLIBBeImHiz78i7W+ejEAgEJ4FnAd9YCWiRKxUhGRryzJPRiAQCM8BPotvxAZZ4ig7K/zyyy9q0Vo9rHD7+++/L+Aa08rREf99wH/rMsNmSup+/vtI6ImfT7V816tmc/lIpM//NjPyEhjwayJ8reFdbM9yr/KHaxj/f2hJY2mpDyL/BN+fobv1OoPwvMb8THJITyx5Nzdcb3xvLheddgfKos7MWw/s6I6fi48u+rZrtTxEjP5JlJWDrnzze1Dp8muULntC1yZdZZTxznOjNHeWwBPPhfSVqe+c+m9KP4E0VfsR7/cuo47Yyk1NV+zY9KzyzqmPm/qr1ZsJPMOqMGFyq/FaPTw/F+tchhaZKLgZyMQnlFOwOO8gKbVuZhHZGPJwkpXkTLXc/xhCCzVQ+HJtlUsIi7tp6SwCKBA8F1U1/FcQ4ljyAgpVgfHzAPR5gdJXGGvpzNj2lqONjHcxPYvAhOfJgDSDHH2Y3rUPehpp96tKLhp4jN5NXC8+m21n5GeSqxXBxfMucAXPeO8aarBqf/OBxQDAadzB862gI8B7vTQ1shL31fj5SmtcellNoF6Y8hPl2FP5Qdri9xlKd7PFMJc10fsHDmUcW/Qj0ru3hM2U7upQP0KLvrPqvyl9Vb8X8I6C8NqK0IGsrpCu88otRvVtjvKK2fZWHl3Ie6DlNYTrQq3uqjK7LGNh4l6wA5m8N8gw64vfpxq7q43jsUw9HJbNgDj0e0MH2YT5rDptRqJVLoW2x31PuCFB41M9uehBF2x7U7P1uyiS0Xr+ldYDCuLw2frgSe8xeVr3zONrLMP97zNIb4zfQ5xDfkOfQoD37UL9GDKfTeAKQllAcC5IM2RoBXhksbShbmw1LlRWar+hlW7JYHLC+an7+b0xpK3y7UHb0kkz712KensRENXSQJqu9T/S6n/A0sXFG2BtRlqbiFn+cnkJvJfqjBNDXnoH8GDIa2DwbgL+2wU//yy8Pd0D9CHMiG0v868rJ0tWhKQST5e/TL4mhCzd8mCrZ4aeP7FYOCvU8w35tUPD79gSEQUzZukGVxc55LEEt350gjCFKdbddLhPWZwPBbKdwPvGUMEf+d+5zV3KgGkfl9ilrkBZR5rFq6w/QW4d0di0MIIqK9EBDgqqvKaRRBvCAGvStHRUjYz6puOtocNcaaTSzCHNrPq/1IiL2chQc+8jpO/C5eZQrrGlE1Ru/R32AH0JU/RwX+BBwxzZA7zoFGU+1Mxrk2yMlLQPWRkI8oot8alNz59DXGP8OxTK/zSr6xb1urc2iwB6vxm4ueGeOPAHJvdYcq1grwxE2DA0ykRzF8dQ1nfatT9nPRNyextaxzPMIQJj/L1oJwPl9sjv/xGI8NrQgWzCBRCXnIFVWaasIkMZ9BRpgg6+muKejsjteHTSNPyelV9Ts/pwvDbGHiqKizY0IyXek3Hwg6FcR+gdFBfp77mzrbITYYrl3Ji2b3GGbKrJIt2VPYZsDy65iCN1DLGfKCPAH9ksCmhMungKlci6ORc0UhWz7GjPZAzqGyDue2d4l8sSOrKR7dyiuwQs9ADFcAPDM7VRj980hAIesUVnKIMyHaYgiM+aBVNDBD3RO0J4hjvwKObQMSSGspobCHRlyG+nnllI81qLl5rKOKt+TMCdZTpx2UgzxzLMrP/aO64g/6XBSl5oHt3SQPQ+HdEK6lrdoOMeCvtcaFZnAB7gVujgNXNYGV3b3ExtgoYHWlxlZQZ98gaC1M6BpQd9YCQ70iwlPY7XzKgUtvybBhK9tMSbmqg3trm+sYNrHJqsQK0h5emraUl359ymO7AWcIW8tF0DhNm2WEBN5Eo2M3Qy0OJxue/G87sEK8cWv7WNnqpteL3KCkalGybiRvVhwLTBGyDNOZKHFqs7tjzLICN+vaMvIE29vLLq/8CQ9yZdKOMLZhhJR/XSZgTFhneJbXUTYsI/GvJSdS2AjlnXcQwdxVa7dFpco8wmaA6yiMsuNVnMZRcesjuWjoyJuaI/MgKBQNgzvqvQs5QZ9PH5nUAgEArBZ9Bnork6g5KyKg/6EAgEAoFAIBCKwjWGGYBFuP50CTZBw18xZMnUgMzaUkUDQUo2QIM5PrIayBYmGRUtgUA4lUuONzcT5NkGgnKR4e9K1WdPuuxSk+EvfbJk669egMx1GYFAIOwVVdoELSkhIxAIhMpYmGPkGuMNzxoOMteBoDEiWRr0IRAIlcP/BRgALG9EWNAPi04AAAAASUVORK5CYII=";
-
+			var simboli="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4RDoRXhpZgAATU0AKgAAAAgABQESAAMAAAABAAEAAAE7AAIAAAAGAAAIVodpAAQAAAABAAAIXJydAAEAAAAMAAAQ1OocAAcAAAgMAAAASgAAAAAc6gAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE1BVFRFAAAFkAMAAgAAABQAABCqkAQAAgAAABQAABC+kpEAAgAAAAM4MgAAkpIAAgAAAAM4MgAA6hwABwAACAwAAAieAAAAABzqAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAxODowNDoyNCAxNjo1OTo1NAAyMDE4OjA0OjI0IDE2OjU5OjU0AAAATQBBAFQAVABFAAAA/+ELGGh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8APD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4NCjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iPjxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+PHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9InV1aWQ6ZmFmNWJkZDUtYmEzZC0xMWRhLWFkMzEtZDMzZDc1MTgyZjFiIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iLz48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyI+PHhtcDpDcmVhdGVEYXRlPjIwMTgtMDQtMjRUMTY6NTk6NTQuODIxPC94bXA6Q3JlYXRlRGF0ZT48L3JkZjpEZXNjcmlwdGlvbj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyI+PGRjOmNyZWF0b3I+PHJkZjpTZXEgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOmxpPk1BVFRFPC9yZGY6bGk+PC9yZGY6U2VxPg0KCQkJPC9kYzpjcmVhdG9yPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgPD94cGFja2V0IGVuZD0ndyc/Pv/bAEMAAgEB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";
 
 				function inc_PuntiLuce_SOL_PLED(indice){
 					var i = indice.substring(10);
@@ -417,94 +417,136 @@
 
 				function addOneToStatoAttuale(){
 
-					var indice_id = N_analogic_bulb - 1;
+					var control = 0;
 
-					//var indice_id_prev = indice_id - 1;
-
-					//----------------------------SALVO I VALORI INSERITI PRECEDENTEMENTE-----------------------
-					var modello_span = document.getElementById("modelloStandard"+indice_id).value;
-					var titolo_span = document.getElementById("titoloLampadaStandard"+indice_id).innerHTML;
-					var consumo_span = document.getElementById("standardSpanConsumo"+indice_id).innerHTML;
-					var durata_span = document.getElementById("standardSpanDurata"+indice_id).innerHTML;
-					var PL_span = document.getElementById("standardSpanPL"+indice_id).innerHTML;
-					var GG_span = document.getElementById("standardSpanGG"+indice_id).innerHTML;
-					var HH_span = document.getElementById("standardSpanHH"+indice_id).innerHTML;
-
-					var modello = document.getElementById("modelloStandard"+indice_id).value;
-					var consumo = document.getElementById("consumoStandard"+indice_id).value;
-					var durata = document.getElementById("durataStandard"+indice_id).value;
-					var PL = document.getElementById("puntiluceStandard"+indice_id).value;
-					var GG = document.getElementById("GGStandard"+indice_id).value;
-					var HH = document.getElementById("HHStandard"+indice_id).value;
+					for (var i = 0 ; i < N_analogic_bulb ; i++){
+						var modello = document.getElementById("modelloStandard"+i).value;
+						var consumo = document.getElementById("consumoStandard"+i).value;
+						var durata = document.getElementById("durataStandard"+i).value;
+						var PL = document.getElementById("puntiluceStandard"+i).value;
+						var GG = document.getElementById("GGStandard"+i).value;
+						var HH = document.getElementById("HHStandard"+i).value;
 
 
-					//----------------------------ELIMINO I VALORI INSERIRI PRECEDENTEMENTE-------------------
-					var elemento = document.getElementById("elemento"+indice_id);
-					elemento.parentNode.removeChild(elemento);
-					controlButton = false;
 
-					if (controlButtonRemove == true){
-						var bottoniRemove = document.getElementById("bottoniRemove");
-						bottoniRemove.parentNode.removeChild(bottoniRemove);
-						controlButtonRemove = false;
-					}
+						if(modello != "" && consumo != "" && !isNaN(consumo) && durata != "" && !isNaN(durata)  && PL != "" && !isNaN(PL) && GG != "" && !isNaN(GG) && HH != "" && !isNaN(HH)){
+							//StatoAttualeArray[i] = new Array(modello,consumo,durata,PL,GG,HH);
+							control ++;
+						}else {
+							if (modello == ""){
+								alert("Nome Modello "+(i+1)+" mancante!");
+							}
+							if (consumo == "" || isNaN(consumo)){
+								alert("Consumo del modello "+(i+1)+ " mancante oppure in formato non valido (deve essere un numero)!")
+							}
+							if (durata == "" || isNaN(durata)){
+								alert("Durata del modello "+(i+1)+ " mancante oppure in formato non valido (deve essere un numero)!")
+							}
+							if (PL == "" || isNaN(PL)){
+								alert("Punti luce del modello "+(i+1)+ " mancante oppure in formato non valido (deve essere un numero)!")
+							}
+							if (GG == "" || isNaN(GG)){
+								alert("Giorni di funzionamento del modello "+(i+1)+ " mancante oppure in formato non valido (deve essere un numero)!")
+							}
+							if (HH == "" || isNaN(HH)){
+								alert("Ore di funzionamento del modello "+(i+1)+ " mancante oppure in formato non valido (deve essere un numero)!")
+							}
+						}
+				}
 
-					var html = "";
+				if (control == N_analogic_bulb){
 
-					//-------------------------SCRITTURA DEI CAMPI INSERITI PRECEDENTEMENTE-------------------
-					html += "<div id='elemento"+indice_id+"'>";
-					html += "<hr>";
-					html += "<h3 id='titoloLampadaStandard"+indice_id+"'>"+titolo_span+ "</h3>";
-					html += "<div><span>Modello: "+modello_span+"</span></div>";
-					html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)' value='"+modello+"' readonly> </input></div>";
-					html += "<div><span id='standardSpanConsumo"+indice_id+"'>"+consumo_span+ " (in Watt)</span></div>";
-					html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+consumo+"' readonly></input></div>";
-					html += "<div><span id='standardSpanDurata"+indice_id+"'>"+durata_span+"</span></div>";
-					html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+durata+"' readonly> </input></div>";
-					html += "<div><span id='standardSpanPL"+indice_id+"'>"+PL_span+"</span></div>";
-					html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+PL+"' readonly> </input></div>";
-					html += "<div><span id='standardSpanGG"+indice_id+"'>"+GG_span+"</span></div>";
-					html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+GG+"' readonly> </input></div>";
-					html += "<div><span id='standardSpanHH"+indice_id+"'>"+HH_span+"</span></div>";
-					html += "<div><input id='HHStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+HH+"' readonly> </input></div>";
-					html += "<hr>";
-					html += "</div>";
+						var indice_id = N_analogic_bulb - 1;
 
-					//------------------------------SCRITTURA DEI NUOVI CAMPI--------------------------------------------
-					html += "<div id='elemento"+N_analogic_bulb+"'>";
-					html += "<hr>";
-					html += "<h3 id='titoloLampadaStandard"+N_analogic_bulb+"'>Lampada Standard "+(N_analogic_bulb+1)+ "</h3>";
-					html += "<div><span>Inserire modello"+(N_analogic_bulb+1)+ "</span></div>";
-					html += "<div><input id='modelloStandard"+N_analogic_bulb+ "' onkeyup='updateNameStandard(this.id)'> </input></div>";
-					html += "<div><span id='standardSpanConsumo"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'>Consumo reale del modello "+(N_analogic_bulb+1)+ " (in Watt)</span></div>";
-					html += "<div><input id='consumoStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'></input></div>";
-					html += "<div><span id='standardSpanDurata"+N_analogic_bulb+"'>Durata del modello "+(N_analogic_bulb+1)+ " (in ore)</span></div>";
-					html += "<div><input id='durataStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
-					html += "<div><span id='standardSpanPL"+N_analogic_bulb+"'>Punti luce del modello "+(N_analogic_bulb+1)+ "</span></div>";
-					html += "<div><input id='puntiluceStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
-					html += "<div><span id='standardSpanGG"+N_analogic_bulb+"'>Giorni di funzionamento del modello "+(N_analogic_bulb+1)+ " all'anno</span></div>";
-					html += "<div><input id='GGStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
-					html += "<div><span id='standardSpanHH"+N_analogic_bulb+"'>Ore di funzionamento del modello "+(N_analogic_bulb+1)+ " al giorno</span></div>";
-					html += "<div><input id='HHStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
-					html += "<hr>";
+						//var indice_id_prev = indice_id - 1;
 
-					//alert(controlButton);
+						//----------------------------SALVO I VALORI INSERITI PRECEDENTEMENTE-----------------------
+						var modello_span = document.getElementById("modelloStandard"+indice_id).value;
+						var titolo_span = document.getElementById("titoloLampadaStandard"+indice_id).innerHTML;
+						var consumo_span = document.getElementById("standardSpanConsumo"+indice_id).innerHTML;
+						var durata_span = document.getElementById("standardSpanDurata"+indice_id).innerHTML;
+						var PL_span = document.getElementById("standardSpanPL"+indice_id).innerHTML;
+						var GG_span = document.getElementById("standardSpanGG"+indice_id).innerHTML;
+						var HH_span = document.getElementById("standardSpanHH"+indice_id).innerHTML;
 
-					if (controlButton == false){
-						html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
-						html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Salva ultimo ed aggiungi una lampada</button></div>";
-						html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
-						html += "</div>";
+						var modello = document.getElementById("modelloStandard"+indice_id).value;
+						var consumo = document.getElementById("consumoStandard"+indice_id).value;
+						var durata = document.getElementById("durataStandard"+indice_id).value;
+						var PL = document.getElementById("puntiluceStandard"+indice_id).value;
+						var GG = document.getElementById("GGStandard"+indice_id).value;
+						var HH = document.getElementById("HHStandard"+indice_id).value;
+
+
+						//----------------------------ELIMINO I VALORI INSERIRI PRECEDENTEMENTE-------------------
+						var elemento = document.getElementById("elemento"+indice_id);
+						elemento.parentNode.removeChild(elemento);
+						controlButton = false;
+
+						if (controlButtonRemove == true){
+							var bottoniRemove = document.getElementById("bottoniRemove");
+							bottoniRemove.parentNode.removeChild(bottoniRemove);
+							controlButtonRemove = false;
+						}
+
+						var html = "";
+
+						//-------------------------SCRITTURA DEI CAMPI INSERITI PRECEDENTEMENTE-------------------
+						html += "<div id='elemento"+indice_id+"'>";
 						html += "<hr>";
-						html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
+						html += "<h3 id='titoloLampadaStandard"+indice_id+"'>"+titolo_span+ "</h3>";
+						html += "<div><span>Modello: "+modello_span+"</span></div>";
+						html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)' value='"+modello+"' readonly> </input></div>";
+						html += "<div><span id='standardSpanConsumo"+indice_id+"'>"+consumo_span+ " (in Watt)</span></div>";
+						html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+consumo+"' readonly></input></div>";
+						html += "<div><span id='standardSpanDurata"+indice_id+"'>"+durata_span+"</span></div>";
+						html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+durata+"' readonly> </input></div>";
+						html += "<div><span id='standardSpanPL"+indice_id+"'>"+PL_span+"</span></div>";
+						html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+PL+"' readonly> </input></div>";
+						html += "<div><span id='standardSpanGG"+indice_id+"'>"+GG_span+"</span></div>";
+						html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+GG+"' readonly> </input></div>";
+						html += "<div><span id='standardSpanHH"+indice_id+"'>"+HH_span+"</span></div>";
+						html += "<div><input id='HHStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)' value='"+HH+"' readonly> </input></div>";
+						html += "<hr>";
+						html += "</div>";
+
+						//------------------------------SCRITTURA DEI NUOVI CAMPI--------------------------------------------
+						html += "<div id='elemento"+N_analogic_bulb+"'>";
+						html += "<hr>";
+						html += "<h3 id='titoloLampadaStandard"+N_analogic_bulb+"'>Lampada Standard "+(N_analogic_bulb+1)+ "</h3>";
+						html += "<div><span>Inserire modello"+(N_analogic_bulb+1)+ "</span></div>";
+						html += "<div><input id='modelloStandard"+N_analogic_bulb+ "' onkeyup='updateNameStandard(this.id)'> </input></div>";
+						html += "<div><span id='standardSpanConsumo"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'>Consumo reale del modello "+(N_analogic_bulb+1)+ " (in Watt)</span></div>";
+						html += "<div><input id='consumoStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'></input></div>";
+						html += "<div><span id='standardSpanDurata"+N_analogic_bulb+"'>Durata del modello "+(N_analogic_bulb+1)+ " (in ore)</span></div>";
+						html += "<div><input id='durataStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
+						html += "<div><span id='standardSpanPL"+N_analogic_bulb+"'>Punti luce del modello "+(N_analogic_bulb+1)+ "</span></div>";
+						html += "<div><input id='puntiluceStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
+						html += "<div><span id='standardSpanGG"+N_analogic_bulb+"'>Giorni di funzionamento del modello "+(N_analogic_bulb+1)+ " all'anno</span></div>";
+						html += "<div><input id='GGStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
+						html += "<div><span id='standardSpanHH"+N_analogic_bulb+"'>Ore di funzionamento del modello "+(N_analogic_bulb+1)+ " al giorno</span></div>";
+						html += "<div><input id='HHStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
+						html += "<hr>";
+
+						//alert(controlButton);
+
+						if (controlButton == false){
+							html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
+							html += "<div><button class='buttonAddItem' onclick='addOneToStatoAttuale()'>Salva ultimo ed aggiungi una lampada</button></div>";
+							html += "<div><button class='buttonRemoveItem' onclick='removeOneToStatoAttuale()'>Rimuovi una lampada (l'ultima)</button></div>";
+							html += "</div>";
+							html += "<hr>";
+							html += "<br><button id='bottone_prosegui_stato_attuale' class='buttonStep' onclick='toSoluzionePLED()'>Prosegui</button>";
+						}
+						html += "</div>"
+
+						html += "</div>"
+
+						N_analogic_bulb++;
+
+						step2.innerHTML += html;
+					}else{
+						alert("Errore: non sono stati inseriti tutti i valori nell'ultimo modello");
 					}
-					html += "</div>"
-
-					html += "</div>"
-
-					N_analogic_bulb++;
-
-					step2.innerHTML += html;
 				}
 
 					function cambiaOpzioniLED(id){
@@ -737,7 +779,7 @@
 							html += "<div class='flex-containerPLED'>";
 								html += "<div><span>Inserire punti luce: </span></div>";
 								html += "<div><button id='dec_button"+i+"' onclick='dec_PuntiLuce_SOL_PLED(this.id)' class='buttonLess'> - </button></div>";
-								html += "<div><input type='number' value='0' id='PuntiLuceLED"+i+"' style='text-align:center'></div>";
+								html += "<div><input type='number' min='0' value='0' id='PuntiLuceLED"+i+"' style='text-align:center'></div>";
 								html += "<div><button id='inc_button"+i+"' onclick='inc_PuntiLuce_SOL_PLED(this.id)' class='buttonPlus'> + </button></div>";
 							html += "</div>";
 							html += "<hr>";
@@ -804,15 +846,15 @@
 					html += "<hr>";
 					html += "<div class='flex-containerPLED'>";
 						html += "<p>Inserire il risparmio manutenzione (in euro)</p>";
-						html += "<div><input type='number' value='0' id='risparmioManutenzione' style='text-align:center'></div>";
+						html += "<div><input type='number' min='0' value='0' id='risparmioManutenzione' style='text-align:center'></div>";
 					html += "</div>";
 					html += "<div class='flex-containerPLED'>";
 						html += "<p>Smaltimento vecchi apparecchi illuminotecnici in Isola Ecologica (in euro)</p>";
-						html += "<div><input type='number' value='0' id='costoSmaltimento' style='text-align:center'></div>";
+						html += "<div><input type='number' min='0' value='0' id='costoSmaltimento' style='text-align:center'></div>";
 					html += "</div>";
 					html += "<div class='flex-containerPLED'>";
 						html += "<p>Inserire il numero del preventivo</p>";
-						html += "<div><input type='number' value='0' id='NPreventivo' style='text-align:center'></div>";
+						html += "<div><input type='number' min='0' value='0' id='NPreventivo' style='text-align:center'></div>";
 					html += "</div>";
 
 					html += "<br><button class='buttonStep' onclick='toCheckValues()'>Prosegui</button>";
@@ -1444,15 +1486,18 @@
 
 					drawCell: function (cell, data) {
 						if (data.column.dataKey === "foto") {
-							var indice_foto = indici_foto_filtrati[data.row.index]-1;
+							var indice_foto = indici_foto_filtrati[data.row.index];
 							var img = array_foto[indice_foto];
 							images.push({
+								indice: indice_foto,
 								elem: img,
 								w: cell.width,
 								h: cell.height,
 								x: cell.textPos.x,
 								y: cell.textPos.y
 							});
+						}else if (data.column.dataKey === "descrizione" && (((indici_foto_filtrati.length+1) == data.row.index ) || ((indici_foto_filtrati.length) == data.row.index ))){
+							doc.setTextColor(201,201,201);
 						}
 					},
 
@@ -1462,12 +1507,35 @@
 					addPageContent: pageContent
 				});
 
+				//sincronizzazione array
+				images.pop();
+				images.pop();
+
 				//adding photos
 				for (var i = 0; i < images.length; i++) {
-					if (selezionati_foto[i] != 0){
+					if (images[i].elem != "no foto"){
 						doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y,images[i].w-5,images[i].h-5);
 					}
 				}
+				//contenuti dopo la tabella
+				var finalY = doc.autoTable.previous.finalY;
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(7, finalY, 195, 10, 'FD');
+				doc.rect(177, finalY, 25, 10, 'FD');
+				doc.setTextColor(0, 77, 126);
+				doc.text(179, finalY+6, "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2}));
+				doc.setFontType('bold');
+				doc.setTextColor(160, 197, 25);
+				doc.setFontSize(12);
+				doc.text(77, finalY+7, "IMPORTO TOTALE");
+				doc.setTextColor(201,201,201);
+				doc.setFontSize(9);
+				doc.text(170,finalY+15,"(esclusa I.V.A. di legge)");
+				doc.setFontSize(9);
+				doc.setTextColor(0, 77, 126);
+				doc.text(14,finalY+17,"Tutti i prodotti sono conformi alla Normativa Europea\nEN 6241:2008 contro il Rischio Fotobiologico da illuminazione LED.");
+				doc.addImage(simboli,14,finalY+23,80,20);
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
@@ -1557,9 +1625,36 @@
 					//prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 					//importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 					for (var j = 0; j < filtrato.length; j++){
+						filtrato[j].quantity = ""+filtrato[j].quantity;
 						filtrato[j].price = "€ "+Number((filtrato[j].price).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 						filtrato[j].total = "€ "+Number((filtrato[j].total).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 					}
+
+					//aggiungo smaltimento
+					costo_smaltimento = parseFloat(costo_smaltimento);
+					filtrato.push({
+							cod: "",
+							descrizione: "Smaltimento vecchi apparecchi illuminotecnici in Isola Ecologica",
+							foto: "",
+							quantity: "",
+							price: "",
+							total: "€ "+Number(costo_smaltimento.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+					});
+
+					//aggiungo dimmerabilità
+					dimmerabilita += "\nContributi RAEE compresi."
+
+					//aggiungo info installazione
+					filtrato.push({
+							cod: "",
+							descrizione: "Installazione a forfait su impianto elettrico esistente.\nImporto da confermare dopo sopralluogo da parte dei nostri tecnici.\nSono escluse eventuali difformità o difetti rilevati nell'impianto.\nNoleggio di piattaforma mobile (se necessaria) da quotare a parte.\n\n"+dimmerabilita,
+							foto: "",
+							quantity: "",
+							price: "",
+							total: "€ "+Number((0).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+					});
+
+
 
 			    return filtrato;
 			}
