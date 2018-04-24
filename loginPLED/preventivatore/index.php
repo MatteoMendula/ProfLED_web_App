@@ -1287,150 +1287,6 @@
 			}
 
 
-			function create_payback(){
-				var pdf_as_url;
-				var doc = new jsPDF();
-				var totalPagesExp = "{total_pages_count_string}";
-				var columns = ["Anno", "Risparmio", "Risparmio \nmanutenzione","Quota \nammortizzata","Quota \nresidua","Risparmio \ntot annuo","Investimento"];
-				var rows = new Array();
-
-
-				//valori totali
-				var risparmio_totale_vita = 0;
-				var ammoratamento_cespite = acquisto_totale * 140 / 100;
-				var payback = acquisto_totale / risparmio_annuo_con_led_totale;
-
-
-				//colonne sempre uguali
-				var risparmio_colonna = "€ "+Number((risparmio_annuo_con_led_totale-risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-				var risparmio_manutenzione_colonna = "€ "+Number((risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-				var precedente_colonna = 0;
-
-				for (var i = 0; i < 20 ; i++){
-					var quota_ammortizzata_colonna;
-					var colonna_temp;
-					var quota_residua_colonna;
-					var risparmio_tot_annuo_colonna;
-					var investimento_colonna;
-
-					//numeri
-					quota_ammortizzata_colonna = ((i == 0) ? acquisto_totale : precedente_colonna);
-					colonna_temp = quota_ammortizzata_colonna-risparmio_annuo_con_led_totale;
-					precedente = colonna_temp;
-					quota_residua_colonna = ((colonna_temp > 0) ? colonna_temp : 0);
-					risparmio_tot_annuo_colonna = ((quota_residua_colonna > 0) ? 0 : (risparmio_annuo_con_led_totale-quota_ammortizzata_colonna));
-
-					risparmio_totale_vita += risparmio_tot_annuo_colonna;
-
-					if(i == 0) investimento_colonna = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-					else investimento_colonna = "€ "+Number((0).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-
-					//stringhe formattate per stampa
-					quota_ammortizzata_colonna = "€ "+Number((quota_ammortizzata_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-					quota_residua_colonna = "€ "+Number((quota_residua_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-					risparmio_tot_annuo_colonna = "€ "+Number((risparmio_tot_annuo_colonna).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-
-
-					rows[i] = [i+1,risparmio_colonna,risparmio_manutenzione_colonna,quota_ammortizzata_colonna,quota_residua_colonna,risparmio_tot_annuo_colonna,investimento_colonna];
-				}
-
-				//totali formattati in require_once
-				payback = ""+Number((payback).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-				risparmio_totale_vita = "€ "+Number((risparmio_totale_vita).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-				ammoratamento_cespite = "€ "+Number((ammoratamento_cespite).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-
-
-
-				var pageContent = function (data) {
-					// HEADER
-					doc.setFontSize(9);
-					doc.setTextColor(40);
-					doc.setFontStyle('normal');
-			 // Purple
-
-					if (imgLogo) {
-							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
-					}
-					doc.setFontType('bold');
-					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
-					doc.setFontType('normal');
-					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
-					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
-					// FOOTER
-					var str = "Page " + data.pageCount;
-					// Total page number plugin only available in jspdf v1.0+
-					doc.setTextColor(201,201,201);
-					if (typeof doc.putTotalPages === 'function') {
-							str = str + " of " + totalPagesExp;
-					}
-					doc.setFontSize(10);
-					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
-				};
-
-				doc.setDrawColor(0);
-				doc.setFillColor(0, 77, 126);
-				doc.rect(10, 55, doc.internal.pageSize.width-20, 10, 'FD');
-
-				doc.setFontType('bold');
-				doc.setTextColor(160, 197, 25);
-				doc.setFontSize(16);
-				doc.text(70, 62, "PAYBACK IN "+payback+" ANNI");
-
-				doc.autoTable(columns, rows, {
-					//styles: {fillColor: [154, 216, 25]},
-					//columnStyles: {
-					//	id: {fillColor: [0, 0, 0]}
-					//},
-					theme: 'grid',
-					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, right: 15},
-					headerStyles: {fillColor: [0, 77, 126]},
-					addPageContent: pageContent
-				});
-
-				var finalY = doc.autoTable.previous.finalY;
-				var finalX = doc.autoTable.previous.finalX;
-				doc.setDrawColor(201,201,201);
-				doc.setFillColor(255, 255, 255);
-				doc.rect(54, finalY+3, 113, 11, 'FD');
-				doc.rect(139.2, finalY+3, 27.8, 11, 'FD');
-
-				doc.setFontType('bold');
-				doc.setTextColor(160, 197, 25);
-				doc.setFontSize(9);
-				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
-				doc.setTextColor(0, 77, 126);
-				doc.setFontSize(12);
-				doc.text(141, finalY+10, risparmio_totale_vita);
-
-				doc.setDrawColor(201,201,201);
-				doc.setFillColor(255, 255, 255);
-				doc.rect(10, finalY+20, doc.internal.pageSize.width-20, 11, 'FD');
-				doc.rect(11, finalY+21, doc.internal.pageSize.width-22, 9, 'FD');
-
-				doc.setTextColor(0);
-				doc.setFontSize(12);
-				doc.text(20,finalY+27,"Legge finanziaria 2018: ammortamento cespite 130% annuo                         "+ammoratamento_cespite);
-
-				doc.setTextColor(0);
-				doc.setFontSize(9);
-				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
-
-				if (typeof doc.putTotalPages === 'function') {
-        	doc.putTotalPages(totalPagesExp);
-    		}
-				pdf_as_string = doc.output('datauristring');
-
-				if (typeof(Storage) !== "undefined") {
-					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
-					window.open("./toPrint.html");
-				} else {
-					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
-				}
-
-			}
-
-
 			function create_acquisto_listino(){
 				var pdf_as_url;
 				var doc = new jsPDF();
@@ -1447,11 +1303,6 @@
 					if (imgLogo) {
 							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
 					}
-					doc.setFontType('bold');
-					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
-					doc.setFontType('normal');
-					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
-					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
 					// FOOTER
 					var str = "Page " + data.pageCount;
 					// Total page number plugin only available in jspdf v1.0+
@@ -1465,6 +1316,15 @@
 
 				var today  = new Date();
 				var images = [];
+
+
+				doc.setFontType('bold');
+				doc.setFontSize(9);
+				doc.text("PROFESSIONAL LED SRL\n", 10, 30);
+				doc.setFontType('normal');
+				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 34);
+				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+
 
 				doc.setFontSize(10);
 				doc.setFontType('bold');
@@ -1539,6 +1399,108 @@
 				doc.setTextColor(0, 77, 126);
 				doc.text(14,finalY+17,"Tutti i prodotti sono conformi alla Normativa Europea\nEN 6241:2008 contro il Rischio Fotobiologico da illuminazione LED.");
 				doc.addImage(simboli,14,finalY+23,80,20);
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, finalY+43, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, finalY+44, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(20,finalY+50,"Legge finanziaria 2018: ammortamento cespite 130% annuo");
+
+				var anticipo = acquisto_totale*35/100;
+				var posticipo = acquisto_totale*65/100;
+				anticipo = "€ "+Number((anticipo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				posticipo = "€ "+Number((posticipo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+				//parte statica dopo tabella
+				doc.addPage();
+
+				if (imgLogo) {
+						doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+				}
+
+				doc.setFillColor(0, 77, 126);
+				doc.rect(8,53,doc.internal.pageSize.width-16,54,'FD');
+				doc.setFillColor(160, 197, 25);
+				doc.rect(10,55,doc.internal.pageSize.width-20,50,'FD');
+				doc.setFillColor(255);
+				doc.rect(12,57,doc.internal.pageSize.width-24,46,'FD');
+
+				doc.setFontStyle("bold");
+				doc.setFontSize(12);
+				doc.text("CONDIZIONI DI PAGAMENTO: bonifico bancario a ricevimento fattura",17,65);
+				doc.text("Banca d'appoggio: BCC Felsinea                           IBAN: IT34U0847237072040000040906",17,73);
+				doc.setFontStyle("normal");
+				doc.text(anticipo+" (+ I.V.A. di legge) quale acconto all'ordine  35%",52,88);
+				doc.text(posticipo+" (+ I.V.A. di legge) a Consegna/Installazione  65%",52,95);
+				doc.rect(45,83,125,15);
+
+				doc.setFillColor(0, 77, 126);
+				doc.rect(8,120,doc.internal.pageSize.width-16,70,'FD');
+				doc.setFillColor(160, 197, 25);
+				doc.rect(10,122,doc.internal.pageSize.width-20,66,'FD');
+				doc.setFillColor(255);
+				doc.rect(12,124,doc.internal.pageSize.width-24,62,'FD');
+
+				doc.setFontStyle("bold");
+				doc.text("CONDIZIONI DI GARANZIA E CERTIFICAZIONI:",17,132);
+				doc.text("             su tutti i prodotti (vedi singole voci del preventivo)",17,137)
+				doc.setTextColor(0, 77, 126);
+				doc.text("5 ANNI ",17,137);
+				doc.setTextColor(0);
+				doc.setFontStyle("normal");
+				doc.text("La garanzia prevede la sostituzione dell'eventuale componente led difettoso \ncon uno equivalente.",17,145)
+				doc.text("Sono esclusi lo smontaggio ed il rimontaggio dello stesso.",17,155);
+				doc.text("Tutti i nostri prodotti si avvalgono delle certificazioni di legge:\n - Certificazione EN 6241:2008 Rischio Fotobiologico\n - Certificazione Rohs\n - Certificazione CE ",17,165);
+
+
+
+				doc.setFontStyle("bold");
+				doc.text("Consegna:",17,207);
+				doc.setFontStyle("normal");
+				doc.text("da concordare",45,207);
+				doc.text("Validità offerta 15 gg.",17,215);
+
+				doc.setFontSize(12);
+				doc.text("cell. 334/99.14.178\nmail: direzione@professional-led.it",10,37);
+
+				//accettazione page
+				doc.addPage();
+
+				doc.setLineWidth(0.5)
+				doc.line(20, 25, doc.internal.pageSize.width-50, 25);
+				doc.setFontStyle("bold");
+				doc.text("Il Cliente DATA E TIMBRO PER ACCETTAZIONE",25,30)
+				doc.text("SCHEDA ANAGRAFICA ",12,50)
+				doc.line(20, 65, doc.internal.pageSize.width-20, 65);
+				doc.text("Ragione sociale",25,64);
+				doc.line(20, 80, doc.internal.pageSize.width-20, 80);
+				doc.text("Indirizzo Sede Legale",25,79);
+
+				doc.line(20, 90, doc.internal.pageSize.width-20, 90);
+				doc.line(20, 110, doc.internal.pageSize.width-20, 110);
+				doc.text("Indirizzo di consegna (se diverso dalla Sede Legale)",25,109);
+				doc.line(20, 120, doc.internal.pageSize.width-20, 120);
+				doc.line(20, 135, doc.internal.pageSize.width-20, 135);
+				doc.text("P.Iva",25,134);
+				doc.line(20, 150, doc.internal.pageSize.width-20, 150);
+				doc.text("Cod. Fisc.",25,149);
+				doc.line(20, 165, doc.internal.pageSize.width-20, 165);
+				doc.text("Tel.                                                              mail",25,164);
+				doc.line(20, 180, doc.internal.pageSize.width-20, 180);
+				doc.text("mail Ufficio Amministrativo",25,179);
+				doc.line(20, 195, doc.internal.pageSize.width-20, 195);
+				doc.text("mail PEC",25,194);
+
+				doc.setFontStyle("normal");
+				doc.text("Data",25,255);
+				doc.line(20,260,80,260);
+				doc.text("Timbro e firma",100,255);
+				doc.line(200,260,80,260);
+
+
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
@@ -1662,6 +1624,7 @@
 			    return filtrato;
 			}
 
+
 			function create_payback(){
 				var pdf_as_url;
 				var doc = new jsPDF();
@@ -1726,11 +1689,6 @@
 					if (imgLogo) {
 							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
 					}
-					doc.setFontType('bold');
-					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
-					doc.setFontType('normal');
-					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
-					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
 					// FOOTER
 					var str = "Page " + data.pageCount;
 					// Total page number plugin only available in jspdf v1.0+
@@ -1741,6 +1699,13 @@
 					doc.setFontSize(10);
 					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
 				};
+
+				doc.setFontType('bold');
+				doc.setFontSize(9);
+				doc.text("PROFESSIONAL LED SRL\n", 10, 30);
+				doc.setFontType('normal');
+				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 34);
+				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
 
 				doc.setDrawColor(0);
 				doc.setFillColor(0, 77, 126);
