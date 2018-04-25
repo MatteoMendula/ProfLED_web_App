@@ -1221,7 +1221,7 @@
 					spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
 					totale_attuale += spesa_annua_attuale;
 					totale_led += spesa_annua_led;
-					risparmio += spesa_annua_attuale - spesa_annua_led;
+					risparmio += spesa_annua_led - spesa_annua_attuale;
 					data.push({
 						sostLED: SolPLEDArray[i][0],
 						consumo: selezionati_consumo[i],
@@ -1234,7 +1234,7 @@
 					});
 				}
 
-				risparmio += risparmio_manutenzione;
+				risparmio -= risparmio_manutenzione;
 				
 				data.push({
 					sostLED: "Risparmio manutenzione annua",
@@ -1251,7 +1251,7 @@
 				return data;
 			}
 
-			function create_acquisto_conti() {
+			function create_tabella_conti() {
 				var doc = new jsPDF("l");
 				var totalPagesExp = "{total_pages_count_string}";
 				var columns1 = [
@@ -1431,8 +1431,18 @@
 					headerStyles: {fillColor: [0, 77, 126]},
 				});
 
-				finalY = doc.autoTable.previous.finalY;
-				finalX = doc.autoTable.previous.finalX;
+				var result = [doc, totalPagesExp, data[data.length-1]["risparmio"]];
+
+				return result;
+			}
+
+			function create_acquisto_conti(){
+				var result = create_tabella_conti();
+				var doc = result[0];
+				var totalPagesExp = result[1];
+
+				var finalY = doc.autoTable.previous.finalY;
+				var finalX = doc.autoTable.previous.finalX;
 
 				doc.setFontType('bold');
 				doc.setDrawColor(201,201,201);
@@ -1443,6 +1453,74 @@
 				doc.setTextColor(0);
 				doc.setFontSize(12);
 				doc.text(doc.internal.pageSize.width / 2 - 50,finalY+42,"Legge finanziaria 2018: ammortamento cespite 130% annuo")
+
+				if (typeof doc.putTotalPages === 'function') {
+        			doc.putTotalPages(totalPagesExp);
+    			}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+			}
+
+			function create_noleggio_conti(){
+				var result = create_tabella_conti();
+				var doc = result[0];
+				var totalPagesExp = result[1];
+				var risparmio_totale = result[2];
+				var risparmio_mensile = parseFloat(risparmio_totale.substring(2, risparmio_totale.length).replace('.', '').replace(',', '.'))  / 12;
+
+				var finalY = doc.autoTable.previous.finalY;
+				var finalX = doc.autoTable.previous.finalX;
+				
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+10, 113, 9, 'FD');
+				doc.rect(doc.internal.pageSize.width / 2 + 63, finalY+10, 27.8, 9, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(9);
+				doc.text(doc.internal.pageSize.width / 2 - 47, finalY+17, "RISPARMIO ANNUO");
+				doc.setTextColor(255,0, 0);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 + 66, finalY+17, risparmio_totale);
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+29, 113, 9, 'FD');
+				doc.rect(doc.internal.pageSize.width / 2 + 63, finalY+29, 27.8, 9, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(9);
+				doc.text(doc.internal.pageSize.width / 2 - 47, finalY+36, "RISPARMIO MENSILE");
+				doc.setTextColor(255, 0, 0);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 + 66, finalY+36, "€ " + Number((risparmio_mensile).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}));
+			
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+48, 140.8, 9, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(9);
+				doc.text(doc.internal.pageSize.width / 2 - 47, finalY+55, "CANONE NOLEGGIO MENSILE");
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+67, 140.8, 9, 'FD');
+
+				doc.setFontType('bold');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(9);
+				doc.text(doc.internal.pageSize.width / 2 - 47, finalY+74, "DEDUCIBILITA' CANONI:  100%");
 
 				if (typeof doc.putTotalPages === 'function') {
         			doc.putTotalPages(totalPagesExp);
