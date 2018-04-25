@@ -1209,18 +1209,60 @@
 				}
 			}
 
+			function getDatiRisparmio(){
+				var data = [];
+				var spesa_annua_attuale;
+				var spesa_annua_led;
+				var totale_attuale = 0;
+				var totale_led = 0;
+				var risparmio = 0;
+				for (var i = 0; i < N_analogic_bulb; i++){
+					spesa_annua_attuale = StatoAttualeArray[i][1] * StatoAttualeArray[i][3] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					totale_attuale += spesa_annua_attuale;
+					totale_led += spesa_annua_led;
+					risparmio += spesa_annua_attuale - spesa_annua_led;
+					data.push({
+						sostLED: SolPLEDArray[i][0],
+						consumo: selezionati_consumo[i],
+						ore: selezionati_durata[i] + " h",
+						PL: SolPLEDArray[i][1],
+						spesa_att: "€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+						spesa_led: "€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+						risparmio: "€ " + Number((spesa_annua_led - spesa_annua_attuale).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+						perc: Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
+					});
+				}
+
+				risparmio += risparmio_manutenzione;
+				
+				data.push({
+					sostLED: "Risparmio mautenzione annua",
+					risparmio: "€ " + Number((-risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2})
+				});
+
+				data.push({
+					sostLED: "TOTALI",
+					spesa_att: "€ " + Number(totale_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+					spesa_led: "€ " + Number(totale_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+					risparmio: "€ " + Number((risparmio).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2})
+				})
+
+				return data;
+			}
+
 			function create_acquisto_conti() {
 				var doc = new jsPDF("l");
 				var totalPagesExp = "{total_pages_count_string}";
 				var columns1 = [
-					"Illuminazione \nattuale",
+					"Illuminazione attuale",
 					"Consumo reale in Watt",
 					"Ore \ndurata media",
 					"Punti luce",
 					"Giorni di funz.",
 					"Ore di funz."
 				];
-				var columns2 = [
+				/*var columns2 = [
 					"Sostituzione LED",
 					"Consumo in Watt",
 					"Ore durata \nmedia",
@@ -1229,9 +1271,25 @@
 					"Spesa annua \ncon LED",
 					"Risparmio annuo \ncon LED",
 					"%"
-				];
+				];*/
+
+				var getColumns = function () {
+					return [
+							{title: "Sostituzione LED", dataKey: "sostLED"},
+							{title: "Consumo in Watt", dataKey: "consumo"},
+							{title: "Ore durata \nmedia", dataKey: "ore"},
+							{title: "Punti luce", dataKey: "PL"},
+							{title: "Spesa annua \nattuale", dataKey: "spesa_att"},
+							{title: "Spesa annua \ncon LED", dataKey: "spesa_led"},
+							{title: "Risparmio annuo \ncon LED", dataKey: "risparmio"},
+							{title: "%", dataKey: "perc"}
+					];
+				};
 				var rows1 = new Array();
-				var rows2 = new Array();
+				//var rows2 = new Array();
+				var data = getDatiRisparmio();
+				var finalY;
+				var finalX;
 				var risparmio = 0;
 
 				for (var i = 0; i < N_analogic_bulb; i++){
@@ -1246,7 +1304,7 @@
 								StatoAttualeArray[i][4],
 								StatoAttualeArray[i][5]
 								];
-					rows2[i] = [
+					/*rows2[i] = [
 								SolPLEDArray[i][0],
 								selezionati_consumo[i], 
 								selezionati_durata[i] + " h",
@@ -1255,8 +1313,20 @@
 								"€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
 								"€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
 								Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
-								];
+								];*/
 				}
+
+
+				/*rows2[i] = [
+								"",
+								"",
+								"",
+								"",
+								"",
+								"",
+								"€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								""
+								];*/
 
 				var pageContent = function (data) {
 					// HEADER
@@ -1293,10 +1363,9 @@
 				doc.setFontType('normal');
 				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
 
-				doc.setFillColor(160, 197, 25);
-				doc.setDrawColor(0);
-				doc.rect(174,55,38,8,'F');
 				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente + " rev. 1");
+
+
 
 				doc.autoTable(columns1, rows1, {
 					//styles: {fillColor: [154, 216, 25]},
@@ -1305,50 +1374,56 @@
 					//},
 					theme: 'grid',
 					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, right: 169},
+					margin: {top: 70,bottom: 20, right: 160, left: 4},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
 
-				doc.autoTable(columns2, rows2, {
+				/*doc.autoTable(columns2, rows2, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
 					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, left: 130},
+					margin: {top: 70,bottom: 20, left: 139, right: 4},
+					headerStyles: {fillColor: [0, 77, 126]},
+				});*/
+
+				finalY = doc.autoTable.previous.finalY;
+				finalX = doc.autoTable.previous.finalX;
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(finalX + 4, finalY+5, 113, 11, 'FD');
+				doc.rect(finalX + 15, finalY+5, 27.8, 11, 'FD');
+				
+				doc.setFontType('bold');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(11);
+				doc.text(finalX + 11, finalY+12, "Costo energia elettrica in Kw/h.");
+				doc.setTextColor(255, 255, 255);
+				doc.setFontSize(12);
+				doc.text(finalX + 22, finalY+12, costoKWH + "");
+
+				doc.autoTable(getColumns(), data, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//}
+					drawRow: function (row, data) {
+						if (row.index >= N_analogic_bulb) {
+							doc.setFontStyle('bold');
+						} 
+					},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 139, right: 4},
 					headerStyles: {fillColor: [0, 77, 126]},
 				});
 
-				var finalY = doc.autoTable.previous.finalY;
-				var finalX = doc.autoTable.previous.finalX;
-
-				doc.setDrawColor(201,201,201);
-				doc.setFillColor(255, 255, 255);
-				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+3, 113, 11, 'FD');
-				doc.rect(doc.internal.pageSize.width / 2 + 50, finalY+3, 27.8, 11, 'FD');
-
-				doc.setFontType('normal');
-				doc.setTextColor(40);
-				doc.setFontSize(15);
-				doc.text(doc.internal.pageSize.width / 2 - 46, finalY+10, "Risparmio manutenzione annua");
-				doc.setTextColor(0, 77, 126);
-				doc.setFontSize(12);
-				doc.text(doc.internal.pageSize.width / 2 + 54, finalY+10, "€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}));
-
-				doc.setDrawColor(201,201,201);
-				doc.setFillColor(255, 255, 255);
-				doc.rect(doc.internal.pageSize.width / 2 - 50, finalY+20, 113, 11, 'FD');
-				doc.rect(doc.internal.pageSize.width / 2 + 50, finalY+20, 27.8, 11, 'FD');
-
-				doc.setFontType('bold');
-				doc.setTextColor(160, 197, 25);
-				doc.setFontSize(15);
-				doc.text(doc.internal.pageSize.width / 2 - 46, finalY+27, "TOTALE RISPARMIO");
-				doc.setTextColor(0, 77, 126);
-				doc.setFontSize(12);
-				doc.text(doc.internal.pageSize.width / 2 + 54, finalY+27, "€ " + Number((risparmio + risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}));
+				finalY = doc.autoTable.previous.finalY;
+				finalX = doc.autoTable.previous.finalX;
 
 				doc.setFontType('bold');
 				doc.setDrawColor(201,201,201);
