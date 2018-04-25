@@ -905,7 +905,7 @@
 					numero_preventivo = parseFloat(numPrev).toFixed(2);
 					control++;
 				}else{
-					alert("Non hai inserito il risparmio manutenzione!");
+					alert("Non hai inserito il numero di preventivo!");
 				}
 
 			if (control == 4){
@@ -1412,6 +1412,7 @@
 				doc.setFillColor(255);
 				doc.rect(14,41,doc.internal.pageSize.width-28,192,'FD');
 
+				doc.setFontSize(14);
 				doc.setTextColor(0, 77, 126);
 				doc.text("NOLEGGIO OPERATIVO LED",65,50);
 
@@ -1420,7 +1421,7 @@
 
 				doc.setFontStyle("bold");
 				doc.setTextColor(0);
-				doc.setFontSize(14);
+
 				doc.text("Durata noleggio mesi 24",24,64);
 				doc.text("Durata noleggio mesi 30",24,74);
 				doc.text("Durata noleggio mesi 36",24,84);
@@ -1526,8 +1527,6 @@
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
     		}
-
-				alert(totalPagesExp);
 
 				pdf_as_string = doc.output('datauristring');
 
@@ -1860,6 +1859,269 @@
 
 			}
 
+
+			function getDatiRisparmio(){
+				var data = [];
+				var spesa_annua_attuale;
+				var spesa_annua_led;
+				var totale_attuale = 0;
+				var totale_led = 0;
+				var risparmio = 0;
+				for (var i = 0; i < N_analogic_bulb; i++){
+					spesa_annua_attuale = StatoAttualeArray[i][1] * StatoAttualeArray[i][3] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					totale_attuale += spesa_annua_attuale;
+					totale_led += spesa_annua_led;
+					risparmio += spesa_annua_attuale - spesa_annua_led;
+					data.push({
+						sostLED: SolPLEDArray[i][0],
+						consumo: selezionati_consumo[i],
+						ore: selezionati_durata[i] + " h",
+						PL: SolPLEDArray[i][1],
+						spesa_att: "€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+						spesa_led: "€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+						risparmio: "-€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+						perc: Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
+					});
+				}
+
+				risparmio += risparmio_manutenzione;
+
+				data.push({
+					sostLED: "Risparmio \nmanutenzione \nannua",
+					risparmio: "-€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2})
+				});
+
+				data.push({
+					sostLED: "TOTALI",
+					spesa_att: "€ " + Number(totale_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+					spesa_led: "€ " + Number(totale_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+					risparmio: "€ " + Number((risparmio).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2})
+				})
+
+				return data;
+			}
+
+			function create_acquisto_conti() {
+				var doc = new jsPDF("l");
+				var totalPagesExp = "{total_pages_count_string}";
+				var columns1 = [
+					"Illuminazione attuale",
+					"Consumo reale in Watt",
+					"Ore \ndurata media",
+					"Punti luce",
+					"Giorni di funz.",
+					"Ore di funz."
+				];
+				/*var columns2 = [
+					"Sostituzione LED",
+					"Consumo in Watt",
+					"Ore durata \nmedia",
+					"Punti luce",
+					"Spesa annua \nattuale",
+					"Spesa annua \ncon LED",
+					"Risparmio annuo \ncon LED",
+					"%"
+				];*/
+
+				var getColumns = function () {
+					return [
+							{title: "Sostituzione \nLED", dataKey: "sostLED"},
+							{title: "Consumo \nin Watt", dataKey: "consumo"},
+							{title: "Ore durata \nmedia", dataKey: "ore"},
+							{title: "Punti luce", dataKey: "PL"},
+							{title: "Spesa \nannua \nattuale", dataKey: "spesa_att"},
+							{title: "Spesa \nannua \ncon LED", dataKey: "spesa_led"},
+							{title: "Risparmio \nannuo \ncon LED", dataKey: "risparmio"},
+							{title: "%", dataKey: "perc"}
+					];
+				};
+				var rows1 = new Array();
+				//var rows2 = new Array();
+				var data = getDatiRisparmio();
+				var finalY;
+				var finalX;
+				var risparmio = 0;
+
+				for (var i = 0; i < N_analogic_bulb; i++){
+					var spesa_annua_attuale = StatoAttualeArray[i][1] * StatoAttualeArray[i][3] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					var spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					risparmio += spesa_annua_attuale - spesa_annua_led;
+					rows1[i] = [
+								StatoAttualeArray[i][0],
+								StatoAttualeArray[i][1],
+								StatoAttualeArray[i][2],
+								StatoAttualeArray[i][3],
+								StatoAttualeArray[i][4],
+								StatoAttualeArray[i][5]
+								];
+					/*rows2[i] = [
+								SolPLEDArray[i][0],
+								selezionati_consumo[i],
+								selezionati_durata[i] + " h",
+								SolPLEDArray[i][1],
+								"€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								"€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								"€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
+								];*/
+				}
+
+
+				/*rows2[i] = [
+								"",
+								"",
+								"",
+								"",
+								"",
+								"",
+								"€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								""
+								];*/
+
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+					// Purple
+
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+					}
+					doc.setFontType('bold');
+					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
+					doc.setFontType('normal');
+					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede Operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
+					if (typeof doc.putTotalPages === 'function') {
+						str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 5);
+				};
+
+				var today  = new Date();
+
+				doc.setFontSize(10);
+				doc.setFontType('bold');
+				doc.text(14,60,"Soluzione ACQUISTO");
+
+				doc.setFontType('normal');
+				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
+
+				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
+
+
+				var leftPos = 4;
+				doc.autoTable(columns1, rows1, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					//ciao
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, right: 190, left: leftPos},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+					addPageContent: pageContent
+				});
+
+				/*doc.autoTable(columns2, rows2, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 139, right: 4},
+					headerStyles: {fillColor: [0, 77, 126]},
+				});*/
+
+				finalY = doc.autoTable.previous.finalY;
+				finalX = doc.autoTable.previous.finalX;
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(leftPos, finalY+5, 60, 10, 'FD');
+				doc.rect(leftPos + 60, finalY+5, 10 + (costoKWH + "").length * 1.5, 10, 'FD');
+
+				doc.setFontType('normal');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(10);
+				doc.text(leftPos + 3, finalY+12, "Costo energia elettrica in Kw/h.");
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(10);
+				doc.text(leftPos + 63, finalY+12, costoKWH + "");
+				doc.setFontSize(12);
+
+
+
+				doc.autoTable(getColumns(), data, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//}
+					drawRow: function(row, data){
+						if (data.row.index === N_analogic_bulb) {
+							doc.setFontStyle('bold');
+							doc.setTextColor(200, 0, 0);
+							doc.rect(data.settings.margin.left, row.y, data.table.width, 10, 'S');
+							data.cursor.y += 10;
+						}
+					},
+					createdCell: function (cell, data) {
+						if (data.row.index >= N_analogic_bulb) {
+							cell.styles.fontStyle = 'bold';
+
+						}
+					},
+					drawCell: function (cell, data) {
+            // Rowspan
+            if (data.column.dataKey === 'risparmio') {
+                if (data.row.index == N_analogic_bulb +1) {
+									doc.setFontSize(12);
+									doc.setTextColor(160, 197, 25);
+									doc.setFontStyle("bold");
+                }
+            }
+        },
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 109, right: 4},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+				});
+
+				finalY = doc.autoTable.previous.finalY;
+				finalX = doc.autoTable.previous.finalX;
+
+				doc.setFontType('bold');
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, doc.internal.pageSize.height - 22, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, doc.internal.pageSize.height - 21, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 - 50,doc.internal.pageSize.height - 15,"Legge finanziaria 2018: ammortamento cespite 130% annuo")
+
+				if (typeof doc.putTotalPages === 'function') {
+        			doc.putTotalPages(totalPagesExp);
+    			}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+			}
+
 			function getDataAcquisto() {
    				var data = [];
 
@@ -1957,6 +2219,333 @@
 			    return filtrato;
 			}
 
+			function create_noleggio_conti() {
+				var doc = new jsPDF("l");
+				var totalPagesExp = "{total_pages_count_string}";
+				var columns1 = [
+					"Illuminazione attuale",
+					"Consumo reale in Watt",
+					"Ore \ndurata media",
+					"Punti luce",
+					"Giorni di funz.",
+					"Ore di funz."
+				];
+				/*var columns2 = [
+					"Sostituzione LED",
+					"Consumo in Watt",
+					"Ore durata \nmedia",
+					"Punti luce",
+					"Spesa annua \nattuale",
+					"Spesa annua \ncon LED",
+					"Risparmio annuo \ncon LED",
+					"%"
+				];*/
+
+				var getColumns = function () {
+					return [
+							{title: "Sostituzione \nLED", dataKey: "sostLED"},
+							{title: "Consumo \nin Watt", dataKey: "consumo"},
+							{title: "Ore durata \nmedia", dataKey: "ore"},
+							{title: "Punti luce", dataKey: "PL"},
+							{title: "Spesa \nannua \nattuale", dataKey: "spesa_att"},
+							{title: "Spesa \nannua \ncon LED", dataKey: "spesa_led"},
+							{title: "Risparmio \nannuo \ncon LED", dataKey: "risparmio"},
+							{title: "%", dataKey: "perc"}
+					];
+				};
+				var rows1 = new Array();
+				//var rows2 = new Array();
+				var data = getDatiRisparmio();
+				var finalY;
+				var finalX;
+				var risparmio = 0;
+
+				for (var i = 0; i < N_analogic_bulb; i++){
+					var spesa_annua_attuale = StatoAttualeArray[i][1] * StatoAttualeArray[i][3] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					var spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
+					risparmio += spesa_annua_attuale - spesa_annua_led;
+					rows1[i] = [
+								StatoAttualeArray[i][0],
+								StatoAttualeArray[i][1],
+								StatoAttualeArray[i][2],
+								StatoAttualeArray[i][3],
+								StatoAttualeArray[i][4],
+								StatoAttualeArray[i][5]
+								];
+					/*rows2[i] = [
+								SolPLEDArray[i][0],
+								selezionati_consumo[i],
+								selezionati_durata[i] + " h",
+								SolPLEDArray[i][1],
+								"€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								"€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								"€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
+								];*/
+				}
+
+
+				/*rows2[i] = [
+								"",
+								"",
+								"",
+								"",
+								"",
+								"",
+								"€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+								""
+								];*/
+
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+					// Purple
+
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+					}
+					doc.setFontType('bold');
+					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
+					doc.setFontType('normal');
+					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede Operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
+					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
+					if (typeof doc.putTotalPages === 'function') {
+						str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 5);
+				};
+
+				var today  = new Date();
+
+				doc.setFontSize(10);
+				doc.setFontType('bold');
+				doc.text(14,60,"Soluzione ACQUISTO");
+
+				doc.setFontType('normal');
+				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
+
+				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
+
+
+				var leftPos = 4;
+				doc.autoTable(columns1, rows1, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					//ciao
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, right: 190, left: leftPos},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+					addPageContent: pageContent
+				});
+
+				/*doc.autoTable(columns2, rows2, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 139, right: 4},
+					headerStyles: {fillColor: [0, 77, 126]},
+				});*/
+
+				finalY = doc.autoTable.previous.finalY;
+				finalX = doc.autoTable.previous.finalX;
+
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(leftPos, finalY+5, 60, 10, 'FD');
+				doc.rect(leftPos + 60, finalY+5, 10 + (costoKWH + "").length * 1.5, 10, 'FD');
+
+				doc.setFontType('normal');
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(10);
+				doc.text(leftPos + 3, finalY+12, "Costo energia elettrica in Kw/h.");
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(10);
+				doc.text(leftPos + 63, finalY+12, costoKWH + "");
+				doc.setFontSize(12);
+
+				doc.setTextColor(0, 77, 126);
+				doc.text(leftPos + 3, finalY+27, "RISPARMIO ANNUO");
+				doc.text(leftPos + 3, finalY+32, "RISPARMIO MENSILE");
+
+				doc.setTextColor(0, 0, 0);
+				doc.text(leftPos + 3, finalY+37, "DEDUCIBILITA' CANONI:  100%	");
+
+
+				doc.setTextColor(160, 197, 25);
+				doc.text(leftPos + 80, finalY+27, "-€ "+Number((risparmio+risparmio_manutenzione).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2}));
+				doc.text(leftPos + 80, finalY+32, "-€ "+Number(((risparmio+risparmio_manutenzione)/12).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2}));
+
+
+				doc.autoTable(getColumns(), data, {
+					//styles: {fillColor: [154, 216, 25]},
+					//columnStyles: {
+					//	id: {fillColor: [0, 0, 0]}
+					//}
+					drawRow: function(row, data){
+						if (data.row.index === N_analogic_bulb) {
+							doc.setFontStyle('bold');
+							doc.setTextColor(200, 0, 0);
+							doc.rect(data.settings.margin.left, row.y, data.table.width, 10, 'S');
+							data.cursor.y += 10;
+						}
+					},
+					createdCell: function (cell, data) {
+						if (data.row.index >= N_analogic_bulb) {
+							cell.styles.fontStyle = 'bold';
+
+						}
+					},
+					drawCell: function (cell, data) {
+						// Rowspan
+						if (data.column.dataKey === 'risparmio') {
+								if (data.row.index == N_analogic_bulb +1) {
+									doc.setFontSize(12);
+									doc.setTextColor(160, 197, 25);
+									doc.setFontStyle("bold");
+								}
+						}
+				},
+					theme: 'grid',
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 109, right: 4},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+				});
+
+				finalY = doc.autoTable.previous.finalY;
+				finalX = doc.autoTable.previous.finalX;
+
+				doc.setFontType('bold');
+				doc.setDrawColor(201,201,201);
+				doc.setFillColor(255, 255, 255);
+				doc.rect(10, doc.internal.pageSize.height - 22, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(11, doc.internal.pageSize.height - 21, doc.internal.pageSize.width-22, 9, 'FD');
+
+				doc.setTextColor(0);
+				doc.setFontSize(12);
+				doc.text(doc.internal.pageSize.width / 2 - 50,doc.internal.pageSize.height - 15,"Legge finanziaria 2018: ammortamento cespite 130% annuo")
+
+				if (typeof doc.putTotalPages === 'function') {
+							doc.putTotalPages(totalPagesExp);
+					}
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+			}
+
+			function getDataAcquisto() {
+					var data = [];
+
+					var filtrato = new Array();
+					var modelli = new Array();
+
+
+					for (var i = 0; i < N_analogic_bulb; i++) {
+							var modello = SolPLEDArray[i][0];
+							var descrizione = ""+selezionati_nome_lungo[i]+"\n";
+									descrizione += selezionati_marca[i]+"\n";
+									descrizione += selezionati_lumen[i]+"\n";
+									descrizione += "Durata "+ selezionati_durata[i]+"ore\n";
+									descrizione += selezionati_kelvin[i]+"\n";
+									if (selezionati_note[i] != null) {
+										descrizione += selezionati_note[i]+"\n";
+										descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
+									}else{
+										descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI\n";
+									}
+							var quantita = parseFloat(SolPLEDArray[i][1]);
+							var prezzo_unitario = parseFloat(selezionati_prezzo[i]);
+							var importo = prezzo_unitario * quantita;
+
+
+							data.push({
+									cod: modello,
+									descrizione: descrizione,
+									foto: "",
+									quantity: quantita,
+									price: prezzo_unitario,
+									total: importo
+							});
+					}
+
+					filtrato[0] = data[0];
+					modelli.push(data[0].cod);
+					indici_foto_filtrati[0] = selezionati_foto[0];
+
+
+					for (var i = 1; i < data.length; i++){
+						if (modelli.includes(data[i].cod)){
+							var indice = modelli.indexOf(data[i].cod);
+							filtrato[indice].quantity += data[i].quantity;
+							filtrato[indice].total += data[i].quantity * filtrato[indice].price;
+						}else{
+							modelli.push(data[i].cod);
+							indici_foto_filtrati.push(selezionati_foto[i]);
+							filtrato.push({
+								cod: data[i].cod,
+								descrizione: data[i].descrizione,
+								foto: "",
+								quantity: data[i].quantity,
+								price: data[i].price,
+								total: data[i].total
+							});
+						}
+					}
+
+					//formattazione in require_once
+					//prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					//importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					for (var j = 0; j < filtrato.length; j++){
+						filtrato[j].quantity = ""+filtrato[j].quantity;
+						filtrato[j].price = "€ "+Number((filtrato[j].price).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+						filtrato[j].total = "€ "+Number((filtrato[j].total).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+					}
+
+					//aggiungo smaltimento
+					costo_smaltimento = parseFloat(costo_smaltimento);
+					filtrato.push({
+							cod: "",
+							descrizione: "Smaltimento vecchi apparecchi illuminotecnici in Isola Ecologica",
+							foto: "",
+							quantity: "",
+							price: "",
+							total: "€ "+Number(costo_smaltimento.toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+					});
+
+					//aggiungo dimmerabilità
+					dimmerabilita += "\nContributi RAEE compresi."
+
+					//aggiungo info installazione
+					filtrato.push({
+							cod: "",
+							descrizione: "Installazione a forfait su impianto elettrico esistente.\nImporto da confermare dopo sopralluogo da parte dei nostri tecnici.\nSono escluse eventuali difformità o difetti rilevati nell'impianto.\nNoleggio di piattaforma mobile (se necessaria) da quotare a parte.\n\n"+dimmerabilita,
+							foto: "",
+							quantity: "",
+							price: "",
+							total: "€ "+Number((0).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2})
+					});
+
+
+
+					return filtrato;
+			}
 
 			function create_payback(){
 				var pdf_as_url;
