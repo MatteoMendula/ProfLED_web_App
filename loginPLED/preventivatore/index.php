@@ -1237,7 +1237,7 @@
 				risparmio += risparmio_manutenzione;
 				
 				data.push({
-					sostLED: "Risparmio mautenzione annua",
+					sostLED: "Risparmio manutenzione annua",
 					risparmio: "€ " + Number((-risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2})
 				});
 
@@ -1366,7 +1366,7 @@
 				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente + " rev. 1");
 
 
-
+				var leftPos = 4;
 				doc.autoTable(columns1, rows1, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
@@ -1374,7 +1374,7 @@
 					//},
 					theme: 'grid',
 					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, right: 160, left: 4},
+					margin: {top: 70,bottom: 20, right: 160, left: leftPos},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
@@ -1395,25 +1395,34 @@
 
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
-				doc.rect(finalX + 4, finalY+5, 113, 11, 'FD');
-				doc.rect(finalX + 15, finalY+5, 27.8, 11, 'FD');
+				doc.rect(leftPos, finalY+5, 60, 10, 'FD');
+				doc.rect(leftPos + 60, finalY+5, 10 + (costoKWH + "").length * 1.5, 10, 'FD');
 				
-				doc.setFontType('bold');
+				doc.setFontType('normal');
 				doc.setTextColor(0, 0, 0);
-				doc.setFontSize(11);
-				doc.text(finalX + 11, finalY+12, "Costo energia elettrica in Kw/h.");
-				doc.setTextColor(255, 255, 255);
-				doc.setFontSize(12);
-				doc.text(finalX + 22, finalY+12, costoKWH + "");
+				doc.setFontSize(10);
+				doc.text(leftPos + 3, finalY+12, "Costo energia elettrica in Kw/h.");
+				doc.setTextColor(0, 0, 0);
+				doc.setFontSize(10);
+				doc.text(leftPos + 63, finalY+12, costoKWH + "");
 
 				doc.autoTable(getColumns(), data, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//}
-					drawRow: function (row, data) {
-						if (row.index >= N_analogic_bulb) {
+					drawRow: function(row, data){
+						if (data.row.index === N_analogic_bulb) {
 							doc.setFontStyle('bold');
+							doc.setTextColor(200, 0, 0);
+							doc.rect(data.settings.margin.left, row.y, data.table.width, 10, 'S');
+							data.cursor.y += 10;
+						}
+					},
+					createdCell: function (cell, data) {
+						if (data.row.index >= N_analogic_bulb) {
+							cell.styles.fontStyle = 'bold';
+							
 						} 
 					},
 					theme: 'grid',
