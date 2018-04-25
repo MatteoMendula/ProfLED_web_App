@@ -1287,6 +1287,259 @@
 			}
 
 
+			function  create_noleggio_listino(){
+				var pdf_as_url;
+				var doc = new jsPDF();
+				doc.page = 1;
+				var totalPagesExp = "{total_pages_count_string}";
+
+				var data = getDataAcquisto();
+				//elimino ultime due stringhe
+				data.pop();
+				data.pop();
+				var colonne = getColumns();
+				//elimino ultime due colonne
+				colonne.pop();
+				colonne.pop();
+
+				var pageContent = function (data) {
+					// HEADER
+					doc.setFontSize(9);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+			 // Purple
+
+					if (imgLogo) {
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
+					}
+					// FOOTER
+					var str = "Page " + data.pageCount;
+					// Total page number plugin only available in jspdf v1.0+
+					doc.setTextColor(201,201,201);
+					if (typeof doc.putTotalPages === 'function') {
+							str = str + " of " + totalPagesExp;
+					}
+					doc.setFontSize(10);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
+				};
+
+				var today  = new Date();
+				var images = [];
+
+
+				doc.setFontType('bold');
+				doc.setFontSize(9);
+				doc.text("PROFESSIONAL LED SRL\n", 10, 30);
+				doc.setFontType('normal');
+				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 34);
+				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+
+
+				doc.setFontSize(10);
+				doc.setFontType('bold');
+				doc.text(14,60,"Soluzione NOLEGGIO");
+
+				doc.setFontType('normal');
+				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
+
+				//doc.setFillColor(160, 197, 25);
+				//doc.setDrawColor(0);
+				//doc.rect(174,55,28,8,'F');
+				doc.text(175,60,""+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
+
+				doc.autoTable(colonne, data, {
+					theme: 'grid',
+					columnStyles: {	cod:{columnWidth: 30},
+													descrizione:{columnWidth: 90},
+													foto:{columnWidth: 50},
+													quantity:{columnWidth: 20},},
+
+					drawCell: function (cell, data) {
+						if (data.column.dataKey === "foto") {
+							var indice_foto = indici_foto_filtrati[data.row.index];
+							var img = array_foto[indice_foto];
+							images.push({
+								indice: indice_foto,
+								elem: img,
+								w: cell.width,
+								h: cell.height,
+								x: cell.textPos.x,
+								y: cell.textPos.y
+							});
+						}
+					},
+
+					styles: {overflow: 'linebreak'},
+					margin: {top: 70,bottom: 20, left: 7},
+					headerStyles: {fillColor: [0, 77, 126]},
+					addPageContent: pageContent
+				});
+
+
+				//adding photos
+				for (var i = 0; i < images.length; i++) {
+					if (images[i].elem != "no foto"){
+						doc.addImage(images[i].elem, 'jpg', images[i].x, images[i].y,images[i].w-5,images[i].h-5);
+					}
+				}
+				//contenuti dopo la tabella
+				var finalY = doc.autoTable.previous.finalY;
+
+				doc.setFontSize(9);
+				doc.setTextColor(0, 77, 126);
+				doc.text(14,finalY+17,"Tutti i prodotti sono conformi alla Normativa Europea\nEN 6241:2008 contro il Rischio Fotobiologico da illuminazione LED.");
+				doc.addImage(simboli,14,finalY+23,80,20);
+
+				var noleggio1 = 1390;
+				var noleggio2 = 1105;
+				var noleggio3 = 949;
+				var noleggio4 = 726;
+				var noleggio5 = 595;
+
+				noleggio1 = "€ "+Number((noleggio1).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				noleggio2 = "€ "+Number((noleggio2).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				noleggio3 = "€ "+Number((noleggio3).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				noleggio4 = "€ "+Number((noleggio4).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				noleggio5 = "€ "+Number((noleggio5).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+
+				//parte statica dopo tabella
+				doc.addPage();
+
+				doc.setFillColor(0, 77, 126);
+				doc.rect(10,37,doc.internal.pageSize.width-20,200,'F');
+				doc.setFillColor(160, 197, 25);
+				doc.rect(12,39,doc.internal.pageSize.width-24,196,'FD');
+				doc.setFillColor(255);
+				doc.rect(14,41,doc.internal.pageSize.width-28,192,'FD');
+
+				doc.setTextColor(0, 77, 126);
+				doc.text("NOLEGGIO OPERATIVO LED",65,50);
+
+				doc.setDrawColor(201,201,201);
+				doc.rect(20,57,doc.internal.pageSize.width-40,50);
+
+				doc.setFontStyle("bold");
+				doc.setTextColor(0);
+				doc.setFontSize(14);
+				doc.text("Durata noleggio mesi 24",24,64);
+				doc.text("Durata noleggio mesi 30",24,74);
+				doc.text("Durata noleggio mesi 36",24,84);
+				doc.text("Durata noleggio mesi 48",24,94);
+				doc.text("Durata noleggio mesi 60",24,104);
+
+				doc.line(108,57,108,107);
+				doc.setFontStyle("normal");
+				doc.text("euro",120,64);
+				doc.text("euro",120,74);
+				doc.text("euro",120,84);
+				doc.text("euro",120,94);
+				doc.text("euro",120,104);
+				doc.line(20,67,190,67);
+				doc.line(20,77,190,77);
+				doc.line(20,87,190,87);
+				doc.line(20,97,190,97);
+
+				doc.setFontStyle("bold");
+				doc.text("Il canone di noleggio comprende",24,120);
+				doc.setFontStyle("normal");
+				doc.text(" - Anticipo zero\n - Installazione corpi illuminanti LED\n - Garanzia per l'intero periodo del noleggio\n - Manutenzione straordinaria per il periodo del noleggio\n - Manutenzione ordinaria per il periodo del noleggio.\n - Assicurazione All-Risk sul materiale installato \n     (furto, incendio, atti vandalici, fenomeno elettrico)\n     con manleva su vs polizza. \n     In alternativa assicurazione Grenke a carico cliente.\n - Riscatto finale 3%",24,130);
+				doc.text(""+dimmerabilita,24,200);
+
+				doc.setFontStyle("bold");
+				doc.setFontSize(14);
+				doc.text("CANONE MENSILE DI NOLEGGIO OPERATIVO LED. DURATA MESI",24,220);
+				doc.setFontStyle("normal");
+				doc.text("IVA 22%",24,227);
+				doc.text("Rate e condizioni indicative, soggette ad approvazione dell'Istituto di Credito.\nIl presente prospetto, come da normativa vigente a tutela del Consumatore e \nTesto Unico Bancario, non rappresenta alcun tipo di sollecitazione al finanziamento.",15,245);
+
+				var pagina = data.pageCount;
+
+				//doc.text("Page "+pagina+ " of " +totalPagesExp,10, doc.internal.pageSize.height - 10);
+
+				doc.addPage();
+
+				doc.setFillColor(0, 77, 126);
+				doc.rect(10,37,doc.internal.pageSize.width-20,100,'F');
+				doc.setFillColor(160, 197, 25);
+				doc.rect(12,39,doc.internal.pageSize.width-24,96,'FD');
+				doc.setFillColor(255);
+				doc.rect(14,41,doc.internal.pageSize.width-28,92,'FD');
+
+				doc.setFontStyle("bold");
+				doc.text("CONDIZIONI DI GARANZIA E CERTIFICAZIONI:",17,50);
+				doc.text("             su tutti i prodotti (vedi singole voci del preventivo)",17,62)
+				doc.setTextColor(0, 77, 126);
+				doc.text("5 ANNI ",17,62);
+				doc.setTextColor(0);
+				doc.setFontStyle("normal");
+				doc.text("La garanzia prevede la sostituzione dell'eventuale componente led difettoso \ncon uno equivalente.",17,70)
+				doc.text("Tutti i nostri prodotti si avvalgono delle certificazioni di legge:\n - Certificazione EN 6241:2008 Rischio Fotobiologico\n - Certificazione Rohs\n - Certicazione CE ",17,90);
+
+				doc.setFontStyle("bold");
+				doc.text("Consegna:",17,120);
+				doc.setFontStyle("normal");
+				doc.text("da concordare",45,120);
+				doc.text("Validità offerta 15 gg.",17,130);
+				doc.text("Salvo errori e/o commissioni",17,143);
+
+				doc.setFontStyle("bold");
+				doc.text("Elenco documentazione da inviare unitamente \nall'accettazione del preventivo per istruire la pratica di noleggio:",17,155)
+				doc.setFontStyle("normal");
+				doc.text("- Ragione Sociale\n- Partita Iva\n- Telefono fisso\n- Fax\n- Data di costituzione dell’azienda\n- IBAN aziendale ed intestazione conto corrente\n- Fronte/Retro Carta d’identità del legale rappresentante\n- Fronte/Retro Tessera sanitaria o Tessera codice fiscale del legale rappresentante\n- Bilancio provvisorio.\n- Dichiarazione dei redditi anno precedente.",17,170);
+
+
+				//doc.text("Page "+pagina+ " of " +totalPagesExp,10, doc.internal.pageSize.height - 10);
+
+				doc.addPage();
+
+				doc.setFontStyle("bold");
+				doc.text("SCHEDA ANAGRAFICA NUOVO CLIENTE: ",12,50)
+				doc.line(20, 65, doc.internal.pageSize.width-20, 65);
+				doc.text("Ragione sociale",25,64);
+				doc.line(20, 80, doc.internal.pageSize.width-20, 80);
+				doc.text("Indirizzo Sede Legale",25,79);
+
+				doc.line(20, 90, doc.internal.pageSize.width-20, 90);
+				doc.line(20, 110, doc.internal.pageSize.width-20, 110);
+				doc.text("Indirizzo di consegna (se diverso dalla Sede Legale)",25,109);
+				doc.line(20, 120, doc.internal.pageSize.width-20, 120);
+				doc.line(20, 135, doc.internal.pageSize.width-20, 135);
+				doc.text("P.Iva",25,134);
+				doc.line(20, 150, doc.internal.pageSize.width-20, 150);
+				doc.text("Cod. Fisc.",25,149);
+				doc.line(20, 165, doc.internal.pageSize.width-20, 165);
+				doc.text("Tel.                                                              mail",25,164);
+				doc.line(20, 180, doc.internal.pageSize.width-20, 180);
+				doc.text("mail Ufficio Amministrativo",25,179);
+				doc.line(20, 195, doc.internal.pageSize.width-20, 195);
+				doc.text("mail PEC",25,194);
+
+				doc.setFontStyle("normal");
+				doc.text("Data",25,255);
+				doc.line(20,260,80,260);
+				doc.text("Timbro e firma",100,255);
+				doc.line(200,260,80,260);
+
+
+				//doc.text("Page "+(totalPagesExp)+ " of " +totalPagesExp,10, doc.internal.pageSize.height - 10);
+
+				if (typeof doc.putTotalPages === 'function') {
+        	doc.putTotalPages(totalPagesExp);
+    		}
+
+				alert(totalPagesExp);
+
+				pdf_as_string = doc.output('datauristring');
+
+				if (typeof(Storage) !== "undefined") {
+					localStorage.setItem('pdf', JSON.stringify(pdf_as_string));
+					window.open("./toPrint.html");
+				} else {
+					alert("Impossile stampare, prego scaricare ultima versione di Chrome");
+				}
+
+			}
+
 			function create_acquisto_listino(){
 				var pdf_as_url;
 				var doc = new jsPDF();
@@ -1359,8 +1612,6 @@
 								x: cell.textPos.x,
 								y: cell.textPos.y
 							});
-						}else if (data.column.dataKey === "descrizione" && (((indici_foto_filtrati.length+1) == data.row.index ) || ((indici_foto_filtrati.length) == data.row.index ))){
-							doc.setTextColor(201,201,201);
 						}
 					},
 
@@ -1416,10 +1667,6 @@
 
 				//parte statica dopo tabella
 				doc.addPage();
-
-				if (imgLogo) {
-						doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
-				}
 
 				doc.setFillColor(0, 77, 126);
 				doc.rect(8,53,doc.internal.pageSize.width-16,54,'FD');
@@ -1526,6 +1773,92 @@
 							{title: "Importo totale", dataKey: "total"}
 					];
 			};
+
+			function getDataNoleggio(){
+				var data = [];
+
+				var filtrato = new Array();
+				var modelli = new Array();
+
+
+				for (var i = 0; i < N_analogic_bulb; i++) {
+						var modello = SolPLEDArray[i][0];
+						var descrizione = ""+selezionati_nome_lungo[i]+"\n";
+								descrizione += selezionati_marca[i]+"\n";
+								descrizione += selezionati_lumen[i]+"\n";
+								descrizione += "Durata "+ selezionati_durata[i]+"ore\n";
+								descrizione += selezionati_kelvin[i]+"\n";
+								if (selezionati_note[i] != null) {
+									descrizione += selezionati_note[i]+"\n";
+									descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI";
+								}else{
+									descrizione += "GARANZIA "+selezionati_garanzia[i]+" ANNI\n";
+								}
+						var quantita = parseFloat(SolPLEDArray[i][1]);
+
+
+						data.push({
+								cod: modello,
+								descrizione: descrizione,
+								foto: "",
+								quantity: quantita
+						});
+				}
+
+				filtrato[0] = data[0];
+				modelli.push(data[0].cod);
+				indici_foto_filtrati[0] = selezionati_foto[0];
+
+
+				for (var i = 1; i < data.length; i++){
+					if (modelli.includes(data[i].cod)){
+						var indice = modelli.indexOf(data[i].cod);
+						filtrato[indice].quantity += data[i].quantity;
+						filtrato[indice].total += data[i].quantity * filtrato[indice].price;
+					}else{
+						modelli.push(data[i].cod);
+						indici_foto_filtrati.push(selezionati_foto[i]);
+						filtrato.push({
+							cod: data[i].cod,
+							descrizione: data[i].descrizione,
+							foto: "",
+							quantity: data[i].quantity
+						});
+					}
+				}
+
+				//formattazione in require_once
+				//prezzo_unitario = "€ "+Number((prezzo_unitario).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				//importo = "€ "+Number((importo).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+				for (var j = 0; j < filtrato.length; j++){
+					filtrato[j].quantity = ""+filtrato[j].quantity;
+				}
+
+				//aggiungo smaltimento
+				costo_smaltimento = parseFloat(costo_smaltimento);
+				filtrato.push({
+						cod: "",
+						descrizione: "Smaltimento vecchi apparecchi illuminotecnici in Isola Ecologica",
+						foto: "",
+						quantity: ""
+				});
+
+				//aggiungo dimmerabilità
+				dimmerabilita += "\nContributi RAEE compresi."
+
+				//aggiungo info installazione
+				filtrato.push({
+						cod: "",
+						descrizione: "Installazione a forfait su impianto elettrico esistente.\nImporto da confermare dopo sopralluogo da parte dei nostri tecnici.\nSono escluse eventuali difformità o difetti rilevati nell'impianto.\nNoleggio di piattaforma mobile (se necessaria) da quotare a parte.\n\n"+dimmerabilita,
+						foto: "",
+						quantity: ""
+				});
+
+
+
+				return filtrato;
+
+			}
 
 			function getDataAcquisto() {
    				var data = [];
