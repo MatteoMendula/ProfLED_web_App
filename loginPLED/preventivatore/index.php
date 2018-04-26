@@ -1655,7 +1655,6 @@
 					doc.setFontSize(9);
 					doc.setTextColor(40);
 					doc.setFontStyle('normal');
-			 // Purple
 
 					if (imgLogo) {
 							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 100, 15);
