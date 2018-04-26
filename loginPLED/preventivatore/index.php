@@ -517,9 +517,9 @@
 						html += "<div><input id='modelloStandard"+N_analogic_bulb+ "' onkeyup='updateNameStandard(this.id)'> </input></div>";
 						html += "<div><span id='standardSpanConsumo"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'>Consumo reale del modello "+(N_analogic_bulb+1)+ " (in Watt)</span></div>";
 						html += "<div><input id='consumoStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'></input></div>";
-						html += "<div><span id='standardSpanDurata"+N_analogic_bulb+"'>Durata del modello "+(N_analogic_bulb+1)+ " (in ore)</span></div>";
+						html += "<div><span id='standardSpanDurata"+N_analogic_bulb+"'>Durata in ore "+(N_analogic_bulb+1)+ "</span></div>";
 						html += "<div><input id='durataStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
-						html += "<div><span id='standardSpanPL"+N_analogic_bulb+"'>Punti luce del modello "+(N_analogic_bulb+1)+ "</span></div>";
+						html += "<div><span id='standardSpanPL"+N_analogic_bulb+"'>Numero di Punti luce del modello "+(N_analogic_bulb+1)+ "</span></div>";
 						html += "<div><input id='puntiluceStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 						html += "<div><span id='standardSpanGG"+N_analogic_bulb+"'>Giorni di funzionamento del modello "+(N_analogic_bulb+1)+ " all'anno</span></div>";
 						html += "<div><input id='GGStandard"+N_analogic_bulb+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
@@ -665,9 +665,9 @@
 							html += "<div><input id='modelloStandard"+indice_id+ "' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<div><span id='standardSpanConsumo"+indice_id+"'>Consumo reale del modello "+(indice_id+1)+ " (in Watt)</span></div>";
 							html += "<div><input id='consumoStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'></input></div>";
-							html += "<div><span id='standardSpanDurata"+indice_id+"'>Durata del modello "+(indice_id+1)+ " (in ore)</span></div>";
+							html += "<div><span id='standardSpanDurata"+indice_id+"'>Durata in ore "+(indice_id+1)+ "</span></div>";
 							html += "<div><input id='durataStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
-							html += "<div><span id='standardSpanPL"+indice_id+"'>Punti luce del modello "+(indice_id+1)+ "</span></div>";
+							html += "<div><span id='standardSpanPL"+indice_id+"'>Numero di Punti luce del modello "+(indice_id+1)+ "</span></div>";
 							html += "<div><input id='puntiluceStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
 							html += "<div><span id='standardSpanGG"+indice_id+"'>Giorni di funzionamento del modello "+(indice_id+1)+ " all'anno</span></div>";
 							html += "<div><input id='GGStandard"+indice_id+"' onkeyup='updateNameStandard(this.id)'> </input></div>";
@@ -963,13 +963,13 @@
 				html += "<hr>";
 
 				html += "<h3>Se i dati inseriti risultano corretti clicca su Calcola per calcolare il preventivo</h3>";
-				html += "<p>altrimenti clicca su ricarica per reinserire i dati</p>";
+				html += "<p>altrimenti clicca su Nuovo Preventivo per reinserire i dati</p>";
 
 				html += "<div class='flex-containerPLED'>";
 				html += "<hr>";
 				html += "<div id='bottoni_stato_attuale_inc_dec' class='flex-containerPLED'>";
 				html += "<div><button class='buttonAddItem' onclick='toCheckCalcolo()'>Calcola</button></div>";
-				html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+				html += "<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Nuovo Preventivo</button></div>";
 				html += "</div>";
 				html += "<hr>";
 
@@ -1274,7 +1274,7 @@
 							html +="<button class='btn btn-info' type='button' onclick='create_payback()'>PAYBACK</button>";
 							html +="<hr>";
 							html +="<hr>";
-							html +="<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Ricarica</button></div>";
+							html +="<div><button class='buttonRemoveItem' onclick='window.location.reload()'>Nuovo Preventivo</button></div>";
 						html +="</div>";
 					html +="</center>";
 
