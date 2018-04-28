@@ -1506,7 +1506,6 @@
 							for(var i = 0; i < array_id_foto.length ; i++){
 								if (array_id_foto[i] == indice_foto){
 									indice_foto_su_db = i;
-									alert(i);
 								}
 							}
 							var img = array_foto[indice_foto_su_db];
@@ -1521,7 +1520,7 @@
 						}
 					},
 
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak', halign: 'right'},
 					margin: {top: 70,bottom: 20, left: 7},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
@@ -1773,7 +1772,7 @@
 						}
 					},
 
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak',halign: 'right'},
 					margin: {top: 70,bottom: 20, left: 7},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
@@ -2183,7 +2182,7 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak',halign: 'right'},
 					margin: {top: 70,bottom: 20, right: 190, left: leftPos},
 					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
 					addPageContent: pageContent
@@ -2249,7 +2248,7 @@
             }
         },
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak',halign: 'right'},
 					margin: {top: 70,bottom: 20, left: 109, right: 4},
 					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
 				});
@@ -2499,7 +2498,7 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak',halign: 'right'},
 					margin: {top: 70,bottom: 20, right: 190, left: leftPos},
 					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
 					addPageContent: pageContent
@@ -2576,7 +2575,7 @@
 						}
 				},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak',halign: 'right'},
 					margin: {top: 70,bottom: 20, left: 109, right: 4},
 					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
 				});
@@ -2801,9 +2800,27 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak',halign: 'right'},
 					margin: {top: 70,bottom: 20, right: 15},
 					headerStyles: {fillColor: [0, 77, 126]},
+					drawCell: function (cell, rows) {
+            // Rowspan
+            if (rows.column.dataKey === 6) {
+                if (rows.row.index === 1) {
+									doc.setDrawColor(255);
+                    doc.rect(cell.x+1, cell.y,30.5, cell.height * 19, 'S');
+                }else if (rows.row.index === 0){
+									var investimento_temp = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+									//doc.setDrawColor(201,201,201);
+									doc.rect(cell.x, cell.y, 30.5, cell.height, 'S');
+									doc.autoTableText(""+investimento_temp, cell.x + cell.width - investimento_temp.length * 0.3, cell.y + cell.height / 2, {
+                    halign: 'right',
+                    valign: 'middle'
+                });
+								}
+								return false;
+            }
+        },
 					addPageContent: pageContent
 				});
 
@@ -2820,7 +2837,7 @@
 				doc.text(59, finalY+8, "RISPARMIO TOTALE PER VITA UTILE \nCORPI ILLUMINANTI A LED INSTALLATI");
 				doc.setTextColor(0, 77, 126);
 				doc.setFontSize(12);
-				doc.text(141, finalY+10, risparmio_totale_vita);
+				doc.text(139.2 + 27.8 - risparmio_totale_vita.length * 2.2, finalY+10, risparmio_totale_vita);
 
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
