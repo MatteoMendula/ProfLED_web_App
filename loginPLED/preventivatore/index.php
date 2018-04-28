@@ -1502,7 +1502,14 @@
 					drawCell: function (cell, data) {
 						if (data.column.dataKey === "foto") {
 							var indice_foto = indici_foto_filtrati[data.row.index];
-							var img = array_foto[indice_foto];
+							var indice_foto_su_db = 0;
+							for(var i = 0; i < array_id_foto.length ; i++){
+								if (array_id_foto[i] == indice_foto){
+									indice_foto_su_db = i;
+									alert(i);
+								}
+							}
+							var img = array_foto[indice_foto_su_db];
 							images.push({
 								indice: indice_foto,
 								elem: img,
@@ -1748,7 +1755,13 @@
 					drawCell: function (cell, data) {
 						if (data.column.dataKey === "foto") {
 							var indice_foto = indici_foto_filtrati[data.row.index];
-							var img = array_foto[indice_foto];
+							var indice_foto_su_db = 0;
+							for(var i = 0; i < array_id_foto.length ; i++){
+								if (array_id_foto[i] == indice_foto){
+									indice_foto_su_db = i;
+								}
+							}
+							var img = array_foto[indice_foto_su_db];
 							images.push({
 								indice: indice_foto,
 								elem: img,
