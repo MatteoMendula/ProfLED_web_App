@@ -1676,11 +1676,56 @@
 					sostLED: "TOTALI",
 					spesa_att: "€ " + Number(totale_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
 					spesa_led: "€ " + Number(totale_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
-					risparmio: "€ " + Number((risparmio).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2})
+					risparmio: "€ " + Number((risparmio).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
+					perc: Math.round(totale_led / totale_attuale * 100 - 100) + " %"
 				})
 
 				return data;
 			}
+
+			function addComitato(doc){
+				doc.addPage();
+
+				if (imgLogo) {
+						doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
+				}
+
+
+
+
+				doc.setFillColor(201, 201, 201);
+				doc.rect(10,40,doc.internal.pageSize.width-20,130,'FD');
+				doc.setFillColor(255);
+				doc.rect(12,42,doc.internal.pageSize.width-24,126,'FD');
+
+				if (comitato) {
+						doc.addImage(comitato, 'JPEG', doc.internal.pageSize.width/2-10, 60, 25, 30);
+				}
+
+				doc.setFontSize(12);
+				doc.setFontStyle("bold");
+				doc.text("Considerazioni normative per la sostituzione di tubi al neon con tubi LED",32,50);
+				doc.setFontSize(10);
+				doc.setFontStyle("normal");
+				doc.text("Per sostituire i tubi al neon con tubi LED sono necessari interventi di cablaggio al corpo lampada con \n         l'eliminazione o la sostituzione, di alcune parti interne della plafoniera (starter e reattore).",25,100);
+				doc.setFontStyle("bold");
+				doc.text("Non è però possibile apportare modifiche ai prodotti esistenti, senza adeguare \n                                    la Dichiarazione di Conformità.",38,115);
+				doc.setFontStyle("normal");
+				doc.text("Queste modifiche comportano infatti la decadenza della certificazione del prodotto originale rilasciato dal \n    produttore del corpo illiminante e la necessità di attivare una nuova certificazione presso laboratori \n  specializzati: la lampada infatti deve rispondere alla ",22,130);
+				doc.setFontStyle("bold");
+				doc.text("Norma EN60598-1",105.25,138);
+				doc.setFontStyle("normal");
+				doc.text("e a tutte le altre norme cogenti ",136,138);
+				doc.text("                                 in materia di sicurezza elettrica e compatibilità elettromagnetica.",22,142.5);
+				doc.text("Si possono verificare, inoltre variazioni alla curva fotometrica della lampada",43,153);
+				doc.setFontStyle("bold");
+				doc.text("(cosa che di fatto annulla la Certificazione EN12464-1:2011)",53,157);
+				doc.setFontStyle("normal");
+				doc.text("e quindi la sua inadeguatezza all'illuminazione in ambienti di lavoro.",50,161);
+
+				return doc;
+			}
+
 			//-------------------------------------------------------------------------
 			function create_acquisto_listino(){
 				var pdf_as_url;
@@ -1900,49 +1945,12 @@
 
 
 				//pagina comitato
-				doc.addPage();
 
-				if (imgLogo) {
-						doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
-				}
-
-
-
-
-				doc.setFillColor(201, 201, 201);
-				doc.rect(10,40,doc.internal.pageSize.width-20,130,'FD');
-				doc.setFillColor(255);
-				doc.rect(12,42,doc.internal.pageSize.width-24,126,'FD');
-
-				if (comitato) {
-						doc.addImage(comitato, 'JPEG', doc.internal.pageSize.width/2-10, 60, 25, 30);
-				}
-
-				doc.setFontSize(12);
-				doc.setFontStyle("bold");
-				doc.text("Considerazioni normative per la sostituzione di tubi al neon con tubi LED",32,50);
-				doc.setFontSize(10);
-				doc.setFontStyle("normal");
-				doc.text("Per sostituire i tubi al neon con tubi LED sono necessari interventi di cablaggio al corpo lampada con \n         l'eliminazione o la sostituzione, di alcune parti interne della plafoniera (starter e reattore).",25,100);
-				doc.setFontStyle("bold");
-				doc.text("Non è però possibile apportare modifiche ai prodotti esistenti, senza adeguare \n                                    la Dichiarazione di Conformità.",38,115);
-				doc.setFontStyle("normal");
-				doc.text("Queste modifiche comportano infatti la decadenza della certificazione del prodotto originale rilasciato dal \n    produttore del corpo illiminante e la necessità di attivare una nuova certificazione presso laboratori \n  specializzati: la lampada infatti deve rispondere alla ",22,130);
-				doc.setFontStyle("bold");
-				doc.text("Norma EN60598-1",105.25,138);
-				doc.setFontStyle("normal");
-				doc.text("e a tutte le altre norme cogenti ",136,138);
-				doc.text("                                 in materia di sicurezza elettrica e compatibilità elettromagnetica.",22,142.5);
-				doc.text("Si possono verificare, inoltre variazioni alla curva fotometrica della lampada",43,153);
-				doc.setFontStyle("bold");
-				doc.text("(cosa che di fatto annulla la Certificazione EN12464-1:2011)",53,157);
-				doc.setFontStyle("normal");
-				doc.text("e quindi la sua inadeguatezza all'illuminazione in ambienti di lavoro.",50,161);
-
+				addComitato(doc);
 
 				if (typeof doc.putTotalPages === 'function') {
-        	doc.putTotalPages(totalPagesExp);
-    		}
+        			doc.putTotalPages(totalPagesExp);
+    			}
 				pdf_as_string = doc.output('datauristring');
 
 				if (typeof(Storage) !== "undefined") {
@@ -2217,31 +2225,39 @@
 			}
 
 
+			function getDatiAttuale(){
+				var data = [];
 
+				for (var i = 0; i < N_analogic_bulb; i++){
+					data.push({
+						attuale: StatoAttualeArray[i][0],
+						consumo: StatoAttualeArray[i][1],
+						ore: StatoAttualeArray[i][2],
+						PL: StatoAttualeArray[i][3],
+						giorni_funz: StatoAttualeArray[i][4],
+						ore_funz: StatoAttualeArray[i][5]
+					});
+				}
+
+				return data;
+			}
 
 			function create_acquisto_conti() {
 				var doc = new jsPDF("l");
 				var totalPagesExp = "{total_pages_count_string}";
-				var columns1 = [
-					"Illuminazione attuale",
-					"Consumo reale in Watt",
-					"Ore \ndurata media",
-					"Punti luce",
-					"Giorni di funz.",
-					"Ore di funz."
-				];
-				/*var columns2 = [
-					"Sostituzione LED",
-					"Consumo in Watt",
-					"Ore durata \nmedia",
-					"Punti luce",
-					"Spesa annua \nattuale",
-					"Spesa annua \ncon LED",
-					"Risparmio annuo \ncon LED",
-					"%"
-				];*/
+				
+				var getColumns1 = function() {
+					return [
+							{title: "Illuminazione attuale", dataKey: "attuale"},
+							{title: "Consumo reale in Watt", dataKey: "consumo"},
+							{title: "Ore \ndurata media", dataKey: "ore"},
+							{title: "Punti luce", dataKey: "PL"},
+							{title: "Giorni di funz.", dataKey: "giorni_funz"},
+							{title: "Ore di funz.", dataKey: "ore_funz"}
+					];
+				};
 
-				var getColumns = function () {
+				var getColumns2 = function () {
 					return [
 							{title: "Sostituzione \nLED", dataKey: "sostLED"},
 							{title: "Consumo \nin Watt", dataKey: "consumo"},
@@ -2253,135 +2269,103 @@
 							{title: "%", dataKey: "perc"}
 					];
 				};
-				var rows1 = new Array();
-				//var rows2 = new Array();
-				var data = getDatiRisparmio();
+
+				var data1 = getDatiAttuale();
+				var data2 = getDatiRisparmio();
 				var finalY;
 				var finalX;
-				var risparmio = 0;
-
-				for (var i = 0; i < N_analogic_bulb; i++){
-					var spesa_annua_attuale = StatoAttualeArray[i][1] * StatoAttualeArray[i][3] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
-					var spesa_annua_led = selezionati_consumo[i] * SolPLEDArray[i][1] * StatoAttualeArray[i][4] * StatoAttualeArray[i][5] * costoKWH / 1000;
-					risparmio += spesa_annua_attuale - spesa_annua_led;
-					rows1[i] = [
-								StatoAttualeArray[i][0],
-								StatoAttualeArray[i][1],
-								StatoAttualeArray[i][2],
-								StatoAttualeArray[i][3],
-								StatoAttualeArray[i][4],
-								StatoAttualeArray[i][5]
-								];
-					/*rows2[i] = [
-								SolPLEDArray[i][0],
-								selezionati_consumo[i],
-								selezionati_durata[i] + " h",
-								SolPLEDArray[i][1],
-								"€ " + Number(spesa_annua_attuale.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
-								"€ " + Number(spesa_annua_led.toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
-								"€ " + Number((spesa_annua_attuale - spesa_annua_led).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
-								Math.round(spesa_annua_led / spesa_annua_attuale * 100 - 100) + " %"
-								];*/
-				}
-
-
-				/*rows2[i] = [
-								"",
-								"",
-								"",
-								"",
-								"",
-								"",
-								"€ " + Number((risparmio_manutenzione).toFixed(2)).toLocaleString("it-IT", {minimumFractionDigits: 2}),
-								""
-								];*/
-
+				
 				var pageContent = function (data) {
 					// HEADER
+					//HEADER
 					doc.setFontSize(9);
 					doc.setTextColor(40);
 					doc.setFontStyle('normal');
-					// Purple
 
 					if (imgLogo) {
-							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 60, 31);
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
 					}
-					doc.setFontType('bold');
-					doc.text("PROFESSIONAL LED SRL\n", data.settings.margin.left, 30);
-					doc.setFontType('normal');
-					doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede Operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", data.settings.margin.left, 34);
-					doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
 					// FOOTER
 					var str = "Page " + data.pageCount;
 					// Total page number plugin only available in jspdf v1.0+
 					doc.setTextColor(201,201,201);
 					if (typeof doc.putTotalPages === 'function') {
-						str = str + " of " + totalPagesExp;
+							str = str + " of " + totalPagesExp;
 					}
 					doc.setFontSize(10);
-					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 5);
+					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
 				};
 
 				var today  = new Date();
 
-				doc.setFontSize(10);
 				doc.setFontType('bold');
-				doc.text(14,60,"Soluzione ACQUISTO");
-
+				doc.setFontSize(9);
+				doc.text("PROFESSIONAL LED SRL\n", 10, 40);
 				doc.setFontType('normal');
-				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
+				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 44);
+				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 40);
 
-				doc.text(175,60,"Preventivo Nr. "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
+				doc.setFillColor(160, 197, 25);
+				doc.setDrawColor(0);
+				doc.rect(10,65,80,7,'FD');
 
+				doc.setFontSize(8);
+				doc.setFontStyle("bold");
+				doc.text("         Data                     Prev. n.                      Soluzione A", 10,70);
+				//doc.line(10,72,90,72);
+				doc.setFillColor(255);
+				doc.rect(10,72,80,7,'FD');
+				doc.text("      "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear()+"              "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente+"                  Acquisto", 10,76.5);
 
 				var leftPos = 4;
-				doc.autoTable(columns1, rows1, {
+				doc.autoTable(getColumns1(), data1, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//},
+					columnStyles: {	consumo:{halign: 'right'},
+									ore:{halign: 'right'},
+									PL:{halign: 'right'},
+									giorni_funz:{halign: 'right'},
+									ore_funz:{halign: 'right'}
+									},
 					theme: 'grid',
-					styles: {overflow: 'linebreak',halign: 'right'},
-					margin: {top: 70,bottom: 20, right: 190, left: leftPos},
+					styles: {overflow: 'linebreak'},
+					margin: {top: 90,bottom: 20, right: 190, left: leftPos},
 					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
 					addPageContent: pageContent
 				});
-
-				/*doc.autoTable(columns2, rows2, {
-					//styles: {fillColor: [154, 216, 25]},
-					//columnStyles: {
-					//	id: {fillColor: [0, 0, 0]}
-					//},
-					theme: 'grid',
-					styles: {overflow: 'linebreak'},
-					margin: {top: 70,bottom: 20, left: 139, right: 4},
-					headerStyles: {fillColor: [0, 77, 126]},
-				});*/
 
 				finalY = doc.autoTable.previous.finalY;
 				finalX = doc.autoTable.previous.finalX;
 
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
-				doc.rect(leftPos, finalY+5, 60, 10, 'FD');
-				doc.rect(leftPos + 60, finalY+5, 10 + (costoKWH + "").length * 1.5, 10, 'FD');
+				doc.rect(leftPos, finalY+5, 54, 7, 'FD');
+				doc.rect(leftPos + 54, finalY+5, 10 + (costoKWH + "").length, 7, 'FD');
 
 				doc.setFontType('normal');
 				doc.setTextColor(0, 0, 0);
 				doc.setFontSize(10);
-				doc.text(leftPos + 3, finalY+12, "Costo energia elettrica in Kw/h.");
+				doc.text(leftPos + 2, finalY+9, "Costo energia elettrica in Kw/h.");
 				doc.setTextColor(0, 0, 0);
 				doc.setFontSize(10);
-				doc.text(leftPos + 63, finalY+12, costoKWH + "");
+				doc.text(leftPos + 56, finalY+9, "   " + costoKWH + "");
 				doc.setFontSize(12);
 
-
-
-				doc.autoTable(getColumns(), data, {
+				doc.autoTable(getColumns2(), data2, {
 					//styles: {fillColor: [154, 216, 25]},
 					//columnStyles: {
 					//	id: {fillColor: [0, 0, 0]}
 					//}
+					columnStyles: {	consumo:{halign: 'right'},
+									ore:{halign: 'right'},
+									PL:{halign: 'right'},
+									spesa_att:{halign: 'right'},
+									spesa_led:{halign: 'right'},
+									risparmio:{halign: 'right'},
+									perc:{halign: 'right'}
+									},
 					drawRow: function(row, data){
 						if (data.row.index === N_analogic_bulb) {
 							doc.setFontStyle('bold');
@@ -2397,33 +2381,36 @@
 						}
 					},
 					drawCell: function (cell, data) {
-            // Rowspan
-            if (data.column.dataKey === 'risparmio') {
-                if (data.row.index == N_analogic_bulb +1) {
-									doc.setFontSize(12);
-									doc.setTextColor(160, 197, 25);
-									doc.setFontStyle("bold");
-                }
-            }
-        },
+					// Rowspan
+						if (data.column.dataKey === 'risparmio') {
+							if (data.row.index == N_analogic_bulb +1) {
+												doc.setFontSize(12);
+												doc.setTextColor(160, 197, 25);
+												doc.setFontStyle("bold");
+							}
+						}
+					},
 					theme: 'grid',
-					styles: {overflow: 'linebreak',halign: 'right'},
-					margin: {top: 70,bottom: 20, left: 109, right: 4},
+					styles: {overflow: 'linebreak'},
+					margin: {top: 90,bottom: 20, left: 109, right: 4},
 					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
 				});
 
 				finalY = doc.autoTable.previous.finalY;
 				finalX = doc.autoTable.previous.finalX;
 
-				doc.setFontType('bold');
 				doc.setDrawColor(201,201,201);
+				doc.setFillColor(201,201,201);
+				doc.rect(10, finalY + 16, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.setFillColor(0, 77, 126);
+				doc.rect(11, finalY + 17, doc.internal.pageSize.width-22, 9, 'FD');
 				doc.setFillColor(255, 255, 255);
-				doc.rect(10, doc.internal.pageSize.height - 22, doc.internal.pageSize.width-20, 11, 'FD');
-				doc.rect(11, doc.internal.pageSize.height - 21, doc.internal.pageSize.width-22, 9, 'FD');
 
+				doc.setFontType('bold');
 				doc.setTextColor(0);
 				doc.setFontSize(12);
-				doc.text(doc.internal.pageSize.width / 2 - 50,doc.internal.pageSize.height - 15,"Legge finanziaria 2018: ammortamento cespite 130% annuo")
+				doc.setTextColor(160, 197, 25);
+				doc.text(doc.internal.pageSize.width / 2 - 50,finalY + 23,"Legge finanziaria 2018: ammortamento cespite 130% annuo")
 
 				if (typeof doc.putTotalPages === 'function') {
         			doc.putTotalPages(totalPagesExp);
@@ -2822,14 +2809,13 @@
 
 
 				var pageContent = function (data) {
-					// HEADER
+					//HEADER
 					doc.setFontSize(9);
 					doc.setTextColor(40);
 					doc.setFontStyle('normal');
-			 // Purple
 
 					if (imgLogo) {
-							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 60, 31);
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
 					}
 					// FOOTER
 					var str = "Page " + data.pageCount;
@@ -2842,21 +2828,35 @@
 					doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
 				};
 
+				var today  = new Date();
+
 				doc.setFontType('bold');
 				doc.setFontSize(9);
-				doc.text("PROFESSIONAL LED SRL\n", 10, 30);
+				doc.text("PROFESSIONAL LED SRL\n", 10, 40);
 				doc.setFontType('normal');
-				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 34);
-				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 44);
+				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 40);
+
+				doc.setFillColor(160, 197, 25);
+				doc.setDrawColor(0);
+				doc.rect(10,65,80,7,'FD');
+
+				doc.setFontSize(8);
+				doc.setFontStyle("bold");
+				doc.text("         Data                     Prev. n.                      Soluzione A", 10,70);
+				//doc.line(10,72,90,72);
+				doc.setFillColor(255);
+				doc.rect(10,72,80,7,'FD');
+				doc.text("      "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear()+"              "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente+"                  Acquisto", 10,76.5);
 
 				doc.setDrawColor(0);
 				doc.setFillColor(0, 77, 126);
-				doc.rect(10, 55, doc.internal.pageSize.width-20, 10, 'FD');
+				doc.rect(10, 82, doc.internal.pageSize.width-20, 10, 'FD');
 
 				doc.setFontType('bold');
 				doc.setTextColor(160, 197, 25);
 				doc.setFontSize(16);
-				doc.text(70, 62, "PAYBACK IN "+payback+" ANNI");
+				doc.text(70, 89, "PAYBACK IN "+payback+" ANNI");
 
 				doc.autoTable(columns, rows, {
 					//styles: {fillColor: [154, 216, 25]},
@@ -2864,8 +2864,8 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak',halign: 'right'},
-					margin: {top: 70,bottom: 20, right: 15},
+					styles: {overflow: 'linebreak',halign: 'right', fontsize: 10},
+					margin: {top: 93,bottom: 20, right: 15},
 					headerStyles: {fillColor: [0, 77, 126]},
 					drawCell: function (cell, rows) {
             // Rowspan
@@ -2904,17 +2904,23 @@
 				doc.text(139.2 + 27.8 - risparmio_totale_vita.length * 2.2, finalY+10, risparmio_totale_vita);
 
 				doc.setDrawColor(201,201,201);
+				doc.setFillColor(201,201,201);
+				doc.rect(10, finalY+16, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.setFillColor(0, 77, 126);
+				doc.rect(11, finalY+17, doc.internal.pageSize.width-22, 9, 'FD');
 				doc.setFillColor(255, 255, 255);
-				doc.rect(10, finalY+20, doc.internal.pageSize.width-20, 11, 'FD');
-				doc.rect(11, finalY+21, doc.internal.pageSize.width-22, 9, 'FD');
 
 				doc.setTextColor(0);
 				doc.setFontSize(12);
-				doc.text(20,finalY+27,"Legge finanziaria 2018: ammortamento cespite 130% annuo                         "+ammoratamento_cespite);
+				doc.setTextColor(160, 197, 25);
+				doc.text(20,finalY+23,"Legge finanziaria 2018: ammortamento cespite 130% annuo");
+				doc.setTextColor(0);
 
 				doc.setTextColor(0);
 				doc.setFontSize(9);
-				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
+				doc.text(14,finalY+29,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
+
+				addComitato(doc);
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
