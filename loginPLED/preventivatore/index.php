@@ -1525,7 +1525,8 @@
 					});
 
 					//aggiungo dimmerabilità
-					dimmerabilita += "\nContributi RAEE compresi."
+					if (!dimmerabilita.includes("\nContributi RAEE compresi."))
+						dimmerabilita += "\nContributi RAEE compresi."
 
 					//aggiungo info installazione
 					filtrato.push({
@@ -1623,7 +1624,9 @@
 				});
 
 				//aggiungo dimmerabilità
-				dimmerabilita += "\nContributi RAEE compresi."
+
+				if (!dimmerabilita.includes("\nContributi RAEE compresi."))
+						dimmerabilita += "\nContributi RAEE compresi."
 
 				//aggiungo info installazione
 				filtrato.push({
@@ -1724,6 +1727,40 @@
 				doc.text("e quindi la sua inadeguatezza all'illuminazione in ambienti di lavoro.",50,161);
 
 				return doc;
+			}
+
+			function addAnagrafica(doc){
+				//accettazione page
+				doc.addPage();
+
+				doc.setFontSize(10);
+				doc.setFontStyle("normal");
+				doc.text("SCHEDA ANAGRAFICA ",12,30)
+				doc.line(20, 65, doc.internal.pageSize.width-20, 65);
+				doc.text("Ragione sociale",25,64);
+				doc.line(20, 80, doc.internal.pageSize.width-20, 80);
+				doc.text("Indirizzo Sede Legale",25,79);
+
+				doc.line(20, 90, doc.internal.pageSize.width-20, 90);
+				doc.line(20, 110, doc.internal.pageSize.width-20, 110);
+				doc.text("Indirizzo di consegna (se diverso dalla Sede Legale)",25,109);
+				doc.line(20, 120, doc.internal.pageSize.width-20, 120);
+				doc.line(20, 135, doc.internal.pageSize.width-20, 135);
+				doc.text("P.Iva",25,134);
+				doc.line(20, 150, doc.internal.pageSize.width-20, 150);
+				doc.text("Cod. Fisc.",25,149);
+				doc.line(20, 165, doc.internal.pageSize.width-20, 165);
+				doc.text("Tel.                                                              mail",25,164);
+				doc.line(20, 180, doc.internal.pageSize.width-20, 180);
+				doc.text("mail Ufficio Amministrativo",25,179);
+				doc.line(20, 195, doc.internal.pageSize.width-20, 195);
+				doc.text("mail PEC",25,194);
+
+				doc.setFontStyle("bold");
+				doc.text("Data",25,255);
+				doc.line(20,260,80,260);
+				doc.text("Timbro e firma",100,255);
+				doc.line(200,260,80,260);
 			}
 
 			//-------------------------------------------------------------------------
@@ -1830,7 +1867,7 @@
 				doc.rect(177, finalY, 25, 10, 'FD');
 				doc.setTextColor(0, 77, 126);
 				doc.setFontSize(10);
-				doc.text(202 - ((""+acquisto_totale).length * 5 +1), finalY+6, "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2}));
+				doc.text(201 - ((""+acquisto_totale).length * 5 +1), finalY+6, "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2}));
 				doc.setFontType('bold');
 				doc.setTextColor(160, 197, 25);
 				doc.setFontSize(12);
@@ -1911,37 +1948,7 @@
 				doc.text("Il Cliente DATA E TIMBRO PER ACCETTAZIONE",25,doc.internal.pageSize.height - 10);
 
 
-				//accettazione page
-				doc.addPage();
-
-				doc.setFontSize(10);
-				doc.setFontStyle("normal");
-				doc.text("SCHEDA ANAGRAFICA ",12,30)
-				doc.line(20, 65, doc.internal.pageSize.width-20, 65);
-				doc.text("Ragione sociale",25,64);
-				doc.line(20, 80, doc.internal.pageSize.width-20, 80);
-				doc.text("Indirizzo Sede Legale",25,79);
-
-				doc.line(20, 90, doc.internal.pageSize.width-20, 90);
-				doc.line(20, 110, doc.internal.pageSize.width-20, 110);
-				doc.text("Indirizzo di consegna (se diverso dalla Sede Legale)",25,109);
-				doc.line(20, 120, doc.internal.pageSize.width-20, 120);
-				doc.line(20, 135, doc.internal.pageSize.width-20, 135);
-				doc.text("P.Iva",25,134);
-				doc.line(20, 150, doc.internal.pageSize.width-20, 150);
-				doc.text("Cod. Fisc.",25,149);
-				doc.line(20, 165, doc.internal.pageSize.width-20, 165);
-				doc.text("Tel.                                                              mail",25,164);
-				doc.line(20, 180, doc.internal.pageSize.width-20, 180);
-				doc.text("mail Ufficio Amministrativo",25,179);
-				doc.line(20, 195, doc.internal.pageSize.width-20, 195);
-				doc.text("mail PEC",25,194);
-
-				doc.setFontStyle("bold");
-				doc.text("Data",25,255);
-				doc.line(20,260,80,260);
-				doc.text("Timbro e firma",100,255);
-				doc.line(200,260,80,260);
+				addAnagrafica(doc);
 
 
 				//pagina comitato
@@ -1971,9 +1978,6 @@
 				var totalPagesExp = "{total_pages_count_string}";
 
 				var data = getDataAcquisto();
-				//elimino ultime due stringhe
-				data.pop();
-				data.pop();
 				var colonne = getColumns();
 				//elimino ultime due colonne
 				colonne.pop();
@@ -1984,10 +1988,9 @@
 					doc.setFontSize(9);
 					doc.setTextColor(40);
 					doc.setFontStyle('normal');
-			 // Purple
 
 					if (imgLogo) {
-							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-50, 5, 60, 31);
+							doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
 					}
 					// FOOTER
 					var str = "Page " + data.pageCount;
@@ -2006,33 +2009,33 @@
 
 				doc.setFontType('bold');
 				doc.setFontSize(9);
-				doc.text("PROFESSIONAL LED SRL\n", 10, 30);
+				doc.text("PROFESSIONAL LED SRL\n", 10, 40);
 				doc.setFontType('normal');
-				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 34);
-				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 30);
+				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 44);
+				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 40);
 
+				doc.setFillColor(160, 197, 25);
+				doc.setDrawColor(0);
+				doc.rect(10,65,80,7,'FD');
 
-				doc.setFontSize(10);
-				doc.setFontType('bold');
-				doc.text(14,60,"Soluzione NOLEGGIO");
-
-				doc.setFontType('normal');
-				doc.text(85,60,"Data: "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear());
-
-				//doc.setFillColor(160, 197, 25);
-				//doc.setDrawColor(0);
-				//doc.rect(174,55,28,8,'F');
-				doc.text(175,60,"Preventivo Nr. "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente);
+				doc.setFontSize(8);
+				doc.setFontStyle("bold");
+				doc.text("         Data                     Prev. n.                      Soluzione A", 10,70);
+				//doc.line(10,72,90,72);
+				doc.setFillColor(255);
+				doc.rect(10,72,80,7,'FD');
+				doc.text("      "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear()+"              "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente+"           Noleggio operativo", 10,76.5);
 
 				doc.autoTable(colonne, data, {
 					theme: 'grid',
 					columnStyles: {	cod:{columnWidth: 30},
-													descrizione:{columnWidth: 100},
-													foto:{columnWidth: 40},
-													quantity:{columnWidth: 20},},
+									descrizione:{columnWidth: 100},
+									foto:{columnWidth: 40},
+									quantity:{columnWidth: 20, halign: 'right'}
+									},
 
 					drawCell: function (cell, data) {
-						if (data.column.dataKey === "foto") {
+						if (data.column.dataKey === "foto" && data.row.index < N_analogic_bulb) {
 							var indice_foto = indici_foto_filtrati[data.row.index];
 							var indice_foto_su_db = 0;
 							for(var i = 0; i < array_id_foto.length ; i++){
@@ -2052,8 +2055,8 @@
 						}
 					},
 
-					styles: {overflow: 'linebreak', halign: 'right'},
-					margin: {top: 70,bottom: 20, left: 7},
+					styles: {overflow: 'linebreak', fontSize: 10,},
+					margin: {top: 90,bottom: 20, left: 7},
 					headerStyles: {fillColor: [0, 77, 126]},
 					addPageContent: pageContent
 				});
@@ -2070,8 +2073,9 @@
 
 				doc.setFontSize(9);
 				doc.setTextColor(0, 77, 126);
-				doc.text(14,finalY+17,"Tutti i prodotti sono conformi alla Normativa Europea\nEN 6241:2008 contro il Rischio Fotobiologico da illuminazione LED.");
-				doc.addImage(simboli,14,finalY+23,80,17);
+				doc.text(14,finalY+7,"Tutti i prodotti sono conformi alla Normativa Europea\nEN 6241:2008 contro il Rischio Fotobiologico da illuminazione LED.");
+				doc.addImage(simboli,14,finalY+16,80,15);
+
 
 				noleggio1 = parseFloat(noleggio1);
 				noleggio2 = parseFloat(noleggio2);
@@ -2089,17 +2093,18 @@
 
 				//parte statica dopo tabella
 				doc.addPage();
+				if (imgLogo) {
+						doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
+				}
 
-				doc.setFillColor(0, 77, 126);
-				doc.rect(10,37,doc.internal.pageSize.width-20,200,'F');
-				doc.setFillColor(160, 197, 25);
+				doc.setFillColor(201, 201, 201);
 				doc.rect(12,39,doc.internal.pageSize.width-24,196,'FD');
 				doc.setFillColor(255);
 				doc.rect(14,41,doc.internal.pageSize.width-28,192,'FD');
 
-				doc.setFontSize(14);
+				doc.setFontSize(10);
 				doc.setTextColor(0, 77, 126);
-				doc.text("NOLEGGIO OPERATIVO LED",65,50);
+				doc.text("NOLEGGIO OPERATIVO LED",doc.internal.pageSize.width / 2-25,50);
 
 				doc.setDrawColor(201,201,201);
 				doc.rect(20,57,doc.internal.pageSize.width-40,50);
@@ -2128,14 +2133,15 @@
 				doc.setFontStyle("bold");
 				doc.text("Il canone di noleggio comprende",24,120);
 				doc.setFontStyle("normal");
-				doc.text(" - Anticipo zero\n - Installazione corpi illuminanti LED\n - Garanzia per l'intero periodo del noleggio\n - Manutenzione straordinaria per il periodo del noleggio\n - Manutenzione ordinaria per il periodo del noleggio.\n - Assicurazione All-Risk sul materiale installato \n     (furto, incendio, atti vandalici, fenomeno elettrico)\n     con manleva su vs polizza. \n     In alternativa assicurazione Grenke a carico cliente.\n - Riscatto finale 3%",24,130);
+				doc.text(" - Anticipo zero\n - Installazione corpi illuminanti LED\n - Garanzia per l'intero periodo del noleggio\n - Eventuale manutenzione straordinaria per il periodo del noleggio\n - Assicurazione All-Risk sul materiale installato \n     (furto, incendio, atti vandalici, fenomeno elettrico)\n     con manleva su vs polizza. \n     In alternativa assicurazione Grenke a carico cliente.\n - Riscatto finale 3%",24,130);
 				doc.text(""+dimmerabilita,24,200);
 
 				doc.setFontStyle("bold");
-				doc.setFontSize(14);
+				doc.setFontSize(10);
 				doc.text("CANONE MENSILE DI NOLEGGIO OPERATIVO LED. DURATA MESI",24,220);
 				doc.setFontStyle("normal");
 				doc.text("IVA 22%",24,227);
+				doc.setFontSize(10);
 				doc.text("Rate e condizioni indicative, soggette ad approvazione dell'Istituto di Credito.\nIl presente prospetto, come da normativa vigente a tutela del Consumatore e \nTesto Unico Bancario, non rappresenta alcun tipo di sollecitazione al finanziamento.",15,245);
 
 				var pagina = data.pageCount;
@@ -2143,15 +2149,17 @@
 				//doc.text("Page "+pagina+ " of " +totalPagesExp,10, doc.internal.pageSize.height - 10);
 
 				doc.addPage();
+				if (imgLogo) {
+						doc.addImage(imgLogo, 'JPEG', doc.internal.pageSize.width/2-30, 5, 60, 31);
+				}
 
-				doc.setFillColor(0, 77, 126);
-				doc.rect(10,37,doc.internal.pageSize.width-20,100,'F');
-				doc.setFillColor(160, 197, 25);
+				doc.setFillColor(201, 201, 201);
 				doc.rect(12,39,doc.internal.pageSize.width-24,96,'FD');
 				doc.setFillColor(255);
 				doc.rect(14,41,doc.internal.pageSize.width-28,92,'FD');
 
 				doc.setFontStyle("bold");
+				doc.setFontSize(10);
 				doc.text("CONDIZIONI DI GARANZIA E CERTIFICAZIONI:",17,50);
 				doc.text("             su tutti i prodotti (vedi singole voci del preventivo)",17,62)
 				doc.setTextColor(0, 77, 126);
@@ -2176,35 +2184,9 @@
 
 				//doc.text("Page "+pagina+ " of " +totalPagesExp,10, doc.internal.pageSize.height - 10);
 
-				doc.addPage();
+				addAnagrafica(doc);
 
-				doc.setFontStyle("bold");
-				doc.text("SCHEDA ANAGRAFICA NUOVO CLIENTE: ",12,50)
-				doc.line(20, 65, doc.internal.pageSize.width-20, 65);
-				doc.text("Ragione sociale",25,64);
-				doc.line(20, 80, doc.internal.pageSize.width-20, 80);
-				doc.text("Indirizzo Sede Legale",25,79);
-
-				doc.line(20, 90, doc.internal.pageSize.width-20, 90);
-				doc.line(20, 110, doc.internal.pageSize.width-20, 110);
-				doc.text("Indirizzo di consegna (se diverso dalla Sede Legale)",25,109);
-				doc.line(20, 120, doc.internal.pageSize.width-20, 120);
-				doc.line(20, 135, doc.internal.pageSize.width-20, 135);
-				doc.text("P.Iva",25,134);
-				doc.line(20, 150, doc.internal.pageSize.width-20, 150);
-				doc.text("Cod. Fisc.",25,149);
-				doc.line(20, 165, doc.internal.pageSize.width-20, 165);
-				doc.text("Tel.                                                              mail",25,164);
-				doc.line(20, 180, doc.internal.pageSize.width-20, 180);
-				doc.text("mail Ufficio Amministrativo",25,179);
-				doc.line(20, 195, doc.internal.pageSize.width-20, 195);
-				doc.text("mail PEC",25,194);
-
-				doc.setFontStyle("normal");
-				doc.text("Data",25,255);
-				doc.line(20,260,80,260);
-				doc.text("Timbro e firma",100,255);
-				doc.line(200,260,80,260);
+				addComitato(doc);
 
 
 				//doc.text("Page "+(totalPagesExp)+ " of " +totalPagesExp,10, doc.internal.pageSize.height - 10);
@@ -2330,9 +2312,9 @@
 									ore_funz:{halign: 'right'}
 									},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak', fontSize: 9,},
 					margin: {top: 90,bottom: 20, right: 190, left: leftPos},
-					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 10},
 					addPageContent: pageContent
 				});
 
@@ -2341,16 +2323,16 @@
 
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
-				doc.rect(leftPos, finalY+5, 54, 7, 'FD');
-				doc.rect(leftPos + 54, finalY+5, 10 + (costoKWH + "").length, 7, 'FD');
+				doc.rect(leftPos, finalY+5, 54, 6, 'FD');
+				doc.rect(leftPos + 54, finalY+5, 10 + (costoKWH + "").length * 1.2, 6, 'FD');
 
 				doc.setFontType('normal');
 				doc.setTextColor(0, 0, 0);
-				doc.setFontSize(10);
+				doc.setFontSize(9);
 				doc.text(leftPos + 2, finalY+9, "Costo energia elettrica in Kw/h.");
 				doc.setTextColor(0, 0, 0);
-				doc.setFontSize(10);
-				doc.text(leftPos + 56, finalY+9, "   " + costoKWH + "");
+				doc.setFontSize(9);
+				doc.text(leftPos + 56, finalY+9, "    " + costoKWH);
 				doc.setFontSize(12);
 
 				doc.autoTable(getColumns2(), data2, {
@@ -2391,9 +2373,9 @@
 						}
 					},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak', fontSize: 9,},
 					margin: {top: 90,bottom: 20, left: 109, right: 4},
-					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 10},
 				});
 
 				finalY = doc.autoTable.previous.finalY;
@@ -2500,7 +2482,7 @@
 				//doc.line(10,72,90,72);
 				doc.setFillColor(255);
 				doc.rect(10,72,80,7,'FD');
-				doc.text("      "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear()+"              "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente+"                  Acquisto", 10,76.5);
+				doc.text("      "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear()+"              "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente+"           Noleggio operativo", 10,76.5);
 
 				var leftPos = 4;
 				doc.autoTable(getColumns1(), data1, {
@@ -2515,9 +2497,9 @@
 									ore_funz:{halign: 'right'}
 									},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak', fontSize: 9,},
 					margin: {top: 90,bottom: 20, right: 190, left: leftPos},
-					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 10},
 					addPageContent: pageContent
 				});
 
@@ -2526,19 +2508,18 @@
 
 				var risparmio_mensile = parseFloat(data2[data2.length - 1]["risparmio"].substring(2, data2[data2.length - 1]["risparmio"].length).replace('.', '').replace(',', '.'))  / 12;
 
-
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(255, 255, 255);
-				doc.rect(leftPos, finalY+5, 54, 7, 'FD');
-				doc.rect(leftPos + 54, finalY+5, 10 + (costoKWH + "").length, 7, 'FD');
+				doc.rect(leftPos, finalY+5, 54, 6, 'FD');
+				doc.rect(leftPos + 54, finalY+5, 10 + (costoKWH + "").length * 1.2, 6, 'FD');
 
 				doc.setFontType('normal');
 				doc.setTextColor(0, 0, 0);
-				doc.setFontSize(10);
+				doc.setFontSize(9);
 				doc.text(leftPos + 2, finalY+9, "Costo energia elettrica in Kw/h.");
 				doc.setTextColor(0, 0, 0);
-				doc.setFontSize(10);
-				doc.text(leftPos + 56, finalY+9, "   " + costoKWH + "");
+				doc.setFontSize(9);
+				doc.text(leftPos + 56, finalY+9, "    " + costoKWH + "");
 				doc.setFontSize(12);
 
 				doc.setTextColor(0, 77, 126);
@@ -2592,9 +2573,9 @@
 						}
 					},
 					theme: 'grid',
-					styles: {overflow: 'linebreak'},
+					styles: {overflow: 'linebreak', fontSize: 9,},
 					margin: {top: 90,bottom: 20, left: 109, right: 4},
-					headerStyles: {fillColor: [0, 77, 126], fontSize: 8},
+					headerStyles: {fillColor: [0, 77, 126], fontSize: 10},
 				});
 
 				finalY = doc.autoTable.previous.finalY;
@@ -2706,7 +2687,8 @@
 					});
 
 					//aggiungo dimmerabilità
-					dimmerabilita += "\nContributi RAEE compresi."
+					if (!dimmerabilita.includes("\nContributi RAEE compresi."))
+						dimmerabilita += "\nContributi RAEE compresi."
 
 					//aggiungo info installazione
 					filtrato.push({
@@ -2806,26 +2788,14 @@
 				doc.text("Sede Legale: Via Filippo Beroaldo, 38 - 40127 Bologna (BO)\nSede operativa: Via Palazzetti, 5/F - 40068 San Lazzaro di Savena (BO)\nReg. Impr. BO P.I. e C.F.  03666271204 – REA 537385 – C.S. € 10.000,00 (i.v.)\nTel +39 051-625.55.83\nmail: info@professional-led.it", 10, 44);
 				doc.text("Spett.le\n"+nome_azienda+"\n"+indirizzo_azienda+"\n"+cap_azienda+"\n\n"+nome_referente+"\n"+mail_referente,doc.internal.pageSize.width/2+40, 40);
 
-				doc.setFillColor(160, 197, 25);
-				doc.setDrawColor(0);
-				doc.rect(10,65,80,7,'FD');
-
-				doc.setFontSize(8);
-				doc.setFontStyle("bold");
-				doc.text("         Data                     Prev. n.                      Soluzione A", 10,70);
-				//doc.line(10,72,90,72);
-				doc.setFillColor(255);
-				doc.rect(10,72,80,7,'FD');
-				doc.text("      "+today.getDate()+"/"+(today.getMonth()+1)+"/"+today.getFullYear()+"              "+Math.floor(numero_preventivo)+"-"+today.getFullYear()+"/"+utente+"                  Acquisto", 10,76.5);
-
 				doc.setDrawColor(0);
 				doc.setFillColor(0, 77, 126);
-				doc.rect(10, 82, doc.internal.pageSize.width-20, 10, 'FD');
+				doc.rect(10, 65, doc.internal.pageSize.width-20, 10, 'FD');
 
 				doc.setFontType('bold');
 				doc.setTextColor(160, 197, 25);
 				doc.setFontSize(16);
-				doc.text(70, 89, "PAYBACK IN "+payback+" ANNI");
+				doc.text(70, 72, "PAYBACK IN "+payback+" ANNI");
 
 				doc.autoTable(columns, rows, {
 					//styles: {fillColor: [154, 216, 25]},
@@ -2833,27 +2803,29 @@
 					//	id: {fillColor: [0, 0, 0]}
 					//},
 					theme: 'grid',
-					styles: {overflow: 'linebreak',halign: 'right', fontsize: 10},
-					margin: {top: 93,bottom: 20, right: 15},
-					headerStyles: {fillColor: [0, 77, 126]},
+					styles: {overflow: 'linebreak',halign: 'right', fontSize: 9},
+					margin: {top: 80,bottom: 20, right: 15},
+					headerStyles: {fillColor: [0, 77, 126], halign: 'left',},
 					drawCell: function (cell, rows) {
-            // Rowspan
-            if (rows.column.dataKey === 6) {
-                if (rows.row.index === 1) {
-									doc.setDrawColor(255);
-                    doc.rect(cell.x+1, cell.y,30.5, cell.height * 19, 'S');
-                }else if (rows.row.index === 0){
-									var investimento_temp = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
-									//doc.setDrawColor(201,201,201);
-									doc.rect(cell.x, cell.y, 30.5, cell.height, 'S');
-									doc.autoTableText(""+investimento_temp, cell.x + cell.width - investimento_temp.length * 0.3, cell.y + cell.height / 2, {
-                    halign: 'right',
-                    valign: 'middle'
-                });
+						// Rowspan
+						if (rows.column.dataKey === 6) {
+							if (rows.row.index === 1) {
+												doc.setDrawColor(255);
+								doc.rect(cell.x+1, cell.y,30.5, cell.height * 19, 'S');
+							}else 
+								if (rows.row.index === 0){
+												var investimento_temp = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
+												//doc.setDrawColor(201,201,201);
+												doc.rect(cell.x, cell.y, 30.5, cell.height, 'S');
+												doc.setFontSize(9);
+												doc.autoTableText(""+investimento_temp, cell.x + cell.width - investimento_temp.length * 0.3, cell.y + cell.height / 2, {
+													halign: 'right',
+													valign: 'middle'
+												});
 								}
-								return false;
-            }
-        },
+							return false;
+						}					
+					},
 					addPageContent: pageContent
 				});
 
@@ -2874,22 +2846,20 @@
 
 				doc.setDrawColor(201,201,201);
 				doc.setFillColor(201,201,201);
-				doc.rect(10, finalY+16, doc.internal.pageSize.width-20, 11, 'FD');
+				doc.rect(10, finalY+19, doc.internal.pageSize.width-20, 11, 'FD');
 				doc.setFillColor(0, 77, 126);
-				doc.rect(11, finalY+17, doc.internal.pageSize.width-22, 9, 'FD');
+				doc.rect(11, finalY+20, doc.internal.pageSize.width-22, 9, 'FD');
 				doc.setFillColor(255, 255, 255);
 
 				doc.setTextColor(0);
 				doc.setFontSize(12);
 				doc.setTextColor(160, 197, 25);
-				doc.text(20,finalY+23,"Legge finanziaria 2018: ammortamento cespite 130% annuo");
+				doc.text(20,finalY+26,"Legge finanziaria 2018: ammortamento cespite 130% annuo");
 				doc.setTextColor(0);
 
 				doc.setTextColor(0);
 				doc.setFontSize(9);
-				doc.text(14,finalY+29,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
-
-				addComitato(doc);
+				doc.text(14,finalY+40,"N.B. IL CONSUMO DI CORRENTE NON CONSIDERA EVENTUALI VARIAZIONI DI TARIFFA");
 
 				if (typeof doc.putTotalPages === 'function') {
         	doc.putTotalPages(totalPagesExp);
