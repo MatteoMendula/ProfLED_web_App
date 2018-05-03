@@ -339,9 +339,23 @@
 
 			var local_db_stato_attuale = [
 				["Seleziona un modello","",""],
-				["modelloA",1,"durataA"],
-				["modelloB",2,"durataB"],
-				["modelloC",3,"durataC"],
+				["Plafoniera_1x36w",66,"25.000"],
+				["Plafoniera_2x36w",102,"25.000"],
+				["Plafoniera_1x58w",88,"25.000"],
+				["Plafoniera_2x58w",146,"25.000"],
+				["Plafoniera_4X18w",132,"25.000"],
+				["Cubo_4x55w",280,"30.000"],
+				["Cubo_6x55w",390,"30.000"],
+				["Faro_o_Campana_SAP_100w",120,"25.000"],
+				["Faro_o_Campana_SAP_125w",150,"25.000"],
+				["Faro_o_Campana_SAP_200w",240,"25.000"],
+				["Faro_o_Campana_SAP_250w",300,"25.000"],
+				["Faro_o_Campana_SAP_300w",360,"25.000"],
+				["Faro_o_Campana_SAP_400w",480,"25.000"],
+				["Faro_o_Campana_SAP_500w",600,"25.000"],
+				["Faro_Sport_Ioduri_1.000w",1200,"25.000"],
+				["Faro_Sport_Ioduri_1.500w",1800,"25.000"],
+				["Faro_Sport_Ioduri_2.000w",2400,"25.000"],
 				["Inserimento_manuale","",""],
 			];
 
@@ -2227,7 +2241,7 @@
 			function create_acquisto_conti() {
 				var doc = new jsPDF("l");
 				var totalPagesExp = "{total_pages_count_string}";
-				
+
 				var getColumns1 = function() {
 					return [
 							{title: "Illuminazione attuale", dataKey: "attuale"},
@@ -2256,7 +2270,7 @@
 				var data2 = getDatiRisparmio();
 				var finalY;
 				var finalX;
-				
+
 				var pageContent = function (data) {
 					// HEADER
 					//HEADER
@@ -2412,7 +2426,7 @@
 			function create_noleggio_conti() {
 				var doc = new jsPDF("l");
 				var totalPagesExp = "{total_pages_count_string}";
-				
+
 				var getColumns1 = function() {
 					return [
 							{title: "Illuminazione attuale", dataKey: "attuale"},
@@ -2441,7 +2455,7 @@
 				var data2 = getDatiRisparmio();
 				var finalY;
 				var finalX;
-				
+
 				var pageContent = function (data) {
 					// HEADER
 					//HEADER
@@ -2812,7 +2826,7 @@
 							if (rows.row.index === 1) {
 												doc.setDrawColor(255);
 								doc.rect(cell.x+1, cell.y,30.5, cell.height * 19, 'S');
-							}else 
+							}else
 								if (rows.row.index === 0){
 												var investimento_temp = "€ "+Number((acquisto_totale).toFixed(2)).toLocaleString("es-ES", {minimumFractionDigits: 2});
 												//doc.setDrawColor(201,201,201);
@@ -2824,7 +2838,7 @@
 												});
 								}
 							return false;
-						}					
+						}
 					},
 					addPageContent: pageContent
 				});
