@@ -2893,7 +2893,7 @@
 
 		</header>
 
-		<body background="https://static.webshopapp.com/shops/001680/files/145451846/striscia-led-rigida-impermeabile-blanco-5050-smd-7.jpg" style="background-size:cover">
+		<body background="./sfondo.jpg" style="background-size:cover">
 
 			<?php
 				$utente = $_SESSION['username'];
